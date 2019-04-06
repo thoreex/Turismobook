@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "turismobook-dev",
+    "prod": "turismobook-prod"
+  }
+}

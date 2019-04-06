@@ -1,16 +1,91 @@
-version: 2
+version: 2.1
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node:8-browsers
     steps:
       - checkout
       - restore_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run: npm install
+          keys:
+            - my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - my-project-{{ .Branch }}-
+            - my-project-
+      - run:
+          name: Installing dependencies
+          command: npm install
       - save_cache:
           key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - "node_modules"
-      - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      - run:
+          name: Linting
+          command: npm run lint
+      - run:
+          name: Testing
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - run:
+          name: E2E
+          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      - store_artifacts:
+          path: coverage
+  deploy-dev:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - my-project-{{ .Branch }}-
+            - my-project-
+      - run:
+          name: Build app
+          command: npm run build
+      - run:
+          name: Firebase environments
+          command: ./deploy_config_dev.sh
+      - run:
+          name: Changing enviroment
+          command: ./node_modules/.bin/firebase use default
+      - run:
+          name: Deploying to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+  deploy-prod:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - my-project-{{ .Branch }}-
+            - my-project-
+      - run:
+          name: Building app
+          command: npm run build -- --prod
+      - run:
+          name: Firebase environments
+          command: ./deploy_config_prod.sh
+      - run:
+          name: Changing enviroment
+          command: ./node_modules/.bin/firebase use prod
+      - run:
+          name: Deploying to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+workflows:
+  version: 2
+  - deploy:
+    jobs:
+      - test
+      - deploy-dev:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+      - deploy-prod:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
