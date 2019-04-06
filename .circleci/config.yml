@@ -46,7 +46,7 @@ jobs:
           command: ./deploy_config_dev.sh
       - run:
           name: Changing enviroment
-          command: ./node_modules/.bin/firebase use default
+          command: ./node_modules/.bin/firebase use default --token=$FIREBASE_DEPLOY_TOKEN
       - run:
           name: Deploying to Firebase
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
@@ -68,7 +68,7 @@ jobs:
           command: ./deploy_config_prod.sh
       - run:
           name: Changing enviroment
-          command: ./node_modules/.bin/firebase use prod
+          command: ./node_modules/.bin/firebase use prod --token=$FIREBASE_DEPLOY_TOKEN
       - run:
           name: Deploying to Firebase
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
