@@ -74,7 +74,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
 workflows:
   version: 2
-  - deploy:
+  test_and_deploy:
     jobs:
       - test
       - deploy-dev:
