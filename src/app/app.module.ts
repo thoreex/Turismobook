@@ -10,6 +10,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CentrosModule } from './centros/centros.module';
 
 @NgModule({
   declarations: [
@@ -17,12 +18,13 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFontAwesomeModule,
     CarouselModule.forRoot(),
     NgxPaginationModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    CentrosModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
