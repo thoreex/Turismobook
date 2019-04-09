@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CentroDetailComponent } from './centro-detail.component';
+import { RouterModule } from '@angular/router';
 
 describe('CentroDetailComponent', () => {
   let component: CentroDetailComponent;
@@ -8,7 +9,8 @@ describe('CentroDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CentroDetailComponent ]
+      declarations: [ CentroDetailComponent ],
+      imports: [ RouterModule ]
     })
     .compileComponents();
   }));

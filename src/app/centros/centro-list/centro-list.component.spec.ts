@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CentroListComponent } from './centro-list.component';
+import { RouterModule } from '@angular/router';
 
 describe('CentroListComponent', () => {
   let component: CentroListComponent;
@@ -8,7 +9,8 @@ describe('CentroListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CentroListComponent ]
+      declarations: [ CentroListComponent ],
+      imports: [ RouterModule ]
     })
     .compileComponents();
   }));
