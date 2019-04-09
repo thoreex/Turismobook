@@ -208,9 +208,12 @@
               </div>
               <div class="col-md-10">
                 <p>
-                  <a class="float-left" href="#"
-                    ><strong>{{ resena.usuario.nombre }}</strong></a
+                  <a
+                    [routerLink]="['/usuarios', resena.usuario.id]"
+                    class="float-left"
                   >
+                    <strong>{{ resena.usuario.nombre }}</strong>
+                  </a>
                   <span class="float-right" *ngIf="resena.valoracion > 0"
                     ><i class="text-warning fa fa-star"></i
                   ></span>

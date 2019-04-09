@@ -1,0 +1,29 @@
+<div class="input-group mb-3">
+  <input
+    type="text"
+    [(ngModel)]="term"
+    maxlength="30"
+    class="form-control"
+    placeholder="Buscar por nombre de centro turistico"
+    aria-label="Centro turistico"
+    (keyup)="searchCentros(term)"
+  />
+</div>
+
+<div class="list-group" *ngIf="!vacio">
+  <a
+    [routerLink]="['/centros', centro.id]"
+    class="list-group-item list-group-item-action flex-column align-items-start"
+    *ngFor="let centro of filteredCentros; let i = index"
+  >
+    <h5 class="mb-1">{{ centro.nombre }}</h5>
+    <p class="mb-1">
+      {{ centro.descripcion }}
+    </p>
+    <small>{{ centro.ultimaModificacion }}</small>
+  </a>
+</div>
+
+<div class="alert alert-danger" role="alert" *ngIf="vacio">
+  No se encontró información!
+</div>

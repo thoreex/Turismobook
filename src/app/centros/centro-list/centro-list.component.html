@@ -1,16 +1,5 @@
-<div class="input-group mb-3">
-  <input
-    type="text"
-    [(ngModel)]="term"
-    class="form-control"
-    placeholder="Buscar por nombre de centro turistico"
-    aria-label="Centro turistico"
-    (keyup)="searchCentros(term)"
-  />
-</div>
-
 <div class="card-columns">
-  <div class="card" *ngFor="let centro of filteredCentros">
+  <div class="card" *ngFor="let centro of centros">
     <img
       class="card-img-top"
       src="{{ centro.imagen }}"
