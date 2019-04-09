@@ -30,6 +30,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('a').textContent).toContain('Turismobook');
+    const component = fixture.componentInstance;
+    expect(compiled.querySelector('a').textContent).toContain(component.title);
   });
 });
