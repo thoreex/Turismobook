@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CentroSearchComponent } from './centro-search.component';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CentroSearchComponent', () => {
   let component: CentroSearchComponent;
@@ -8,7 +10,8 @@ describe('CentroSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CentroSearchComponent ]
+      declarations: [ CentroSearchComponent ],
+      imports: [ FormsModule, RouterTestingModule ]
     })
     .compileComponents();
   }));
