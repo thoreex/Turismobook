@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CentrosModule } from './centros/centros.module';
 
 @NgModule({
@@ -21,10 +21,11 @@ import { CentrosModule } from './centros/centros.module';
     AngularFontAwesomeModule,
     CarouselModule.forRoot(),
     NgxPaginationModule,
+    FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     CentrosModule,
-    AppRoutingModule
+    AppRoutingModule // Siempre al final de todos los Modules con Routing
   ],
   providers: [],
   bootstrap: [AppComponent]
