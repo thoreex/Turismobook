@@ -7,12 +7,7 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CentrosModule } from './centros/centros.module';
-import { AdminModule } from './admin/admin.module';
-import { Router } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
 
@@ -24,17 +19,12 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     BrowserModule,
     AngularFontAwesomeModule,
-    CarouselModule.forRoot(),
-    NgxPaginationModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
     CentrosModule,
-    AdminModule, // Siempre al final de todos los Modules con Routing
-    AuthModule, // Siempre al final de todos los Modules con Routing
-    AppRoutingModule
+    AuthModule,
+    AppRoutingModule // Siempre al final de todos los Modules con Routing
+    // , AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {  }

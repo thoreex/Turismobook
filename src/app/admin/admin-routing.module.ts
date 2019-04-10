@@ -11,7 +11,7 @@ import { ListNoticiasComponent } from './list-noticias/list-noticias.component';
 
 const adminRoutes: Routes = [
   {
-    path: 'admin',
+    path: '',
     component: AdminComponent,
     canActivate: [AuthGuard],
     children: [
