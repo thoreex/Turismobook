@@ -1,0 +1,25 @@
+<ng-container *ngIf="check; else elseTemplate">
+  <carousel>
+    <slide *ngFor="let noticia of aNoticiaGuardada; let index = index">
+      <img
+        [src]="noticia.imagen"
+        alt="image slide"
+        style="display: block; width: 100%;"
+      />
+      <div class="carousel-caption">
+        <h4>{{ noticia.titulo }}</h4>
+        <p>{{ noticia.descripcion }}</p>
+        <small
+          >{{ noticia.fechaCreacion }} - {{ noticia.ultimaModificacion }}</small
+        >
+      </div>
+    </slide>
+  </carousel>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="alert alert-primary text-center" role="alert">
+    <p>¡No Hay Noticias!</p>
+  </div>
+</ng-template>
+<br />
+<app-centro-list></app-centro-list>

@@ -13,6 +13,7 @@ import { CentroSearchComponent } from './centro-search/centro-search.component';
     CommonModule,
     FormsModule,
     CentrosRoutingModule
-  ]
+  ],
+  exports: [CentroListComponent]
 })
 export class CentrosModule { }

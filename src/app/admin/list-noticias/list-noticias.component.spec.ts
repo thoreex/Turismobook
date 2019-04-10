@@ -11,7 +11,7 @@ describe('ListNoticiasComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ListNoticiasComponent],
-      imports: [CarouselModule, RouterTestingModule]
+      imports: [CarouselModule.forRoot(), RouterTestingModule]
     })
       .compileComponents();
   }));

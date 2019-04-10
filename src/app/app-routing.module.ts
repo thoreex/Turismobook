@@ -10,10 +10,15 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'home',
+    loadChildren: './home/home.module#HomeModule'
+  },
+  {
     path: 'usuarios',
     loadChildren: './usuarios/usuarios.module#UsuariosModule'
   },
-  { path: '', pathMatch: 'full', redirectTo: '/centros' },
+  // { path: '', pathMatch: 'full', redirectTo: '/centros' },
+  { path: '', pathMatch: 'full', redirectTo: '/home' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
