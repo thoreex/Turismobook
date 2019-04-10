@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListNoticiasComponent } from './list-noticias.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 describe('ListNoticiasComponent', () => {
   let component: ListNoticiasComponent;
@@ -8,9 +10,10 @@ describe('ListNoticiasComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListNoticiasComponent ]
+      declarations: [ListNoticiasComponent],
+      imports: [CarouselModule, RouterTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
