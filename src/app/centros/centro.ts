@@ -9,12 +9,13 @@ export class Centro {
     horarios?: Horario[];
     imagen: string;
     fotografias?: string[];
-    video: string;
+    video?: string;
     seguidores?: Usuario[];
     valoracion?: number;
     cantValoraciones?: number;
     resenas?: Resena[];
-    fechaCreacion: Date;
-    ultimaModificacion: Date;
+    fechaCreacion?: Date;
+    ultimaModificacion?: Date;
     fechaEliminacion?: Date;
+    editor?: Usuario;
 }

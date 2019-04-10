@@ -11,10 +11,15 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CentrosModule } from './centros/centros.module';
+import { AdminModule } from './admin/admin.module';
+import { Router } from '@angular/router';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +30,9 @@ import { CentrosModule } from './centros/centros.module';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     CentrosModule,
-    AppRoutingModule // Siempre al final de todos los Modules con Routing
+    AdminModule, // Siempre al final de todos los Modules con Routing
+    AuthModule, // Siempre al final de todos los Modules con Routing
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
