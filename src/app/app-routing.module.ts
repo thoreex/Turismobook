@@ -9,6 +9,10 @@ const routes: Routes = [
     loadChildren: './admin/admin.module#AdminModule',
     canLoad: [AuthGuard]
   },
+  {
+    path: 'usuarios',
+    loadChildren: './usuarios/usuarios.module#UsuariosModule'
+  },
   { path: '', pathMatch: 'full', redirectTo: '/centros' },
   { path: '**', component: PageNotFoundComponent }
 ];

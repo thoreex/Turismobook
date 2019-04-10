@@ -1,0 +1,25 @@
+<div class="card-columns">
+  <div class="card" *ngFor="let usuario of usuarios">
+    <img
+      *ngIf="usuario.imagen; else other_content"
+      class="card-img-top"
+      src="{{ usuario.imagen }}"
+      alt="Imagen del usuario"
+    />
+    <ng-template #other_content>
+      <img
+        class="card-img-top"
+        src="https://image.ibb.co/jw55Ex/def_face.jpg"
+        alt="Imagen del usuario"
+      />
+    </ng-template>
+    <div class="card-body">
+      <h5 class="card-title">
+        <a [routerLink]="['/usuarios', usuario.id]">{{ usuario.nombre }}</a>
+      </h5>
+      <p class="card-text">
+        {{ usuario.descripcion }}
+      </p>
+    </div>
+  </div>
+</div>

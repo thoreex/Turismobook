@@ -41,9 +41,15 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Admin
+            {{ authService.oUsuario.nombre }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a
+              class="dropdown-item"
+              routerLinkActive="active"
+              [routerLink]="['usuarios', authService.oUsuario.id]"
+              >Perfil</a
+            >
             <a
               class="dropdown-item"
               routerLinkActive="active"
