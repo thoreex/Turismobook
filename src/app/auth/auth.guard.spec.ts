@@ -8,7 +8,7 @@ describe('AuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [AuthGuard],
-      imports: [RouterTestingModule, FormsModule]
+      imports: [RouterTestingModule]
     });
   });
 
