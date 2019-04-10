@@ -1,0 +1,17 @@
+<h3>ADMIN</h3>
+<nav>
+  <a
+    routerLinkActive="active"
+    [routerLink]="['./']"
+    [routerLinkActiveOptions]="{ exact: true }"
+    >Dashboard</a
+  >
+  <a routerLinkActive="active" [routerLink]="['manage-centros']"
+    >Manage Centros</a
+  >
+  <a routerLinkActive="active" [routerLink]="['manage-editores']"
+    >Manage Editores</a
+  >
+  <a routerLinkActive="active" [routerLink]="['noticias']">Manage Noticias</a>
+</nav>
+<router-outlet></router-outlet>

@@ -1,0 +1,43 @@
+<div *ngIf="error" class="alert alert-danger" role="alert">
+  {{ mensajeError }}
+</div>
+
+<div class="imput-group">
+  <div class="text-center mb-4">
+    <h1 class="h3 mb-3 font-weight-normal">Asignar Editor</h1>
+  </div>
+
+  <div class="form-label-group">
+    <input
+      id="Editor"
+      type="number"
+      [(ngModel)]="idEditor"
+      maxlength="10"
+      class="form-control"
+      placeholder="Id editor"
+      required=""
+      autofocus=""
+    />
+    <label for="inputEmail"></label>
+  </div>
+
+  <div class="form-label-group">
+    <input
+      id="Centro"
+      type="number"
+      [(ngModel)]="idCentro"
+      maxlength="10"
+      class="form-control"
+      placeholder="Id centro"
+      required=""
+    />
+  </div>
+
+  <button
+    class="btn btn-lg btn-primary btn-block mt-5"
+    type="button"
+    (click)="asignar(idEditor, idCentro)"
+  >
+    Asignar
+  </button>
+</div>
