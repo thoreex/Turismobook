@@ -7,6 +7,13 @@
     <h1 class="h3 mb-3 font-weight-normal">Asignar Editor</h1>
   </div>
 
+  <ngx-select-dropdown
+    [config]="config"
+    [options]="selectedOptions"
+    [(ngModel)]="dataModel"
+    [multiple]="false"
+  ></ngx-select-dropdown>
+
   <div class="form-label-group">
     <input
       id="Editor"
