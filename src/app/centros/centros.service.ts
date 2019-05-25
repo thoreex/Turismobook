@@ -19,6 +19,10 @@ export class CentrosService {
     return of(CENTROS);
   }
 
+  getCentrosA = (): Centro[] => {
+    return CENTROS;
+  }
+
   setCentro = (centro: Centro) => {
     //
   }

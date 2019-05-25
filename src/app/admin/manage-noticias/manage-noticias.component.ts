@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
 
 @Component({
@@ -14,6 +14,7 @@ export class ManageNoticiasComponent implements OnInit {
   public formGroup: FormGroup;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
     private formBuilder: FormBuilder) {
@@ -62,6 +63,8 @@ export class ManageNoticiasComponent implements OnInit {
       // console.log(this.StorageService.getObjectValue(this.Key));
 
       alert('Información guardada');
+      // Redireccionar "Manage-Noticias"
+      this.router.navigate(['admin/noticias']);
     } else {
       alert('Debe completar la información correctamente');
     }
@@ -72,7 +75,7 @@ export class ManageNoticiasComponent implements OnInit {
     this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
     listaNoticias.forEach(noticia => {
       if (noticia.id === id) {
-        console.log(this.formGroup);
+        // console.log(this.formGroup);
         this.formGroup = this.formBuilder.group({
           id: [id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
