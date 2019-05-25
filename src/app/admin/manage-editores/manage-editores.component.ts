@@ -3,7 +3,6 @@ import { CentrosService } from 'src/app/centros/centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from 'src/app/centros/centro';
 import { Usuario } from 'src/app/usuarios/usuario';
-import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -23,7 +22,7 @@ export class ManageEditoresComponent implements OnInit {
   placeholderCentro = 'Seleccione el centro';
   selectedCentro: any;
   centrosList: Centro[]; // = this.centrosSevice.getCentrosA();
-  constructor(private centrosService: CentrosService, private usuariosService: UsuariosService, private fromBuilder: FormBuilder) {
+  constructor(private centrosService: CentrosService, private usuariosService: UsuariosService) {
   }
 
   ngOnInit() {
