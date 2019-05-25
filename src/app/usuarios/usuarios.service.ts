@@ -17,4 +17,8 @@ export class UsuariosService {
   getUsuario = (id: number): Observable<Usuario> => {
     return of(USUARIOS.find(usuario => usuario.id === id));
   }
+
+  getUsuariosA = (): Usuario[] => {
+    return USUARIOS;
+  }
 }

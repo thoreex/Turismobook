@@ -10,7 +10,7 @@ import { ManageNoticiasComponent } from './manage-noticias/manage-noticias.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListNoticiasComponent } from './list-noticias/list-noticias.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { SelectDropDownModule } from 'ngx-select-dropdown';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { SelectDropDownModule } from 'ngx-select-dropdown';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SelectDropDownModule,
+    NgSelectModule,
     CarouselModule.forRoot(),
     AdminRoutingModule
   ]
