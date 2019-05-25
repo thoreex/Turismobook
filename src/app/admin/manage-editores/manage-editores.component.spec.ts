@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ManageEditoresComponent } from './manage-editores.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 describe('ManageEditoresComponent', () => {
   let component: ManageEditoresComponent;
@@ -11,7 +12,7 @@ describe('ManageEditoresComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ManageEditoresComponent],
-      imports: [FormsModule, RouterTestingModule]
+      imports: [FormsModule, NgSelectModule, RouterTestingModule]
     })
       .compileComponents();
   }));
