@@ -19,14 +19,16 @@ export class ManageEditoresComponent implements OnInit {
   bindLabel = 'nombre';
   placeholderEditor = 'Seleccione el editor';
   selectedEditor: any;
-  editoresList = this.usuariosService.getUsuariosA();
+  editoresList: Usuario[]; // = this.usuariosService.getUsuarios();
   placeholderCentro = 'Seleccione el centro';
   selectedCentro: any;
-  centrosList = this.centrosSevice.getCentrosA();
-  constructor(private centrosSevice: CentrosService, private usuariosService: UsuariosService, private fromBuilder: FormBuilder) {
+  centrosList: Centro[]; // = this.centrosSevice.getCentrosA();
+  constructor(private centrosService: CentrosService, private usuariosService: UsuariosService, private fromBuilder: FormBuilder) {
   }
 
   ngOnInit() {
+    this.usuariosService.getUsuarios().subscribe(usuarios => this.editoresList = usuarios);
+    this.centrosService.getCentros().subscribe(centros => this.centrosList = centros);
   }
 
   asignar() {
@@ -35,7 +37,7 @@ export class ManageEditoresComponent implements OnInit {
     if (this.selectedEditor) {
       this.oUsuario = this.usuariosService.getUsuario(this.selectedEditor.id);
       if (this.selectedCentro) {
-        this.oCentro = this.centrosSevice.getCentro(this.selectedCentro.id);
+        this.oCentro = this.centrosService.getCentro(this.selectedCentro.id);
 
         let c: Centro;
         let u: Usuario;
@@ -53,6 +55,8 @@ export class ManageEditoresComponent implements OnInit {
                   u.centros = [{ id: c.id, nombre: c.nombre, descripcion: c.descripcion, imagen: c.imagen }];
                 }
                 c.editor = { id: u.id, nombre: u.nombre };
+                this.mensajeError = 'Se asignó el editor ' + u.nombre + ' al centro ' + c.nombre;
+                this.error = true;
               } else {
                 this.mensajeError = 'El usuario no es editor!';
                 this.error = true;
