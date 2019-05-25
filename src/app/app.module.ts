@@ -10,6 +10,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CentrosModule } from './centros/centros.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
+import { SelectDropDownModule } from 'ngx-select-dropdown';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     BrowserModule,
     AngularFontAwesomeModule,
     CentrosModule,
+    SelectDropDownModule,
     AuthModule,
     AppRoutingModule // Siempre al final de todos los Modules con Routing
     // , AngularFireModule.initializeApp(environment.firebase)
@@ -27,4 +29,4 @@ import { AuthModule } from './auth/auth.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {  }
+export class AppModule { }
