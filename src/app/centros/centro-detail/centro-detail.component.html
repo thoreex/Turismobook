@@ -17,6 +17,21 @@
         {{ centro.valoracion ? centro.valoracion : 0 }}
         puntuación
       </h6>
+      <div class="col-12" *ngIf="authService.isLoggedIn">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [class.active]="isFollowing()"
+          (click)="follow()"
+        >
+          <ng-container *ngIf="isFollowing()">
+            Dejar de seguir
+          </ng-container>
+          <ng-container *ngIf="!isFollowing()">
+            Seguir
+          </ng-container>
+        </button>
+      </div>
     </div>
   </div>
 </div>
