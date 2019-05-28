@@ -12,6 +12,7 @@ import { Noticia } from 'src/app/noticias/noticia';
 export class ManageNoticiasComponent implements OnInit {
   private Id: number;
   public formGroup: FormGroup;
+  public Crear = -1;
 
   constructor(
     private router: Router,
@@ -19,10 +20,14 @@ export class ManageNoticiasComponent implements OnInit {
     private noticiasService: NoticiasService,
     private formBuilder: FormBuilder) {
 
-    this.iniciarNoticia();
     this.Id = +this.route.snapshot.params.id;
 
-    this.cargarNoticia(this.Id);
+    if (this.Id !== this.Crear) {
+      console.log(this.Id);
+      this.cargarNoticia(this.Id);
+    } else {
+      this.iniciarNoticia();
+    }
 
   }
 
