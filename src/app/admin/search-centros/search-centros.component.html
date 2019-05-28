@@ -1,0 +1,79 @@
+<div class="input-group mb-3">
+  <input
+    type="text"
+    [(ngModel)]="term"
+    maxlength="30"
+    class="form-control"
+    placeholder="Buscar por nombre de centro turistico"
+    aria-label="Centro turistico"
+    (keyup)="searchCentros(term)"
+  />
+</div>
+
+<div class="card-columns" *ngIf="!vacio">
+  <div
+    class="card"
+    *ngFor="
+      let centro of filteredCentros
+        | paginate: { itemsPerPage: 3, currentPage: p };
+      let i = index
+    "
+  >
+    <img
+      class="card-img-top"
+      src="{{ centro.imagen }}"
+      alt="Imagen del centro"
+    />
+    <div class="card-body">
+      <h5 class="card-title">
+        {{ centro.nombre }}
+      </h5>
+      <p class="card-text">
+        {{ centro.descripcion }}
+      </p>
+      <p class="card-text">
+        <small class="text-muted">{{ centro.ultimaModificacion }}</small>
+      </p>
+      <button
+        [routerLink]="['/admin/manage-centros', centro.id]"
+        class="btn btn-primary"
+      >
+        Editar
+      </button>
+      <button class="btn btn-primary" (click)="borrarData()">
+        Borrar
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="pagination">
+          <pagination-controls
+            (pageChange)="p = $event"
+            autoHide="true"
+            responsive="true"
+          ></pagination-controls>
+        </div>
+      </div>
+      <div class="col-sm">
+        <a
+          class="btn btn-outline-primary float-right m-b-5"
+          routerLinkActive="active"
+          [routerLink]="['/admin/manage-centros', -1]"
+        >
+          Agregar
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-danger" role="alert" *ngIf="vacio">
+  No se encontró información!
+</div>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

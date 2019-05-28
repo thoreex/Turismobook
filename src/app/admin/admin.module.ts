@@ -11,17 +11,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListNoticiasComponent } from './list-noticias/list-noticias.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { SearchCentrosComponent } from './search-centros/search-centros.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent, AdminComponent, ManageEditoresComponent,
-    ManageCentrosComponent, ManageNoticiasComponent, ListNoticiasComponent
+    ManageCentrosComponent, ManageNoticiasComponent, ListNoticiasComponent, SearchCentrosComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     NgSelectModule,
+    NgxPaginationModule,
     CarouselModule.forRoot(),
     AdminRoutingModule
   ]
