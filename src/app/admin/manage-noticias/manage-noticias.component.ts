@@ -21,14 +21,10 @@ export class ManageNoticiasComponent implements OnInit {
     private formBuilder: FormBuilder) {
 
     this.Id = +this.route.snapshot.params.id;
-
+    this.iniciarNoticia();
     if (this.Id !== this.Crear) {
-      console.log(this.Id);
       this.cargarNoticia(this.Id);
-    } else {
-      this.iniciarNoticia();
     }
-
   }
 
   ngOnInit() {
@@ -64,12 +60,9 @@ export class ManageNoticiasComponent implements OnInit {
         listaNoticias.push(this.formGroup.value);
       }
 
-      // this.StorageService.setObjectValue(this.Key, listaNoticias);
-      // console.log(this.StorageService.getObjectValue(this.Key));
-
       alert('Información guardada');
       // Redireccionar "Manage-Noticias"
-      this.router.navigate(['admin/noticias']);
+      this.Cancelar();
     } else {
       alert('Debe completar la información correctamente');
     }
@@ -80,7 +73,7 @@ export class ManageNoticiasComponent implements OnInit {
     this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
     listaNoticias.forEach(noticia => {
       if (noticia.id === id) {
-        // console.log(this.formGroup);
+        this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
           id: [id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
@@ -91,6 +84,10 @@ export class ManageNoticiasComponent implements OnInit {
         });
       }
     });
+  }
+
+  Cancelar() {
+    this.router.navigate(['admin/noticias']);
   }
 
 }
