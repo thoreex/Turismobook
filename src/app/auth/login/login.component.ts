@@ -17,34 +17,16 @@ export class LoginComponent implements OnInit {
   ngOnInit() { }
 
   setMessage() {
-    this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
+    this.message = 'Logged ' + (this.authService.usuario$ ? 'out' : 'in');
   }
 
-  login(usuario: string, contrasena: string) {
+  login() {
+    this.authService.fbSignin();
     this.message = 'Trying to log in ...';
-
-    this.authService.login(usuario, contrasena).subscribe(() => {
-      this.setMessage();
-      if (this.authService.isLoggedIn) {
-        // Get the redirect URL from our auth service
-        // If no redirect has been set, use the default
-        const redirect = this.authService.redirectUrl ? this.router.parseUrl(this.authService.redirectUrl) : '/admin';
-
-        // Set our navigation extras object
-        // that passes on our global query params and fragment
-        const navigationExtras: NavigationExtras = {
-          queryParamsHandling: 'preserve',
-          preserveFragment: true
-        };
-
-        // Redirect the user
-        this.router.navigateByUrl(redirect, navigationExtras);
-      }
-    });
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.signOut();
     this.setMessage();
   }
 }

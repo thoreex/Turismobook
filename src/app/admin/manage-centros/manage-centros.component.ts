@@ -14,11 +14,11 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
   styleUrls: ['./manage-centros.component.css']
 })
 export class ManageCentrosComponent implements OnInit {
-  private Id: number;
+  private Id: string;
+  private usuario: Usuario;
   public formGroup: FormGroup;
   public Crear = -1;
   public rolEditor = 'Editor';
-  public loggedUser: Usuario;
 
   constructor(
     private router: Router,
@@ -28,9 +28,11 @@ export class ManageCentrosComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService
   ) {
-    this.Id = +this.route.snapshot.params.id;
+    this.authService.usuario$.subscribe(usuario => this.usuario = usuario);
+
+    this.Id = this.route.snapshot.params.id;
     this.iniciarCentro();
-    if (this.Id !== this.Crear) {
+    if (this.Id !== '-1') {
       this.cargarCentro(this.Id);
     }
    }
@@ -58,7 +60,6 @@ export class ManageCentrosComponent implements OnInit {
   }
 
   guardarData = () => {
-    this.loggedUser = this.authService.oUsuario;
     let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
       let centroIndex = -1;
@@ -66,7 +67,7 @@ export class ManageCentrosComponent implements OnInit {
       let listaCentros: Centro[];
       this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
       listaCentros.forEach((centro, index) => {
-        if (centro.id === +this.formGroup.value.id) {
+        if (centro.id === this.formGroup.value.id) {
           centroIndex = index;
         }
       });
@@ -74,11 +75,11 @@ export class ManageCentrosComponent implements OnInit {
       if (centroIndex >= 0) {
         this.usuarioService.getUsuarios().subscribe(usuarios => listaUsuarios = usuarios);
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
+        this.formGroup.patchValue({ Editor:  {id: this.usuario.id, nombre: this.usuario.nombre}});
         listaCentros[centroIndex] = this.formGroup.value;
         listaUsuarios.forEach((usuario) => {
           if ( usuario.seguidores ) {
-            const indexCentro = usuario.seguidores.findIndex(centro => centro.id === +this.formGroup.value.id);
+            const indexCentro = usuario.seguidores.findIndex(centro => centro.id === this.formGroup.value.id);
             if ( indexCentro > -1 ) {
               usuario.seguidores[indexCentro] = this.formGroup.value;
             }
@@ -87,7 +88,7 @@ export class ManageCentrosComponent implements OnInit {
       } else {
         this.formGroup.patchValue({ id: listaCentros.length });
         this.formGroup.patchValue({ fechaCreacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
+        this.formGroup.patchValue({ Editor:  {id: this.usuario.id, nombre: this.usuario.nombre}});
         listaCentros.push(this.formGroup.value);
       }
       console.log('LISTA: ' + JSON.stringify(this.formGroup.value));
@@ -99,7 +100,7 @@ export class ManageCentrosComponent implements OnInit {
     }
   }
 
-  cargarCentro = (id: number) => {
+  cargarCentro = (id: string) => {
     let listaCentros: Centro[];
     this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
     listaCentros.forEach(centro => {

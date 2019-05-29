@@ -6,6 +6,7 @@ import { Resena } from '../resena';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { Centro } from 'src/app/centros/centro';
+import { Usuario } from 'src/app/usuarios/usuario';
 
 @Component({
   selector: 'app-resenas-upsert',
@@ -14,8 +15,9 @@ import { Centro } from 'src/app/centros/centro';
 })
 export class ResenasUpsertComponent implements OnInit {
   private idResena: number;
-  private idCentro: number;
+  private idCentro: string;
   private centro: Centro;
+  private usuario: Usuario;
   public formGroup: FormGroup;
   public Crear = -1;
 
@@ -25,10 +27,12 @@ export class ResenasUpsertComponent implements OnInit {
               private centroService: CentrosService,
               private authService: AuthService,
               private formBuilder: FormBuilder) {
-    this.idCentro = +this.route.parent.snapshot.params.id;
-    if (this.idCentro !== this.Crear) {
+    this.idCentro = this.route.parent.snapshot.params.id;
+    if (this.idCentro !== '-1') {
       this.centroService.getCentro(this.idCentro).subscribe(centro => this.centro = centro);
     }
+
+    this.authService.usuario$.subscribe(usuario => this.usuario = usuario);
 
     this.iniciarResena();
     this.idResena = +this.route.snapshot.params.id;
@@ -71,14 +75,14 @@ export class ResenasUpsertComponent implements OnInit {
           descripcion: this.centro.descripcion, imagen: this.centro.imagen
         }});
         this.formGroup.patchValue({ usuario: {
-          id: this.authService.oUsuario.id, nombre: this.authService.oUsuario.nombre
+          id: this.usuario.id, nombre: this.usuario.nombre
         }});
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
         listaResenas[resenaIndex] = this.formGroup.value;
 
-        const uResenaIndex = this.authService.oUsuario.resenas.findIndex(
+        const uResenaIndex = this.usuario.resenas.findIndex(
           resena => resena.id === +this.formGroup.value.id);
-        this.authService.oUsuario.resenas[uResenaIndex] = {
+        this.usuario.resenas[uResenaIndex] = {
           id: this.formGroup.value.id, centro: this.formGroup.value.centro,
           valoracion: this.formGroup.value.valoracion, titulo: this.formGroup.value.titulo,
           resena: this.formGroup.value.resena, fechaCreacion: this.formGroup.value.fechaCreacion,
@@ -100,15 +104,15 @@ export class ResenasUpsertComponent implements OnInit {
           descripcion: this.centro.descripcion, imagen: this.centro.imagen
         }});
         this.formGroup.patchValue({ usuario: {
-          id: this.authService.oUsuario.id, nombre: this.authService.oUsuario.nombre
+          id: this.usuario.id, nombre: this.usuario.nombre
         }});
         this.formGroup.patchValue({ fechaCreacion: new Date() });
         listaResenas.push(this.formGroup.value);
 
-        if (!this.authService.oUsuario.resenas) {
-          this.authService.oUsuario.resenas = [];
+        if (!this.usuario.resenas) {
+          this.usuario.resenas = [];
         }
-        this.authService.oUsuario.resenas.push({
+        this.usuario.resenas.push({
           id: this.formGroup.value.id, centro: this.formGroup.value.centro,
           valoracion: this.formGroup.value.valoracion, titulo: this.formGroup.value.titulo,
           resena: this.formGroup.value.resena, fechaCreacion: this.formGroup.value.fechaCreacion,
@@ -150,9 +154,9 @@ export class ResenasUpsertComponent implements OnInit {
     const fechaEliminacion = new Date();
     listaResenas[resenaIndex].fechaEliminacion = fechaEliminacion;
 
-    const uResenaIndex = this.authService.oUsuario.resenas.findIndex(
+    const uResenaIndex = this.usuario.resenas.findIndex(
       resena => resena.id === +this.formGroup.value.id);
-    this.authService.oUsuario.resenas[uResenaIndex].fechaEliminacion = fechaEliminacion;
+    this.usuario.resenas[uResenaIndex].fechaEliminacion = fechaEliminacion;
 
     const cResenaIndex = this.centro.resenas.findIndex(
       resena => resena.id === +this.formGroup.value.id);

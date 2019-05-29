@@ -4,6 +4,7 @@ import { Centro } from '../../centros/centro';
 import { CentrosService } from '../../centros/centros.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { Usuario } from 'src/app/usuarios/usuario';
 
 @Component({
   selector: 'app-search-centros',
@@ -12,20 +13,22 @@ import { Router } from '@angular/router';
 })
 export class SearchCentrosComponent implements OnInit {
   centros: Centro[] = [];
+  usuario: Usuario;
   filteredCentros: Centro[] = [];
   vacio = false;
-  constructor( private centrosService: CentrosService, private authService: AuthService, private router: Router) { }
+  constructor( private centrosService: CentrosService, private authService: AuthService, private router: Router) {
+    this.authService.usuario$.subscribe(usuario => this.usuario = usuario);
+  }
 
   ngOnInit() {
     this.getCentros();
   }
 
   getCentros = () => {
-    const loggedUser = this.authService.oUsuario;
     let centrosAll: Centro[];
     this.centrosService.getCentros().subscribe(centros => centrosAll = centros);
     this.centros = this.filteredCentros = centrosAll.filter(item => !item.fechaEliminacion && item.editor &&
-                                   loggedUser && item.editor.id === loggedUser.id);
+                                   this.usuario && item.editor.id === this.usuario.id);
     return this.centros;
   }
 
@@ -48,13 +51,13 @@ export class SearchCentrosComponent implements OnInit {
     }
   }
 
-  borrarData = (id: number) => {
+  borrarData = (id: string) => {
     this.centros.forEach((item) => {
       if (item.id === id) {
         item.fechaEliminacion = new Date();
       }
     });
-    this.authService.oUsuario.centros.forEach((item) => {
+    this.usuario.centros.forEach((item) => {
       if (item.id === id) {
         item.fechaEliminacion = new Date();
       }

@@ -4,33 +4,45 @@ import {
   ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationExtras
 } from '@angular/router';
 import { AuthService } from './auth.service';
+import { Observable, of } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private authService: AuthService, private router: Router) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const url: string = state.url;
 
-    return this.checkLogin(url, route);
+    return this.authService.usuario$.pipe(
+      take(1),
+      map(user => !!user),
+      tap(loggedIn => {
+        if (!loggedIn) {
+          console.log('access denied');
+          this.router.navigate(['/login']);
+        }
+      })
+    );
+
+    // return this.checkLogin(url, route);
   }
 
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(route, state);
   }
 
-  canLoad(route: Route): boolean {
+  /*canLoad(route: Route): Observable<boolean> {
     const url = `/${route.path}`;
 
     return this.checkLogin(url, null);
   }
 
-  checkLogin(url: string, route: ActivatedRouteSnapshot): boolean {
-    if (this.authService.isLoggedIn) {
-      const roles = route ? route.data.roles as Array<string> : null;
-      return (roles == null || roles.indexOf(this.authService.oUsuario.rol) !== -1);
+  checkLogin(url: string, route: ActivatedRouteSnapshot): Observable<boolean> {
+    if (this.authService.usuario$) {
+      return of(true);
     }
 
     // Store the attempted URL for redirecting
@@ -48,6 +60,6 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
     // Navigate to the login page with extras
     this.router.navigate(['/login'], navigationExtras);
-    return false;
-  }
+    return of(false);
+  }*/
 }

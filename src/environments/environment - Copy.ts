@@ -5,13 +5,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyAKcBT17NMeOIkuOVNiKzfIUSDas3NSiIA',
-    authDomain: 'turismobook-dev.firebaseapp.com',
-    databaseURL: 'https://turismobook-dev.firebaseio.com',
-    projectId: 'turismobook-dev',
-    storageBucket: 'turismobook-dev.appspot.com',
-    messagingSenderId: '593899647835',
-    appId: '1:593899647835:web:f11adaf718dc8bb7'
+    apiKey: 'API_KEY_DEV',
+    authDomain: 'AUTH_DOMAIN_DEV',
+    databaseURL: 'DATABASE_URL_DEV',
+    projectId: 'PROJECT_ID_DEV',
+    storageBucket: 'STORAGE_BUCKET_DEV',
+    messagingSenderId: 'MESSAGING_SENDER_ID_DEV'
   }
 };
 

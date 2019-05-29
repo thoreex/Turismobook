@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Centro } from './centro';
-import { CENTROS } from './mock-centros';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CentrosService {
-  unDeleteted: Centro[];
-  constructor(private authService: AuthService) {
-  }
+  private collection: AngularFirestoreCollection<Centro>;
 
-  setCentros = (centros: Centro[]) => {
-    //
+  constructor(private readonly db: AngularFirestore) {
+    this.collection = this.db.collection<Centro>('centros');
   }
 
   getCentros = (): Observable<Centro[]> => {
-    return of(CENTROS);
+    return this.collection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Centro;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
   }
 
-  getCentrosA = (): Centro[] => {
-    return CENTROS;
-  }
-
-  setCentro = (centro: Centro) => {
-    //
-  }
-
-  getCentro = (id: number): Observable<Centro> => {
-    return of(CENTROS.find(centro => centro.id === id));
+  getCentro = (id: string): Observable<Centro> => {
+    return this.db.doc<Centro>('centros/' + id).snapshotChanges().pipe(
+      map(a => {
+        const data = a.payload.data() as Centro;
+        return { id, ...data };
+      })
+    );
   }
 
 }

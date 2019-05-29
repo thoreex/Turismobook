@@ -12,7 +12,6 @@ export class AppComponent {
   constructor(public authService: AuthService, public router: Router) {
   }
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
+    this.authService.signOut();
   }
 }

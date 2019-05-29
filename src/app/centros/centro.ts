@@ -3,7 +3,7 @@ import { Resena } from './resenas/resena';
 import { Horario } from './horario';
 
 export class Centro {
-    id: number;
+    id?: string;
     nombre: string;
     descripcion: string;
     horarios?: Horario[];

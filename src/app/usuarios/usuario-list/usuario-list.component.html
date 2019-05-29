@@ -1,4 +1,4 @@
-<div class="card-columns">
+<div class="card-columns" *ngIf="usuarios$ | async as usuarios; else loading">
   <div class="card" *ngFor="let usuario of usuarios">
     <img
       *ngIf="usuario.imagen; else other_content"
@@ -23,3 +23,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  Cargando...
+</ng-template>

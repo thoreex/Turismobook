@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../usuario';
 import { UsuariosService } from '../usuarios.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-list',
@@ -9,7 +10,7 @@ import { UsuariosService } from '../usuarios.service';
 })
 export class UsuarioListComponent implements OnInit {
 
-  usuarios: Usuario[] = [];
+  usuarios$: Observable<Usuario[]>;
 
   constructor(private usuariosService: UsuariosService) { }
 
@@ -18,7 +19,7 @@ export class UsuarioListComponent implements OnInit {
   }
 
   getCentros() {
-    return this.usuariosService.getUsuarios().subscribe(usuarios => this.usuarios = usuarios);
+    this.usuarios$ = this.usuariosService.getUsuarios();
   }
 
 }
