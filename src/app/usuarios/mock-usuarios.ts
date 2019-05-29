@@ -10,7 +10,14 @@ export const USUARIOS: Usuario[] = [
             }
         ],
         resenas: [
-            { id: 0, usuario: { id: 0, nombre: 'Sebastian Vargas' }, fechaCreacion: new Date(), resena: 'resena 1', valoracion: 2 }
+            {
+                id: 0,
+                centro: {
+                    id: 0, nombre: 'c1', descripcion: 'descripcion del centro 1',
+                    imagen: 'https://valor-software.com/ngx-bootstrap/assets/images/nature/1.jpg'
+                },
+                titulo: 'r1', resena: 'resena 1', valoracion: 2
+            }
         ]
     },
     {
@@ -22,7 +29,14 @@ export const USUARIOS: Usuario[] = [
             }
         ],
         resenas: [
-            { id: 1, usuario: { id: 1, nombre: 'Nervin Quesada' }, fechaCreacion: new Date(), resena: 'resena 2', valoracion: 5 }
+            {
+                id: 1,
+                centro: {
+                    id: 0, nombre: 'c1', descripcion: 'descripcion del centro 1',
+                    imagen: 'https://valor-software.com/ngx-bootstrap/assets/images/nature/1.jpg'
+                },
+                titulo: 'r2', resena: 'resena 2', valoracion: 5
+            }
         ]},
     {
         id: 2, nombre: 'Lolito Quesada', usuario: 'Lolito', contrasena: 'l123', rol: 'Admin',

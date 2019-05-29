@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from '../usuarios.service';
 import { ActivatedRoute } from '@angular/router';
 import { Usuario } from '../usuario';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-usuario-detail',
@@ -11,7 +12,9 @@ import { Usuario } from '../usuario';
 export class UsuarioDetailComponent implements OnInit {
   usuario: Usuario;
 
-  constructor(private usuariosService: UsuariosService, private route: ActivatedRoute) { }
+  constructor(private usuariosService: UsuariosService,
+              private authService: AuthService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getUsuario();

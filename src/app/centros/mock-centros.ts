@@ -23,8 +23,14 @@ export const CENTROS: Centro[] = [
         valoracion: 3.5,
         cantValoraciones: 2,
         resenas: [
-            { id: 0, usuario: { id: 0, nombre: 'Sebastian Vargas' }, fechaCreacion: new Date(), resena: 'resena 1', valoracion: 2 },
-            { id: 1, usuario: { id: 1, nombre: 'Nervin Quesada' }, fechaCreacion: new Date(), resena: 'resena 2', valoracion: 5 }
+            {
+                id: 0, usuario: { id: 0, nombre: 'Sebastian Vargas' },
+                titulo: 'r1', resena: 'resena 1', valoracion: 2
+            },
+            {
+                id: 1, usuario: { id: 1, nombre: 'Nervin Quesada' },
+                titulo: 'r2', resena: 'resena 2', valoracion: 5
+            }
         ],
         fechaCreacion: new Date(), ultimaModificacion: new Date()
     },

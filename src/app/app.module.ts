@@ -7,7 +7,6 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-import { CentrosModule } from './centros/centros.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
 
@@ -19,7 +18,6 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     BrowserModule,
     AngularFontAwesomeModule,
-    CentrosModule,
     AuthModule,
     AppRoutingModule // Siempre al final de todos los Modules con Routing
     // , AngularFireModule.initializeApp(environment.firebase)

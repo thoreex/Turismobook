@@ -17,7 +17,10 @@ const routes: Routes = [
     path: 'usuarios',
     loadChildren: './usuarios/usuarios.module#UsuariosModule'
   },
-  // { path: '', pathMatch: 'full', redirectTo: '/centros' },
+  {
+    path: 'centros',
+    loadChildren: './centros/centros.module#CentrosModule'
+  },
   { path: '', pathMatch: 'full', redirectTo: '/home' },
   { path: '**', component: PageNotFoundComponent }
 ];
