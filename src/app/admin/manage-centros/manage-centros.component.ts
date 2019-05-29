@@ -37,12 +37,12 @@ export class ManageCentrosComponent implements OnInit {
       nombre: ['', [Validators.required]],
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
       imagen: ['', [Validators.required]],
-      fotografias: ['', [Validators.required]],
+      // fotografias: ['', [Validators.required]],
       video: ['', [Validators.required]],
       fechaCreacion: [new Date()],
       ultimaModificacion: [new Date()],
-      editorNombre: ['', [Validators.required]],
-      editorId: ['', [Validators.required]]
+      // editorNombre: ['', [Validators.required]],
+      // editorId: ['', [Validators.required]]
     });
   }
 
@@ -66,7 +66,7 @@ export class ManageCentrosComponent implements OnInit {
       }
 
       alert('Información guardada');
-      // Redireccionar "Manage-Noticias"
+      // Redireccionar "Manage-Centros"
       this.Cancelar();
     } else {
       alert('Debe completar la información correctamente');
@@ -85,12 +85,12 @@ export class ManageCentrosComponent implements OnInit {
           nombre: [centro.nombre, [Validators.required]],
           descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
           imagen: [centro.imagen, [Validators.required]],
-          fotografias: [centro.fotografias, [Validators.required]],
+          // fotografias: [centro.fotografias, [Validators.required]],
           video: [centro.video, [Validators.required]],
           fechaCreacion: [centro.fechaCreacion],
           ultimaModificacion: [centro.ultimaModificacion],
-          editorNombre: [centro.editor.nombre, [Validators.required]],
-          editorId: [centro.editor.id, [Validators.required]]
+          // editorNombre: [centro.editor.nombre, [Validators.required]],
+          // editorId: [centro.editor.id, [Validators.required]]
         });
       }
     });

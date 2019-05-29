@@ -12,12 +12,12 @@
     />
   </div>
   <div class="form-group col-12">
-    <label for="titulo">Nombre</label>
+    <label for="nombre">Nombre</label>
     <input
       type="text"
       class="form-control"
       formControlName="nombre"
-      id="Nombre"
+      id="nombre"
       placeholder="Escriba el Nombre"
     />
     <div *ngIf="formGroup.controls['nombre'].dirty">
@@ -30,7 +30,7 @@
     </div>
   </div>
   <div class="form-group col-12">
-    <label for="titulo">Descripción</label>
+    <label for="descripcion">Descripción</label>
     <input
       type="text"
       class="form-control"
@@ -54,7 +54,7 @@
     </div>
   </div>
   <div class="form-group col-12">
-    <label for="titulo">Imagen</label>
+    <label for="imagen">Imagen</label>
     <input
       type="text"
       class="form-control"
@@ -71,8 +71,9 @@
       </div>
     </div>
   </div>
+  <!--
   <div class="form-group col-12">
-    <label for="titulo">Fotografias</label>
+    <label for="fotografias">Fotografias</label>
     <input
       type="text"
       class="form-control"
@@ -89,8 +90,9 @@
       </div>
     </div>
   </div>
+  -->
   <div class="form-group col-12">
-    <label for="titulo">Video</label>
+    <label for="video">Video</label>
     <input
       type="text"
       class="form-control"
@@ -108,7 +110,7 @@
     </div>
   </div>
   <div class="form-group col-6">
-    <label for="titulo">Fecha Creación</label>
+    <label for="fechaCreacion">Fecha Creación</label>
     <input
       type="datetime"
       class="form-control"
@@ -118,7 +120,7 @@
     />
   </div>
   <div class="form-group col-6">
-    <label for="titulo">Última modificación</label>
+    <label for="ultimaModificacion">Última modificación</label>
     <input
       type="datetime"
       class="form-control"
@@ -127,6 +129,7 @@
       readonly
     />
   </div>
+  <!--
   <div class="form-group col-6">
     <label for="editorNombre">Nombre de Editor</label>
     <input
@@ -137,7 +140,7 @@
       readonly
     />
   </div>
-  <div class="form-group col-6">
+    div class="form-group col-6">
     <label for="editorId">Id de Editor</label>
     <input
       type="text"
@@ -147,6 +150,7 @@
       readonly
     />
   </div>
+  -->
 </form>
 <button
   type="submit"
