@@ -6,8 +6,8 @@ import { CentroDetailComponent } from './centro-detail/centro-detail.component';
 
 const routes: Routes = [
   { path: 'centros', component: CentroListComponent },
-  { path: 'centros/search', component: CentroSearchComponent},
-  { path: 'centros/:id', component: CentroDetailComponent}
+  { path: 'centros/search', component: CentroSearchComponent },
+  { path: 'centros/:id', component: CentroDetailComponent }
 ];
 
 @NgModule({

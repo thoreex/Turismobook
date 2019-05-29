@@ -10,6 +10,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { CentrosModule } from './centros/centros.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
+import { ResenasModule } from './resenas/resenas.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     BrowserModule,
     AngularFontAwesomeModule,
     CentrosModule,
+    ResenasModule,
     AuthModule,
     AppRoutingModule // Siempre al final de todos los Modules con Routing
     // , AngularFireModule.initializeApp(environment.firebase)

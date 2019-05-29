@@ -1,0 +1,129 @@
+<h2>Información de reseña</h2>
+
+<form [formGroup]="formGroup" id="formGroup" class="row">
+  <div class="form-group col-6">
+    <label for="id">Id de la Reseña</label>
+    <input
+      class="form-control"
+      formControlName="id"
+      id="id"
+      type="text"
+      readonly
+    />
+  </div>
+  <div class="form-group col-6">
+    <label for="usuario">Usuario</label>
+    <input
+      class="form-control"
+      formControlName="usuario"
+      id="usuario"
+      type="text"
+      readonly
+    />
+  </div>
+  <div class="form-group col-6">
+    <label for="centro">Centro</label>
+    <input
+      class="form-control"
+      formControlName="centro"
+      id="centro"
+      type="text"
+      readonly
+    />
+  </div>
+  <div class="form-group col-12">
+    <label for="valoracion">Valoración</label>
+    <input
+      type="number"
+      class="form-control"
+      formControlName="valoracion"
+      id="valoracion"
+      placeholder="Escriba la valoración"
+      min="1"
+      max="5"
+    />
+    <div *ngIf="formGroup.controls['valoracion'].dirty">
+      <div
+        class="form-control-feedback text-danger"
+        *ngIf="formGroup.controls['valoracion'].errors?.required"
+      >
+        La valoración es requerida
+      </div>
+    </div>
+  </div>
+  <div class="form-group col-12">
+    <label for="titulo">Título</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="titulo"
+      id="titulo"
+      placeholder="Escriba el título"
+    />
+    <div *ngIf="formGroup.controls['titulo'].dirty">
+      <div
+        class="form-control-feedback text-danger"
+        *ngIf="formGroup.controls['titulo'].errors?.required"
+      >
+        El título es requerido
+      </div>
+    </div>
+  </div>
+  <div class="form-group col-12">
+    <label for="resena">Reseña</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="resena"
+      id="resena"
+      placeholder="Escriba la reseña"
+    />
+    <div *ngIf="formGroup.controls['resena'].dirty">
+      <div
+        class="form-control-feedback text-danger"
+        *ngIf="formGroup.controls['resena'].errors?.required"
+      >
+        La reseña es requerida
+      </div>
+    </div>
+  </div>
+  <div class="form-group col-6">
+    <label for="fechaCreacion">Fecha Creación</label>
+    <input
+      type="datetime"
+      class="form-control"
+      formControlName="fechaCreacion"
+      id="fechaCreacion"
+      readonly
+    />
+  </div>
+  <div class="form-group col-6">
+    <label for="ultimaModificacion">Última modificación</label>
+    <input
+      type="datetime"
+      class="form-control"
+      formControlName="ultimaModificacion"
+      id="ultimaModificacion"
+      readonly
+    />
+  </div>
+
+  <div class="form-group col-6">
+    <label for="fechaEliminacion">Fecha Creación</label>
+    <input
+      type="datetime"
+      class="form-control"
+      formControlName="fechaEliminacion"
+      id="fechaEliminacion"
+      readonly
+    />
+  </div>
+</form>
+<button
+  type="submit"
+  class="btn btn-primary float-right m-b-5"
+  [ngClass]="{ disabled: !formGroup.valid }"
+  (click)="guardarData()"
+>
+  Guardar
+</button>

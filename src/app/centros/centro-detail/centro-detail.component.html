@@ -247,8 +247,12 @@
                 </p>
                 <div class="clearfix"></div>
                 <p>
-                  {{ resena.resena }}
+                  Título:
+                  <a [routerLink]="['/resenas', resena.id]">
+                    <strong>{{ resena.titulo }}</strong>
+                  </a>
                 </p>
+                <p>{{ resena.resena }}</p>
                 <small>{{ resena.fechaCreacion }}</small>
               </div>
             </div>

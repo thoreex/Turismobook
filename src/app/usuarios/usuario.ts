@@ -1,5 +1,5 @@
 import { Centro } from '../centros/centro';
-import { Resena } from '../centros/resena';
+import { Resena } from '../resenas/resena';
 
 export class Usuario {
     id: number;
