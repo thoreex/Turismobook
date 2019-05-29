@@ -1,0 +1,78 @@
+<div class="input-group mb-3">
+  <input
+    type="text"
+    [(ngModel)]="term"
+    maxlength="30"
+    class="form-control"
+    placeholder="Buscar por nombre de centro turistico"
+    aria-label="Centro turistico"
+    (keyup)="searchCentros(term)"
+  />
+  <a
+    class="btn btn-outline-primary float-right m-b-5"
+    routerLinkActive="active"
+    [routerLink]="['/admin/manage-centros', -1]"
+  >
+    Agregar
+  </a>
+</div>
+
+<router-outlet></router-outlet>
+
+<div class="container">
+  <div class="row">
+    <h2>Centros:</h2>
+    <div class="col-12">
+      <div class="card-columns" *ngIf="!vacio">
+        <div
+          class="card"
+          *ngFor="
+            let centro of filteredCentros
+              | paginate: { itemsPerPage: 3, currentPage: p };
+            let i = index
+          "
+        >
+          <img
+            class="card-img-top"
+            src="{{ centro.imagen }}"
+            alt="Imagen del centro"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ centro.nombre }}
+            </h5>
+            <p class="card-text">
+              {{ centro.descripcion }}
+            </p>
+            <p class="card-text">
+              <small class="text-muted">{{ centro.ultimaModificacion }}</small>
+            </p>
+            <a
+              [routerLink]="['/admin/manage-centros', centro.id]"
+              class="btn btn-primary"
+            >
+              Editar
+            </a>
+            <button class="btn btn-danger" (click)="borrarData(centro.id)">
+              Borrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="pagination">
+        <pagination-controls
+          (pageChange)="p = $event"
+          autoHide="true"
+          responsive="true"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-danger" role="alert" *ngIf="vacio">
+  No se encontró información!
+</div>

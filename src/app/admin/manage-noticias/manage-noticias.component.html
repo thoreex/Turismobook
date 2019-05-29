@@ -94,6 +94,13 @@
 </form>
 <button
   type="submit"
+  class="btn btn-danger float-right m-b-5"
+  (click)="Cancelar()"
+>
+  Cancelar
+</button>
+<button
+  type="submit"
   class="btn btn-primary float-right m-b-5"
   [ngClass]="{ disabled: !formGroup.valid }"
   (click)="guardarData()"

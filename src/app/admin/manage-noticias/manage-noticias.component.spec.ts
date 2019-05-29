@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManageNoticiasComponent } from './manage-noticias.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ManageNoticiasComponent', () => {
@@ -11,7 +11,7 @@ describe('ManageNoticiasComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ManageNoticiasComponent],
-      imports: [ReactiveFormsModule, RouterTestingModule]
+      imports: [ReactiveFormsModule, FormsModule, RouterTestingModule]
     })
       .compileComponents();
   }));

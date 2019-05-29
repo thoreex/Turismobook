@@ -12,6 +12,8 @@ import { Noticia } from 'src/app/noticias/noticia';
 export class ManageNoticiasComponent implements OnInit {
   private Id: number;
   public formGroup: FormGroup;
+  public Crear = -1;
+  public listaNoticias: Noticia[];
 
   constructor(
     private router: Router,
@@ -19,11 +21,11 @@ export class ManageNoticiasComponent implements OnInit {
     private noticiasService: NoticiasService,
     private formBuilder: FormBuilder) {
 
-    this.iniciarNoticia();
     this.Id = +this.route.snapshot.params.id;
-
-    this.cargarNoticia(this.Id);
-
+    this.iniciarNoticia();
+    if (this.Id !== this.Crear) {
+      this.cargarNoticia(this.Id);
+    }
   }
 
   ngOnInit() {
@@ -43,39 +45,35 @@ export class ManageNoticiasComponent implements OnInit {
   guardarData = () => {
     if (this.formGroup.valid) {
       let noticiaIndex = -1;
-      let listaNoticias: Noticia[];
-      this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
-      listaNoticias.forEach((noticia, index) => {
-        if (noticia.id === this.formGroup.value.id) {
+      this.listaNoticias = [];
+      this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
+      this.listaNoticias.forEach((noticia, index) => {
+        if (noticia.id === +this.formGroup.value.id) {
           noticiaIndex = index;
         }
       });
 
       if (noticiaIndex >= 0) {
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        listaNoticias[noticiaIndex] = this.formGroup.value;
+        this.listaNoticias[noticiaIndex] = this.formGroup.value;
       } else {
-        this.formGroup.patchValue({ id: listaNoticias.length });
-        listaNoticias.push(this.formGroup.value);
+        this.formGroup.patchValue({ id: this.listaNoticias.length });
+        this.listaNoticias.push(this.formGroup.value);
       }
-
-      // this.StorageService.setObjectValue(this.Key, listaNoticias);
-      // console.log(this.StorageService.getObjectValue(this.Key));
 
       alert('Información guardada');
       // Redireccionar "Manage-Noticias"
-      this.router.navigate(['admin/noticias']);
+      this.Cancelar();
     } else {
       alert('Debe completar la información correctamente');
     }
   }
 
   cargarNoticia = (id: number) => {
-    let listaNoticias: Noticia[];
-    this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
-    listaNoticias.forEach(noticia => {
+    this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
+    this.listaNoticias.forEach(noticia => {
       if (noticia.id === id) {
-        // console.log(this.formGroup);
+        this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
           id: [id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
@@ -88,4 +86,7 @@ export class ManageNoticiasComponent implements OnInit {
     });
   }
 
+  Cancelar = () => {
+    this.router.navigate(['admin/noticias']);
+  }
 }

@@ -72,8 +72,6 @@ export class ManageEditoresComponent implements OnInit {
           this.mensajeError = 'No existe el centro!';
           this.error = true;
         }
-        console.log('Centro:' + JSON.stringify(c));
-        console.log('Usuario:' + JSON.stringify(u));
 
       } else {
         this.mensajeError = 'Seleccione un centro!';

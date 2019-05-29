@@ -1,3 +1,196 @@
-<p>
-  manage-centros works!
-</p>
+<h2>Información de Centro</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="formGroup" id="formGroup" class="row">
+        <div class="form-group col-6">
+          <label for="id">Id del centro</label>
+          <input
+            class="form-control"
+            formControlName="id"
+            id="id"
+            type="text"
+            readonly
+          />
+        </div>
+        <div class="form-group col-12">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            id="nombre"
+            placeholder="Escriba el Nombre"
+          />
+          <div *ngIf="formGroup.controls['nombre'].dirty">
+            <div
+              class="form-control-feedback text-danger"
+              *ngIf="formGroup.controls['nombre'].errors?.required"
+            >
+              El nombre es requerido
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-12">
+          <label for="descripcion">Descripción</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="descripcion"
+            id="descripcion"
+            placeholder="Escriba la descripción"
+          />
+          <div *ngIf="formGroup.controls['descripcion'].dirty">
+            <div
+              class="form-control-feedback text-danger"
+              *ngIf="formGroup.controls['descripcion'].errors?.required"
+            >
+              La descripción es requerida
+            </div>
+            <div
+              class="form-control-feedback text-danger"
+              *ngIf="formGroup.controls['descripcion'].errors?.minlength"
+            >
+              La descripción debe ser de almenos 15 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="horarios">Horarios</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="horarios"
+            id="horarios"
+            readonly
+          />
+        </div>
+        <div class="form-group col-12">
+          <label for="imagen">Imagen</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="imagen"
+            id="imagen"
+            placeholder="Escriba la url de la imagen"
+          />
+          <div *ngIf="formGroup.controls['imagen'].dirty">
+            <div
+              class="form-control-feedback text-danger"
+              *ngIf="formGroup.controls['imagen'].errors?.required"
+            >
+              La url de la imagen es requerida
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="fotografias">fotografias</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="fotografias"
+            id="fotografias"
+            readonly
+          />
+        </div>
+        <div class="form-group col-12">
+          <label for="video">Video</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="video"
+            id="video"
+            placeholder="Escriba la url de la video"
+          />
+          <div *ngIf="formGroup.controls['video'].dirty">
+            <div
+              class="form-control-feedback text-danger"
+              *ngIf="formGroup.controls['video'].errors?.required"
+            >
+              La url de las video es requerida
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="seguidores">seguidores</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="seguidores"
+            id="seguidores"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="resenas">resenas</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="resenas"
+            id="resenas"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6">
+          <label for="fechaCreacion">Fecha Creación</label>
+          <input
+            type="datetime"
+            class="form-control"
+            formControlName="fechaCreacion"
+            id="fechaCreacion"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6">
+          <label for="ultimaModificacion">Última modificación</label>
+          <input
+            type="datetime"
+            class="form-control"
+            formControlName="ultimaModificacion"
+            id="ultimaModificacion"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="fechaEliminacion">Fecha eliminación</label>
+          <input
+            type="datetime"
+            class="form-control"
+            formControlName="fechaEliminacion"
+            id="fechaEliminacion"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="editor">editor</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="editor"
+            id="editor"
+            readonly
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button
+        type="submit"
+        class="btn btn-danger float-right m-b-5"
+        (click)="Cancelar()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary float-right m-b-5"
+        [ngClass]="{ disabled: !formGroup.valid }"
+        (click)="guardarData()"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
