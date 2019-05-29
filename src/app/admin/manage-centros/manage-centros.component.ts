@@ -81,7 +81,6 @@ export class ManageCentrosComponent implements OnInit {
             const indexCentro = usuario.seguidores.findIndex(centro => centro.id === +this.formGroup.value.id);
             if ( indexCentro > -1 ) {
               usuario.seguidores[indexCentro] = this.formGroup.value;
-              console.log(usuario);
             }
           }
         });

@@ -20,19 +20,6 @@ export class CentrosService {
     return of(CENTROS);
   }
 
-  getFilteredCentros = (): Observable<Centro[]> => {
-    const loggedUser = this.authService.oUsuario;
-    this.unDeleteted = [];
-    CENTROS.forEach((item) => {
-      if (!item.fechaEliminacion && item.editor && loggedUser) {
-        if (item.editor.id === loggedUser.id) {
-          this.unDeleteted.push(item);
-        }
-      }
-    });
-    return of(this.unDeleteted);
-  }
-
   getCentrosA = (): Centro[] => {
     return CENTROS;
   }
