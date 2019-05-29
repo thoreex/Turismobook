@@ -1,7 +1,7 @@
-<h2>Información de reseña</h2>
+<h2>Reseña de {{ centro.nombre }}</h2>
 
 <form [formGroup]="formGroup" id="formGroup" class="row">
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="id">Id de la Reseña</label>
     <input
       class="form-control"
@@ -11,7 +11,7 @@
       readonly
     />
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="usuario">Usuario</label>
     <input
       class="form-control"
@@ -21,7 +21,7 @@
       readonly
     />
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-12 d-none">
     <label for="centro">Centro</label>
     <input
       class="form-control"
@@ -71,13 +71,14 @@
   </div>
   <div class="form-group col-12">
     <label for="resena">Reseña</label>
-    <input
+    <textarea
       type="text"
       class="form-control"
       formControlName="resena"
       id="resena"
-      placeholder="Escriba la reseña"
-    />
+      rows="3"
+    >
+    </textarea>
     <div *ngIf="formGroup.controls['resena'].dirty">
       <div
         class="form-control-feedback text-danger"
@@ -87,7 +88,7 @@
       </div>
     </div>
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="fechaCreacion">Fecha Creación</label>
     <input
       type="datetime"
@@ -97,7 +98,7 @@
       readonly
     />
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="ultimaModificacion">Última modificación</label>
     <input
       type="datetime"
@@ -108,8 +109,8 @@
     />
   </div>
 
-  <div class="form-group col-6">
-    <label for="fechaEliminacion">Fecha Creación</label>
+  <div class="form-group col-12 d-none">
+    <label for="fechaEliminacion">Fecha eliminación</label>
     <input
       type="datetime"
       class="form-control"
@@ -119,11 +120,22 @@
     />
   </div>
 </form>
-<button
-  type="submit"
-  class="btn btn-primary float-right m-b-5"
-  [ngClass]="{ disabled: !formGroup.valid }"
-  (click)="guardarData()"
->
-  Guardar
-</button>
+
+<div class="btn-group float-right m-b-5" role="group">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="eliminarData()"
+    *ngIf="idResena > Crear"
+  >
+    Eliminar
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [ngClass]="{ disabled: !formGroup.valid }"
+    (click)="guardarData()"
+  >
+    Guardar
+  </button>
+</div>

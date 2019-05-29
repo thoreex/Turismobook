@@ -19,24 +19,21 @@ export class ResenasUpsertComponent implements OnInit {
   public formGroup: FormGroup;
   public Crear = -1;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private resenasService: ResenasService,
-    private centroService: CentrosService,
-    private authService: AuthService,
-    private formBuilder: FormBuilder) {
-
-    this.iniciarResena();
-
-    this.idResena = +this.route.snapshot.params.resena;
-    if (this.idResena !== this.Crear) {
-      this.cargarResena(this.idResena);
-    }
-
-    this.idCentro = +this.route.snapshot.params.centro;
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private resenasService: ResenasService,
+              private centroService: CentrosService,
+              private authService: AuthService,
+              private formBuilder: FormBuilder) {
+    this.idCentro = +this.route.parent.snapshot.params.id;
     if (this.idCentro !== this.Crear) {
       this.centroService.getCentro(this.idCentro).subscribe(centro => this.centro = centro);
+    }
+
+    this.iniciarResena();
+    this.idResena = +this.route.snapshot.params.id;
+    if (this.idResena !== this.Crear) {
+      this.cargarResena(this.idResena);
     }
   }
 
@@ -46,8 +43,8 @@ export class ResenasUpsertComponent implements OnInit {
   iniciarResena = () => {
     this.formGroup = this.formBuilder.group({
       id: ['(nueva)', [Validators.required]],
-      centro: [this.centro, [Validators.required]],
-      usuario: [this.authService.oUsuario, [Validators.required]],
+      centro: [''],
+      usuario: [''],
       valoracion: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
       titulo: ['', [Validators.required]],
       resena: ['', [Validators.required]],
@@ -69,6 +66,13 @@ export class ResenasUpsertComponent implements OnInit {
       });
 
       if (resenaIndex >= 0) {
+        this.formGroup.patchValue({ centro: {
+          id: this.centro.id, nombre: this.centro.nombre,
+          descripcion: this.centro.descripcion, imagen: this.centro.imagen
+        }});
+        this.formGroup.patchValue({ usuario: {
+          id: this.authService.oUsuario.id, nombre: this.authService.oUsuario.nombre
+        }});
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
         listaResenas[resenaIndex] = this.formGroup.value;
 
@@ -125,16 +129,34 @@ export class ResenasUpsertComponent implements OnInit {
       // this.StorageService.setObjectValue(this.Key, listaNoticias);
       // console.log(this.StorageService.getObjectValue(this.Key));
 
-      console.log(this.authService.oUsuario);
-      console.log(this.centro);
-      console.log(this.formGroup.value);
-
       alert('Información guardada');
       // Redireccionar la reseña
-      this.router.navigate(['resenas', this.formGroup.value.id]);
+      this.router.navigate(['/centros', this.centro.id, 'resenas', this.formGroup.value.id]);
     } else {
       alert('Debe completar la información correctamente');
     }
+  }
+
+  eliminarData = () => {
+    let resenaIndex = -1;
+    let listaResenas: Resena[];
+    this.resenasService.getResenas().subscribe(resenas => listaResenas = resenas);
+    listaResenas.forEach((resena, index) => {
+      if (resena.id === +this.formGroup.value.id) {
+        resenaIndex = index;
+      }
+    });
+
+    const fechaEliminacion = new Date();
+    listaResenas[resenaIndex].fechaEliminacion = fechaEliminacion;
+
+    const uResenaIndex = this.authService.oUsuario.resenas.findIndex(
+      resena => resena.id === +this.formGroup.value.id);
+    this.authService.oUsuario.resenas[uResenaIndex].fechaEliminacion = fechaEliminacion;
+
+    const cResenaIndex = this.centro.resenas.findIndex(
+      resena => resena.id === +this.formGroup.value.id);
+    this.centro.resenas[cResenaIndex].fechaEliminacion = fechaEliminacion;
   }
 
   cargarResena = (id: number) => {
@@ -144,8 +166,8 @@ export class ResenasUpsertComponent implements OnInit {
       if (resena.id === id) {
         this.formGroup = this.formBuilder.group({
           id: [id, [Validators.required]],
-          centro: [resena.centro, [Validators.required]],
-          usuario: [resena.usuario, [Validators.required]],
+          centro: [resena.centro],
+          usuario: [resena.usuario],
           valoracion: [resena.valoracion, [Validators.required, Validators.min(1), Validators.max(5)]],
           titulo: [resena.titulo, [Validators.required]],
           resena: [resena.resena, [Validators.required]],

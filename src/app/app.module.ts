@@ -9,7 +9,6 @@ import { environment } from '../environments/environment';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
-import { ResenasModule } from './resenas/resenas.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +18,6 @@ import { ResenasModule } from './resenas/resenas.module';
   imports: [
     BrowserModule,
     AngularFontAwesomeModule,
-    ResenasModule,
     AuthModule,
     AppRoutingModule // Siempre al final de todos los Modules con Routing
     // , AngularFireModule.initializeApp(environment.firebase)

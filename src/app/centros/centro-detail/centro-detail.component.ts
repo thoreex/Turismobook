@@ -32,6 +32,12 @@ export class CentroDetailComponent implements OnInit {
       subscribe(centro => this.centro = centro);
   }
 
+  isResena(): boolean {
+    return this.authService.oUsuario &&
+      this.centro.resenas &&
+      this.centro.resenas.some(resena => resena.usuario.id === this.authService.oUsuario.id);
+  }
+
   follow() {
     // seguir/desseguir centro
     const loggedUser = this.authService.oUsuario;

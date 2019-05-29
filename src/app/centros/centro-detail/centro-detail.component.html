@@ -17,7 +17,16 @@
         {{ centro.valoracion ? centro.valoracion : 0 }}
         puntuación
       </h6>
-      <div class="col-12" *ngIf="authService.isLoggedIn">
+      <div class="col-12 btn-group" role="group" *ngIf="authService.isLoggedIn">
+        <a
+          [routerLink]="['resenas', 'nuevo']"
+          class="btn btn-primary"
+          role="button"
+          [class.disabled]="isResena()"
+          aria-disabled="true"
+        >
+          Reseña
+        </a>
         <button
           type="button"
           class="btn btn-primary"
@@ -247,11 +256,27 @@
                 </p>
                 <div class="clearfix"></div>
                 <p>
-                  Título:
-                  <a [routerLink]="['/resenas', resena.id]">
-                    <strong>{{ resena.titulo }}</strong>
-                  </a>
+                  <span class="float-left">
+                    Título:
+                    <a [routerLink]="['resenas', resena.id]">
+                      <strong>{{ resena.titulo }}</strong>
+                    </a>
+                  </span>
+                  <span
+                    class="float-right"
+                    *ngIf="resena.usuario.id === authService.oUsuario?.id"
+                  >
+                    <a
+                      [routerLink]="['resenas', 'editar', resena.id]"
+                      class="btn btn-secondary"
+                      role="button"
+                      aria-disabled="true"
+                    >
+                      Editar
+                    </a>
+                  </span>
                 </p>
+                <div class="clearfix"></div>
                 <p>{{ resena.resena }}</p>
                 <small>{{ resena.fechaCreacion }}</small>
               </div>

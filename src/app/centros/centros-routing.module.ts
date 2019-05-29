@@ -11,10 +11,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        children: [
-          { path: '', component: CentroListComponent },
-          { path: ':id', component: CentroDetailComponent },
-        ]
+        component: CentroListComponent
+      },
+      {
+        path: ':id/resenas',
+        loadChildren: './resenas/resenas.module#ResenasModule'
+      },
+      {
+        path: ':id',
+        component: CentroDetailComponent
       }
     ]
   }

@@ -3,12 +3,31 @@ import { Routes, RouterModule } from '@angular/router';
 import { ResenasListComponent } from './resenas-list/resenas-list.component';
 import { ResenasDetailComponent } from './resenas-detail/resenas-detail.component';
 import { ResenasUpsertComponent } from './resenas-upsert/resenas-upsert.component';
+import { ResenasComponent } from './resenas/resenas.component';
 
 const routes: Routes = [
-  { path: 'resenas', component: ResenasListComponent },
-  { path: 'resenas/:id', component: ResenasDetailComponent},
-  { path: 'resenas/editar/:resena', component: ResenasUpsertComponent},
-  { path: 'resenas/nuevo/:centro', component: ResenasUpsertComponent},
+  {
+    path: '',
+    component: ResenasComponent,
+    children: [
+      {
+        path: '',
+        component: ResenasListComponent
+      },
+      {
+        path: 'nuevo',
+        component: ResenasUpsertComponent
+      },
+      {
+        path: 'editar/:id',
+        component: ResenasUpsertComponent
+      },
+      {
+        path: ':id',
+        component: ResenasDetailComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({

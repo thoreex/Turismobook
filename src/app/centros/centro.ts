@@ -1,5 +1,5 @@
 import { Usuario } from '../usuarios/usuario';
-import { Resena } from '../resenas/resena';
+import { Resena } from './resenas/resena';
 import { Horario } from './horario';
 
 export class Centro {

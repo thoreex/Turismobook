@@ -36,17 +36,15 @@
           </span>
           <span
             class="float-right"
-            *ngIf="
-              authService.oUsuario &&
-              resena.usuario.id === authService.oUsuario.id
-            "
+            *ngIf="resena.usuario.id === authService.oUsuario?.id"
           >
             <a
-              [routerLink]="['/resenas/editar/', resena.id]"
+              [routerLink]="['../editar', resena.id]"
               class="btn btn-secondary"
               role="button"
               aria-disabled="true"
             >
+              Editar
             </a>
           </span>
         </p>
