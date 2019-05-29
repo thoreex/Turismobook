@@ -47,7 +47,7 @@ export class ManageNoticiasComponent implements OnInit {
       let listaNoticias: Noticia[];
       this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
       listaNoticias.forEach((noticia, index) => {
-        if (noticia.id === this.formGroup.value.id) {
+        if (noticia.id === +this.formGroup.value.id) {
           noticiaIndex = index;
         }
       });

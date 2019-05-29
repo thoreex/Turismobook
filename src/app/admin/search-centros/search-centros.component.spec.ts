@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchCentrosComponent } from './search-centros.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('SearchCentrosComponent', () => {
   let component: SearchCentrosComponent;
@@ -11,7 +12,7 @@ describe('SearchCentrosComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SearchCentrosComponent],
-      imports: [ NgxPaginationModule, RouterTestingModule ]
+      imports: [ NgxPaginationModule, RouterTestingModule, FormsModule, ReactiveFormsModule ]
     })
     .compileComponents();
   }));
