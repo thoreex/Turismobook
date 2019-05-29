@@ -4,7 +4,7 @@
     <div class="col-12">
       <form [formGroup]="formGroup" id="formGroup" class="row">
         <div class="form-group col-6">
-          <label for="titulo">Id del centro</label>
+          <label for="id">Id del centro</label>
           <input
             class="form-control"
             formControlName="id"
@@ -55,6 +55,16 @@
             </div>
           </div>
         </div>
+        <div class="form-group col-6 d-none">
+          <label for="horarios">Horarios</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="horarios"
+            id="horarios"
+            readonly
+          />
+        </div>
         <div class="form-group col-12">
           <label for="imagen">Imagen</label>
           <input
@@ -73,6 +83,16 @@
             </div>
           </div>
         </div>
+        <div class="form-group col-6 d-none">
+          <label for="fotografias">fotografias</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="fotografias"
+            id="fotografias"
+            readonly
+          />
+        </div>
         <div class="form-group col-12">
           <label for="video">Video</label>
           <input
@@ -90,6 +110,26 @@
               La url de las video es requerida
             </div>
           </div>
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="seguidores">seguidores</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="seguidores"
+            id="seguidores"
+            readonly
+          />
+        </div>
+        <div class="form-group col-6 d-none">
+          <label for="resenas">resenas</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="resenas"
+            id="resenas"
+            readonly
+          />
         </div>
         <div class="form-group col-6">
           <label for="fechaCreacion">Fecha Creación</label>
@@ -111,28 +151,26 @@
             readonly
           />
         </div>
-        <!--
-        <div class="form-group col-6">
-          <label for="editorNombre">Nombre de Editor</label>
+        <div class="form-group col-6 d-none">
+          <label for="fechaEliminacion">Fecha eliminación</label>
           <input
-            type="text"
+            type="datetime"
             class="form-control"
-            formControlName="editorNombre"
-            id="editorNombre"
+            formControlName="fechaEliminacion"
+            id="fechaEliminacion"
             readonly
           />
         </div>
-          div class="form-group col-6">
-          <label for="editorId">Id de Editor</label>
+        <div class="form-group col-6 d-none">
+          <label for="editor">editor</label>
           <input
             type="text"
             class="form-control"
-            formControlName="editorId"
-            id="editorId"
+            formControlName="editor"
+            id="editor"
             readonly
           />
         </div>
-        -->
       </form>
     </div>
   </div>

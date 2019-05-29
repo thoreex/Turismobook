@@ -5,4 +5,5 @@ export class Noticia {
     public descripcion: string;
     public fechaCreacion?: Date;
     public ultimaModificacion?: Date;
+    public fechaEliminacion?: Date;
 }

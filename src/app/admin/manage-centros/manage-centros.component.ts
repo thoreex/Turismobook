@@ -4,6 +4,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Centro } from 'src/app/centros/centro';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Usuario } from 'src/app/usuarios/usuario';
+import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-manage-centros',
@@ -14,12 +17,16 @@ export class ManageCentrosComponent implements OnInit {
   private Id: number;
   public formGroup: FormGroup;
   public Crear = -1;
+  public rolEditor = 'Editor';
+  public loggedUser: Usuario;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private centrosService: CentrosService,
-    private formBuilder: FormBuilder
+    private usuarioService: UsuariosService,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
   ) {
     this.Id = +this.route.snapshot.params.id;
     this.iniciarCentro();
@@ -36,35 +43,55 @@ export class ManageCentrosComponent implements OnInit {
       id: ['(nueva)', [Validators.required]],
       nombre: ['', [Validators.required]],
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
+      horarios: [''],
       imagen: ['', [Validators.required]],
-      // fotografias: ['', [Validators.required]],
+      fotografias: [''],
       video: ['', [Validators.required]],
+      seguidores: [''],
+      resenas: [''],
       fechaCreacion: [new Date()],
-      ultimaModificacion: [new Date()],
-      // editorNombre: ['', [Validators.required]],
-      // editorId: ['', [Validators.required]]
+      ultimaModificacion: [''],
+      fechaEliminacion: [''],
+      editor: [''],
+
     });
   }
 
   guardarData = () => {
+    this.loggedUser = this.authService.oUsuario;
+    let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
       let centroIndex = -1;
+
       let listaCentros: Centro[];
       this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
       listaCentros.forEach((centro, index) => {
-        if (centro.id === this.formGroup.value.id) {
+        if (centro.id === +this.formGroup.value.id) {
           centroIndex = index;
         }
       });
 
       if (centroIndex >= 0) {
+        this.usuarioService.getUsuarios().subscribe(usuarios => listaUsuarios = usuarios);
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
+        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
         listaCentros[centroIndex] = this.formGroup.value;
+        listaUsuarios.forEach((usuario) => {
+          if ( usuario.seguidores ) {
+            const indexCentro = usuario.seguidores.findIndex(centro => centro.id === +this.formGroup.value.id);
+            if ( indexCentro > -1 ) {
+              usuario.seguidores[indexCentro] = this.formGroup.value;
+              console.log(usuario);
+            }
+          }
+        });
       } else {
         this.formGroup.patchValue({ id: listaCentros.length });
+        this.formGroup.patchValue({ fechaCreacion: new Date() });
+        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
         listaCentros.push(this.formGroup.value);
       }
-
+      console.log('LISTA: ' + JSON.stringify(this.formGroup.value));
       alert('Información guardada');
       // Redireccionar "Manage-Centros"
       this.Cancelar();
@@ -76,7 +103,6 @@ export class ManageCentrosComponent implements OnInit {
   cargarCentro = (id: number) => {
     let listaCentros: Centro[];
     this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
-    console.log(this.centrosService);
     listaCentros.forEach(centro => {
       if (centro.id === id) {
         this.formBuilder = new FormBuilder();
@@ -84,20 +110,23 @@ export class ManageCentrosComponent implements OnInit {
           id: [id, [Validators.required]],
           nombre: [centro.nombre, [Validators.required]],
           descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
+          horarios: [centro.horarios],
           imagen: [centro.imagen, [Validators.required]],
-          // fotografias: [centro.fotografias, [Validators.required]],
+          fotografias: [centro.fotografias],
           video: [centro.video, [Validators.required]],
+          seguidores: [centro.seguidores],
+          resenas: [centro.resenas],
           fechaCreacion: [centro.fechaCreacion],
           ultimaModificacion: [centro.ultimaModificacion],
-          // editorNombre: [centro.editor.nombre, [Validators.required]],
-          // editorId: [centro.editor.id, [Validators.required]]
+          fechaEliminacion: [centro.fechaEliminacion],
+          editor: [centro.editor],
         });
       }
     });
   }
 
   Cancelar() {
-    this.router.navigate(['admin/manage-centros']);
+    this.router.navigate(['admin']);
   }
 
 }

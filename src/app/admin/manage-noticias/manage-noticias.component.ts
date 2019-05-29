@@ -13,6 +13,7 @@ export class ManageNoticiasComponent implements OnInit {
   private Id: number;
   public formGroup: FormGroup;
   public Crear = -1;
+  public listaNoticias: Noticia[];
 
   constructor(
     private router: Router,
@@ -44,9 +45,9 @@ export class ManageNoticiasComponent implements OnInit {
   guardarData = () => {
     if (this.formGroup.valid) {
       let noticiaIndex = -1;
-      let listaNoticias: Noticia[];
-      this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
-      listaNoticias.forEach((noticia, index) => {
+      this.listaNoticias = [];
+      this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
+      this.listaNoticias.forEach((noticia, index) => {
         if (noticia.id === +this.formGroup.value.id) {
           noticiaIndex = index;
         }
@@ -54,10 +55,10 @@ export class ManageNoticiasComponent implements OnInit {
 
       if (noticiaIndex >= 0) {
         this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        listaNoticias[noticiaIndex] = this.formGroup.value;
+        this.listaNoticias[noticiaIndex] = this.formGroup.value;
       } else {
-        this.formGroup.patchValue({ id: listaNoticias.length });
-        listaNoticias.push(this.formGroup.value);
+        this.formGroup.patchValue({ id: this.listaNoticias.length });
+        this.listaNoticias.push(this.formGroup.value);
       }
 
       alert('Información guardada');
@@ -69,9 +70,8 @@ export class ManageNoticiasComponent implements OnInit {
   }
 
   cargarNoticia = (id: number) => {
-    let listaNoticias: Noticia[];
-    this.noticiasService.getNoticias().subscribe(noticias => listaNoticias = noticias);
-    listaNoticias.forEach(noticia => {
+    this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
+    this.listaNoticias.forEach(noticia => {
       if (noticia.id === id) {
         this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
@@ -86,8 +86,7 @@ export class ManageNoticiasComponent implements OnInit {
     });
   }
 
-  Cancelar() {
+  Cancelar = () => {
     this.router.navigate(['admin/noticias']);
   }
-
 }
