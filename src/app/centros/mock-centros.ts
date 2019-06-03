@@ -16,19 +16,19 @@ export const CENTROS: Centro[] = [
         ],
         video: 'zpOULjyy-n8',
         seguidores: [
-            { id: 0, nombre: 'Sebastian Vargas' },
-            { id: 1, nombre: 'Nervin Quesada' },
-            { id: 2, nombre: 'Lolito Quesada' }
+            { id: '0', email: '', nombre: 'Sebastian Vargas' },
+            { id: '1', email: '', nombre: 'Nervin Quesada' },
+            { id: '2', email: '', nombre: 'Lolito Quesada' }
         ],
         valoracion: 3.5,
         cantValoraciones: 2,
         resenas: [
             {
-                id: 0, usuario: { id: 0, nombre: 'Sebastian Vargas' },
+                id: 0, usuario: { id: '0', email: '', nombre: 'Sebastian Vargas' },
                 titulo: 'r1', resena: 'resena 1', valoracion: 2
             },
             {
-                id: 1, usuario: { id: 1, nombre: 'Nervin Quesada' },
+                id: 1, usuario: { id: '1', email: '', nombre: 'Nervin Quesada' },
                 titulo: 'r2', resena: 'resena 2', valoracion: 5
             }
         ],
@@ -38,9 +38,6 @@ export const CENTROS: Centro[] = [
         id: 1, nombre: 'c2', descripcion: 'descripcion del centro 2',
         imagen: 'https://valor-software.com/ngx-bootstrap/assets/images/nature/2.jpg',
         video: '8ecJE3cy06Q',
-        seguidores: [
-            { id: 2, nombre: 'Lolito Quesada' }
-        ],
         fechaCreacion: new Date(), ultimaModificacion: new Date()
     },
     {

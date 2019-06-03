@@ -53,7 +53,7 @@ export class ManageEditoresComponent implements OnInit {
                 } else {
                   u.centros = [{ id: c.id, nombre: c.nombre, descripcion: c.descripcion, imagen: c.imagen }];
                 }
-                c.editor = { id: u.id, nombre: u.nombre };
+                c.editor = { id: u.id, email: u.email, nombre: u.nombre };
                 this.mensajeError = 'Se asignó el editor ' + u.nombre + ' al centro ' + c.nombre;
                 this.error = true;
               } else {

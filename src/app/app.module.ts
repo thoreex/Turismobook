@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -19,8 +21,10 @@ import { AuthModule } from './auth/auth.module';
     BrowserModule,
     AngularFontAwesomeModule,
     AuthModule,
-    AppRoutingModule // Siempre al final de todos los Modules con Routing
-    // , AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

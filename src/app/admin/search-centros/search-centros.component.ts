@@ -21,12 +21,12 @@ export class SearchCentrosComponent implements OnInit {
   }
 
   getCentros = () => {
-    const loggedUser = this.authService.oUsuario;
+    /*const loggedUser = this.authService.oUsuario;
     let centrosAll: Centro[];
     this.centrosService.getCentros().subscribe(centros => centrosAll = centros);
     this.centros = this.filteredCentros = centrosAll.filter(item => !item.fechaEliminacion && item.editor &&
                                    loggedUser && item.editor.id === loggedUser.id);
-    return this.centros;
+    return this.centros;*/
   }
 
   searchCentros = (term: string) => {
@@ -49,7 +49,7 @@ export class SearchCentrosComponent implements OnInit {
   }
 
   borrarData = (id: number) => {
-    this.centros.forEach((item) => {
+    /*this.centros.forEach((item) => {
       if (item.id === id) {
         item.fechaEliminacion = new Date();
       }
@@ -59,7 +59,7 @@ export class SearchCentrosComponent implements OnInit {
         item.fechaEliminacion = new Date();
       }
     });
-    this.router.navigate(['admin']);
+    this.router.navigate(['admin']);*/
   }
 
 }

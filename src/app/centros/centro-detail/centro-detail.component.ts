@@ -4,6 +4,7 @@ import { CentrosService } from '../centros.service';
 import { Centro } from '../centro';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/auth/auth.service';
+import { take, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-centro-detail',
@@ -33,13 +34,15 @@ export class CentroDetailComponent implements OnInit {
   }
 
   isResena(): boolean {
-    return this.authService.oUsuario &&
+    /*return this.authService.oUsuario &&
       this.centro.resenas &&
-      this.centro.resenas.some(resena => resena.usuario.id === this.authService.oUsuario.id);
+      this.centro.resenas.some(resena => resena.usuario.id === this.authService.oUsuario.id);*/
+
+    return false;
   }
 
   follow() {
-    // seguir/desseguir centro
+    /*// seguir/desseguir centro
     const loggedUser = this.authService.oUsuario;
     if (loggedUser) {
       // en caso de seguidores ser undefined
@@ -64,12 +67,21 @@ export class CentroDetailComponent implements OnInit {
       } else {
         this.centro.seguidores.push({ id: loggedUser.id, nombre: loggedUser.nombre });
       }
-    }
+    }*/
   }
 
   isFollowing(): boolean {
+    /*this.authService.usuario$.pipe(
+      take(1),
+      map(user => !!user), // <-- map to boolean
+      tap(isLoggedIn => {
+        if (!isLoggedIn) {
+          this.router.navigate(['/']);
+        }
+      });
     return this.authService.oUsuario &&
       this.centro.seguidores &&
-      this.centro.seguidores.some(seguidor => seguidor.id === this.authService.oUsuario.id);
+      this.centro.seguidores.some(seguidor => seguidor.id === this.authService.oUsuario.id);*/
+    return false;
   }
 }

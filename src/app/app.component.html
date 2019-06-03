@@ -33,12 +33,10 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li *ngIf="!authService.isLoggedIn" class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['login']"
-            >Login</a
-          >
-        </li>
-        <li *ngIf="authService.isLoggedIn" class="nav-item dropdown">
+        <li
+          *ngIf="authService.usuario$ | async as usuario; else loading"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -48,13 +46,13 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {{ authService.oUsuario.nombre }}
+            {{ usuario.nombre }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a
               class="dropdown-item"
               routerLinkActive="active"
-              [routerLink]="['usuarios', authService.oUsuario.id]"
+              [routerLink]="['usuarios', usuario.id]"
               >Perfil</a
             >
             <a
@@ -67,6 +65,16 @@
             <button class="dropdown-item" (click)="logout()">Logout</button>
           </div>
         </li>
+        <ng-template #loading>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              [routerLink]="['login']"
+              >Login</a
+            >
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>

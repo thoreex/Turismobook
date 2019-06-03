@@ -55,7 +55,7 @@ export class ResenasUpsertComponent implements OnInit {
   }
 
   guardarData = () => {
-    if (this.formGroup.valid) {
+    /*if (this.formGroup.valid) {
       let resenaIndex = -1;
       let listaResenas: Resena[];
       this.resenasService.getResenas().subscribe(resenas => listaResenas = resenas);
@@ -134,11 +134,11 @@ export class ResenasUpsertComponent implements OnInit {
       this.router.navigate(['/centros', this.centro.id, 'resenas', this.formGroup.value.id]);
     } else {
       alert('Debe completar la información correctamente');
-    }
+    }*/
   }
 
   eliminarData = () => {
-    let resenaIndex = -1;
+    /*let resenaIndex = -1;
     let listaResenas: Resena[];
     this.resenasService.getResenas().subscribe(resenas => listaResenas = resenas);
     listaResenas.forEach((resena, index) => {
@@ -156,11 +156,11 @@ export class ResenasUpsertComponent implements OnInit {
 
     const cResenaIndex = this.centro.resenas.findIndex(
       resena => resena.id === +this.formGroup.value.id);
-    this.centro.resenas[cResenaIndex].fechaEliminacion = fechaEliminacion;
+    this.centro.resenas[cResenaIndex].fechaEliminacion = fechaEliminacion; */
   }
 
   cargarResena = (id: number) => {
-    let listaResenas: Resena[];
+    /*let listaResenas: Resena[];
     this.resenasService.getResenas().subscribe(resenas => listaResenas = resenas);
     listaResenas.forEach(resena => {
       if (resena.id === id) {
@@ -176,7 +176,7 @@ export class ResenasUpsertComponent implements OnInit {
           fechaEliminacion: [resena.fechaEliminacion],
         });
       }
-    });
+    });*/
   }
 
 }

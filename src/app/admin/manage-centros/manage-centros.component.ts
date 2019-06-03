@@ -58,7 +58,7 @@ export class ManageCentrosComponent implements OnInit {
   }
 
   guardarData = () => {
-    this.loggedUser = this.authService.oUsuario;
+    /*this.loggedUser = this.authService.oUsuario;
     let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
       let centroIndex = -1;
@@ -96,7 +96,7 @@ export class ManageCentrosComponent implements OnInit {
       this.Cancelar();
     } else {
       alert('Debe completar la información correctamente');
-    }
+    }*/
   }
 
   cargarCentro = (id: number) => {
