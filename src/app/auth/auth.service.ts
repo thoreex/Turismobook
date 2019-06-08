@@ -23,7 +23,13 @@ export class AuthService {
       switchMap(usuario => {
         // Logged in
         if (usuario) {
-          return this.afs.doc<Usuario>(`usuarios/${usuario.uid}`).valueChanges();
+          return this.afs.doc<Usuario>(`usuarios/${usuario.uid}`).snapshotChanges().pipe(
+            map(a => {
+              const data = a.payload.data() as Usuario;
+              const id = a.payload.id;
+              return { id, ...data };
+            })
+          );
         } else {
           // Logged out
           return of(null);
