@@ -2,8 +2,8 @@ import { Centro } from '../centros/centro';
 import { Resena } from '../centros/resenas/resena';
 
 export class Usuario {
-    id: string;
-    email: string;
+    id?: string;
+    email?: string;
     imagen?: string;
     nombre?: string;
     rol?: string; // Basico, Editor, Admin

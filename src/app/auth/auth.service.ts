@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Usuario } from '../usuarios/usuario';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -23,7 +23,7 @@ export class AuthService {
       switchMap(usuario => {
         // Logged in
         if (usuario) {
-          return this.afs.doc<Usuario>(`users/${usuario.uid}`).valueChanges();
+          return this.afs.doc<Usuario>(`usuarios/${usuario.uid}`).valueChanges();
         } else {
           // Logged out
           return of(null);
@@ -48,31 +48,56 @@ export class AuthService {
     this.router.navigateByUrl(redirect, navigationExtras);
   }
 
-  async gglSignin() {
+  async signUp(nombre: string, email: string, password: string) {
+    const credential = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    this.createUserData(credential.user, nombre);
+    this.redirect();
+  }
+
+  async signIn(email: string, password: string) {
+    await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    this.redirect();
+  }
+
+  async gglSignIn() {
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.auth.signInWithPopup(provider);
     this.updateUserData(credential.user);
     this.redirect();
   }
 
-  async fbSignin() {
+  async fbSignIn() {
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.auth.signInWithPopup(provider);
     this.updateUserData(credential.user);
     this.redirect();
+  }
+
+  private createUserData(usuario: firebase.User, nombre: string) {
+    const usuarioRef: AngularFirestoreDocument<Usuario> = this.afs.doc<Usuario>(`usuarios/${usuario.uid}`);
+
+    const data: Usuario = {
+      email: usuario.email,
+      nombre,
+      imagen: usuario.photoURL,
+      rol: 'Basico',
+      fechaCreacion: new Date()
+    };
+
+    return usuarioRef.set(data);
   }
 
   private updateUserData(usuario: firebase.User) {
-    const userRef: AngularFirestoreDocument<Usuario> = this.afs.doc(`users/${usuario.uid}`);
+    const usuarioRef: AngularFirestoreDocument<Usuario> = this.afs.doc<Usuario>(`usuarios/${usuario.uid}`);
 
-    const data = {
-      id: usuario.uid,
+    const data: Usuario = {
       email: usuario.email,
       nombre: usuario.displayName,
-      imagen: usuario.photoURL
+      imagen: usuario.photoURL,
+      ultimaModificacion: new Date()
     };
 
-    return userRef.set(data, { merge: true });
+    return usuarioRef.set(data, { merge: true });
   }
 
   async signOut() {

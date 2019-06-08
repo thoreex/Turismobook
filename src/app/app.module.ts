@@ -8,7 +8,6 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
 
@@ -19,7 +18,6 @@ import { AuthModule } from './auth/auth.module';
   ],
   imports: [
     BrowserModule,
-    AngularFontAwesomeModule,
     AuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
