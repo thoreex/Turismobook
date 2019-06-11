@@ -1,5 +1,5 @@
 export class Noticia {
-    public id: number;
+    public id?: string;
     public titulo: string;
     public imagen: string;
     public descripcion: string;
