@@ -14,7 +14,7 @@ import { Centro } from 'src/app/centros/centro';
 })
 export class ResenasUpsertComponent implements OnInit {
   private idResena: number;
-  private idCentro: number;
+  private idCentro;
   private centro: Centro;
   public formGroup: FormGroup;
   public Crear = -1;
@@ -25,7 +25,7 @@ export class ResenasUpsertComponent implements OnInit {
               private centroService: CentrosService,
               private authService: AuthService,
               private formBuilder: FormBuilder) {
-    this.idCentro = +this.route.parent.snapshot.params.id;
+    this.idCentro = this.route.parent.snapshot.params.id;
     if (this.idCentro !== this.Crear) {
       this.centroService.getCentro(this.idCentro).subscribe(centro => this.centro = centro);
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from './usuario';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
@@ -31,5 +31,9 @@ export class UsuariosService {
         return { id, ...data };
       })
     );
+  }
+
+  updateUsuario = (usuario: Usuario) => {
+    this.collection.doc(usuario.id).update(usuario);
   }
 }

@@ -1,4 +1,4 @@
-<div class="card-columns">
+<div class="card-columns" *ngIf="centros$ | async as centros; else loading">
   <div class="card" *ngFor="let centro of centros">
     <img
       class="card-img-top"
@@ -18,3 +18,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  Cargando...
+</ng-template>

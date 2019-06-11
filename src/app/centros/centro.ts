@@ -3,11 +3,11 @@ import { Resena } from './resenas/resena';
 import { Horario } from './horario';
 
 export class Centro {
-    id: number;
-    nombre: string;
-    descripcion: string;
+    id?: string;
+    nombre?: string;
+    descripcion?: string;
     horarios?: Horario[];
-    imagen: string;
+    imagen?: string;
     fotografias?: string[];
     video?: string;
     seguidores?: Usuario[];

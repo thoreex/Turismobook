@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { Usuario } from '../usuarios/usuario';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,14 +12,14 @@ import { auth } from 'firebase';
   providedIn: 'root',
 })
 export class AuthService {
-  usuario$: Observable<Usuario>;
+  usuario$: BehaviorSubject<Usuario> = new BehaviorSubject(null);
   redirectUrl: string;
 
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
               private router: Router) {
     // Get the auth state, then fetch the Firestore user document or return null
-    this.usuario$ = this.afAuth.authState.pipe(
+    this.afAuth.authState.pipe(
       switchMap(usuario => {
         // Logged in
         if (usuario) {
@@ -35,7 +35,7 @@ export class AuthService {
           return of(null);
         }
       })
-    );
+    ).subscribe(this.usuario$);
   }
 
   redirect() {

@@ -14,7 +14,7 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
   styleUrls: ['./manage-centros.component.css']
 })
 export class ManageCentrosComponent implements OnInit {
-  private Id: number;
+  private Id;
   public formGroup: FormGroup;
   public Crear = -1;
   public rolEditor = 'Editor';
@@ -28,7 +28,7 @@ export class ManageCentrosComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService
   ) {
-    this.Id = +this.route.snapshot.params.id;
+    this.Id = this.route.snapshot.params.id;
     this.iniciarCentro();
     if (this.Id !== this.Crear) {
       this.cargarCentro(this.Id);
@@ -99,7 +99,7 @@ export class ManageCentrosComponent implements OnInit {
     }*/
   }
 
-  cargarCentro = (id: number) => {
+  cargarCentro = (id: string) => {
     let listaCentros: Centro[];
     this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
     listaCentros.forEach(centro => {

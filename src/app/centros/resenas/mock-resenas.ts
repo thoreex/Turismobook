@@ -4,7 +4,7 @@ export const RESENAS: Resena[] = [
     {
         id: 0,
         centro: {
-            id: 0, nombre: 'c1', descripcion: 'descripcion del centro 1',
+            id: '0', nombre: 'c1', descripcion: 'descripcion del centro 1',
             imagen: 'https://valor-software.com/ngx-bootstrap/assets/images/nature/1.jpg'
         },
         usuario: { id: '0', email: '', nombre: 'Sebastian Vargas' },
@@ -13,7 +13,7 @@ export const RESENAS: Resena[] = [
     {
         id: 1,
         centro: {
-            id: 0, nombre: 'c1', descripcion: 'descripcion del centro 1',
+            id: '0', nombre: 'c1', descripcion: 'descripcion del centro 1',
             imagen: 'https://valor-software.com/ngx-bootstrap/assets/images/nature/1.jpg'
         },
         usuario: { id: '1', email: '', nombre: 'Nervin Quesada' },

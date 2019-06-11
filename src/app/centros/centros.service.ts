@@ -1,35 +1,43 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Centro } from './centro';
-import { CENTROS } from './mock-centros';
-import { AuthService } from 'src/app/auth/auth.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CentrosService {
-  unDeleteted: Centro[];
-  constructor(private authService: AuthService) {
-  }
+  private collection: AngularFirestoreCollection<Centro>;
 
-  setCentros = (centros: Centro[]) => {
-    //
+  constructor(private readonly db: AngularFirestore) {
+    this.collection = this.db.collection<Centro>('centros');
   }
 
   getCentros = (): Observable<Centro[]> => {
-    return of(CENTROS);
+    return this.collection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Centro;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
   }
 
-  getCentrosA = (): Centro[] => {
-    return CENTROS;
+  getCentro = (id: string): BehaviorSubject<Centro> => {
+    const ret = new BehaviorSubject(null);
+    this.collection.doc<Centro>(id).snapshotChanges().pipe(
+      map(a => {
+        const data = a.payload.data() as Centro;
+        return { id, ...data };
+      })
+    ).subscribe(ret);
+
+    return ret;
   }
 
-  setCentro = (centro: Centro) => {
-    //
-  }
-
-  getCentro = (id: number): Observable<Centro> => {
-    return of(CENTROS.find(centro => centro.id === id));
+  updateCentro = (centro: Centro) => {
+    this.collection.doc(centro.id).update(centro);
   }
 
 }
