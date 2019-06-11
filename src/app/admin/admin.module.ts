@@ -14,6 +14,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { SearchCentrosComponent } from './search-centros/search-centros.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faPlus, faMinus, faEdit } from '@fortawesome/free-solid-svg-icons';
+
 @NgModule({
   declarations: [
     AdminDashboardComponent, AdminComponent, ManageEditoresComponent,
@@ -25,8 +29,17 @@ import {NgxPaginationModule} from 'ngx-pagination';
     ReactiveFormsModule,
     NgSelectModule,
     NgxPaginationModule,
+    FontAwesomeModule,
     CarouselModule.forRoot(),
     AdminRoutingModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+  constructor() {
+    library.add(
+      faPlus,
+      faMinus,
+      faEdit
+    );
+  }
+}
