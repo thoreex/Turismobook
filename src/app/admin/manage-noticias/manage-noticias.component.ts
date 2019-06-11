@@ -1,61 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-manage-noticias',
   templateUrl: './manage-noticias.component.html',
   styleUrls: ['./manage-noticias.component.css']
 })
-export class ManageNoticiasComponent implements OnInit {
+export class ManageNoticiasComponent implements OnInit, OnDestroy {
   private id: string;
   public formGroup: FormGroup;
   public Crear = '-1';
-  public listaNoticias$: BehaviorSubject<Noticia[]>;
   public noticia$: BehaviorSubject<Noticia>;
-  // public listaNoticias: Noticia[];
-  // public noticia: Noticia;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
-    private formBuilder: FormBuilder) {
-      this.id = this.route.snapshot.params.id;
-    }
+    private formBuilder: FormBuilder) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.params.id;
     this.iniciarNoticia();
-    // this.obtenerTotalNoticias();
     if (this.id !== this.Crear) {
-      // this.obtenerNoticias();
       this.cargarNoticia();
     }
   }
 
-  /*obtenerNoticias = () => {
-    this.listaNoticias$ = this.noticiasService.getNoticias();
-    this.listaNoticias$.subscribe(noticias => {
-      this.listaNoticias = noticias;
-      this.listaNoticias.forEach(noticia => {
-        if (noticia.id === this.id) {
-          this.noticia = noticia;
-        }}),
-      this.cargarNoticia();
-    });
-  }*/
-
-  /*obtenerTotalNoticias = () => {
-    this.listaNoticias$ = this.noticiasService.getNoticias();
-    this.listaNoticias$.subscribe(noticias => {
-      this.listaNoticias = noticias;
-      this.iniciarNoticia();
-    });
-  }*/
+  ngOnDestroy() {
+    this.noticia$.unsubscribe();
+  }
 
   iniciarNoticia = () => {
     this.formBuilder = new FormBuilder();
@@ -88,7 +65,8 @@ export class ManageNoticiasComponent implements OnInit {
   }
 
   cargarNoticia = () => {
-    this.noticiasService.getNoticia(this.id).subscribe(noticia => {
+    this.noticia$ = this.noticiasService.getNoticia(this.id);
+    this.noticia$.subscribe(noticia => {
       if (noticia) {
         this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
