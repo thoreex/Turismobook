@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Centro } from '../centro';
 import { CentrosService } from '../centros.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-centro-list',
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./centro-list.component.css']
 })
 export class CentroListComponent implements OnInit {
-  centros$: Observable<Centro[]>;
+  centros$: BehaviorSubject<Centro[]>;
 
   constructor(private centrosService: CentrosService) { }
 

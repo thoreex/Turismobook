@@ -22,6 +22,18 @@
           {{ usuario.seguidores ? usuario.seguidores.length : 0 }}
           follows
         </h6>
+        <ng-container *ngIf="authService.usuario$ | async as u">
+          <span *ngIf="u.id === usuario.id">
+            <a
+              [routerLink]="['../editar', u.id]"
+              class="btn btn-secondary"
+              role="button"
+              aria-disabled="true"
+            >
+              Editar
+            </a>
+          </span>
+        </ng-container>
       </div>
     </div>
   </div>

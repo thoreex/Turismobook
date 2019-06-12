@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { UsuarioListComponent } from './usuario-list/usuario-list.component';
 import { UsuarioDetailComponent } from './usuario-detail/usuario-detail.component';
+import { UsuarioUpsertComponent } from './usuario-upsert/usuario-upsert.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,8 @@ const routes: Routes = [
         path: '',
         children: [
           { path: '', component: UsuarioListComponent },
+          { path: 'nuevo', component: UsuarioUpsertComponent },
+          { path: 'editar/:id', component: UsuarioUpsertComponent },
           { path: ':id', component: UsuarioDetailComponent },
         ]
       }
