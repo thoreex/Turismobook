@@ -41,7 +41,7 @@ export class AuthService {
   redirect() {
     // Get the redirect URL from our auth service
     // If no redirect has been set, use the default
-    const redirect = this.redirectUrl ? this.router.parseUrl(this.redirectUrl) : '/admin';
+    const redirect = '/';
 
     // Set our navigation extras object
     // that passes on our global query params and fragment

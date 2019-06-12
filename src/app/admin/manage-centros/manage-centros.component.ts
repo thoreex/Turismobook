@@ -10,6 +10,8 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { AlertService } from 'src/app/alert.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ResenasService } from 'src/app/centros/resenas/resenas.service';
+import { Resena } from 'src/app/centros/resenas/resena';
 
 @Component({
   selector: 'app-manage-centros',
@@ -17,18 +19,21 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./manage-centros.component.css']
 })
 export class ManageCentrosComponent implements OnInit {
-  private id;
+  private id: string;
   public formGroup: FormGroup;
-  public Crear = -1;
+  public Crear = '-1';
   public rolEditor = 'Editor';
-  public loggedUser: Usuario;
   public centro$: BehaviorSubject<Centro>;
+  public resenas$: BehaviorSubject<Resena[]>;
+  public usuarios$: BehaviorSubject<Usuario[]>;
+
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private centrosService: CentrosService,
     private usuarioService: UsuariosService,
+    private resenasService: ResenasService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private alertService: AlertService
@@ -40,6 +45,8 @@ export class ManageCentrosComponent implements OnInit {
     if (this.id !== this.Crear) {
       this.cargarCentro(this.id);
     }
+    this.usuarios$ = this.usuarioService.getUsuarios();
+    this.resenas$ = this.resenasService.getResenas();
   }
 
   iniciarCentro = () => {
@@ -62,53 +69,63 @@ export class ManageCentrosComponent implements OnInit {
   }
 
   guardarData = () => {
-
-    /*combineLatest(
-      this.authService.usuario$,
-      this.centro$
-    ).pipe(take(1)).subscribe(([usuario, centro]) => {
-      if (usuario && centro) {
-
-      }
-    });*/
-
-    /*this.loggedUser = this.authService.oUsuario;
-    let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
-      let centroIndex = -1;
-
-      let listaCentros: Centro[];
-      this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
-      listaCentros.forEach((centro, index) => {
-        if (centro.id === +this.formGroup.value.id) {
-          centroIndex = index;
+      combineLatest(
+        this.usuarios$,
+        this.resenas$
+      ).pipe(take(1)).subscribe(([usuarios, resenas]) => {
+        if (usuarios && resenas) {
+          const nuevoCentro: Centro = {
+            nombre: this.formGroup.value.nombre,
+            descripcion: this.formGroup.value.descripcion, imagen: this.formGroup.value.imagen,
+            video: this.formGroup.value.video, resenas: this.formGroup.value.resenas,
+            editor: this.formGroup.value.editor, seguidores: this.formGroup.value.seguidores,
+            fotografias: this.formGroup.value.fotografias,
+            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: this.formGroup.value.ultimaModificacion,
+            fechaEliminacion: this.formGroup.value.fechaEliminacion
+          };
+          if (this.id !== this.Crear) {
+            this.centrosService.updateCentro(this.id, nuevoCentro);
+            this.alertService.showAlert('Centro actualizado', false);
+            const actualizadoCentro: Centro = {
+              id: this.id, nombre: this.formGroup.value.nombre,
+              descripcion: this.formGroup.value.descripcion, imagen: this.formGroup.value.imagen
+            };
+            resenas.forEach(resena => {
+              if (resena.centro.id === this.id) {
+                resena.centro = actualizadoCentro;
+              }
+            });
+            usuarios.forEach(usuario => {
+              if (usuario.centros) {
+                usuario.centros.forEach(centro => {
+                  if (centro.id === this.id) {
+                    centro = actualizadoCentro;
+                  }
+                });
+              }
+              if (usuario.seguidores) {
+                usuario.seguidores.forEach(centro => {
+                  if (centro.id === this.id) {
+                    centro = actualizadoCentro;
+                  }
+                });
+              }
+              if (usuario.resenas) {
+                usuario.resenas.forEach(resena => {
+                  if (resena.centro.id === this.id) {
+                    resena.centro = actualizadoCentro;
+                  }
+                });
+              }
+            });
+          } else {
+            this.centrosService.addCentro(nuevoCentro);
+            this.alertService.showAlert('Centro agregado', false);
+          }
         }
       });
-
-      if (centroIndex >= 0) {
-        this.usuarioService.getUsuarios().subscribe(usuarios => listaUsuarios = usuarios);
-        this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
-        listaCentros[centroIndex] = this.formGroup.value;
-        listaUsuarios.forEach((usuario) => {
-          if ( usuario.seguidores ) {
-            const indexCentro = usuario.seguidores.findIndex(centro => centro.id === +this.formGroup.value.id);
-            if ( indexCentro > -1 ) {
-              usuario.seguidores[indexCentro] = this.formGroup.value;
-            }
-          }
-        });
-      } else {
-        this.formGroup.patchValue({ id: listaCentros.length });
-        this.formGroup.patchValue({ fechaCreacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
-        listaCentros.push(this.formGroup.value);
-      }
-      // Redireccionar "Manage-Centros"
-      this.Cancelar();
-    } else {
-      this.alertService.showAlert('Debe completar la información correctamente', false);
-    }*/
+    }
   }
 
   cargarCentro = (id: string) => {
