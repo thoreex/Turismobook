@@ -73,7 +73,7 @@ export class AuthService {
   }
 
   async fbSignIn() {
-    const provider = new auth.GoogleAuthProvider();
+    const provider = new auth.FacebookAuthProvider();
     const credential = await this.afAuth.auth.signInWithPopup(provider);
     this.updateUserData(credential.user);
     this.redirect();
