@@ -4,8 +4,8 @@ import { CentrosService } from '../centros.service';
 import { Centro } from '../centro';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/auth/auth.service';
-import { map, switchMap, tap, withLatestFrom, take, mergeMap, startWith, last } from 'rxjs/operators';
-import { Observable, combineLatest, of, zip, forkJoin, merge, concat, BehaviorSubject } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { combineLatest, BehaviorSubject } from 'rxjs';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 
 @Component({
@@ -50,7 +50,7 @@ export class CentroDetailComponent implements OnInit, OnDestroy {
   }
 
   getFollowing() {
-    zip(
+    combineLatest(
       this.authService.usuario$,
       this.centro$
     ).pipe(
@@ -61,7 +61,7 @@ export class CentroDetailComponent implements OnInit, OnDestroy {
   }
 
   getResena() {
-    zip(
+    combineLatest(
       this.authService.usuario$,
       this.centro$
     ).pipe(
