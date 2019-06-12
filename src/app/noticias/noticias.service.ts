@@ -3,7 +3,6 @@ import { Noticia } from './noticia';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { AlertService } from 'src/app/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ import { AlertService } from 'src/app/alert.service';
 export class NoticiasService {
   private noticias: AngularFirestoreCollection<Noticia>;
 
-  constructor( private readonly db: AngularFirestore, private alertService: AlertService) {
+  constructor( private readonly db: AngularFirestore) {
     this.noticias = this.db.collection<Noticia>('noticias');
   }
 
@@ -39,44 +38,16 @@ export class NoticiasService {
   }
 
   updateNoticia = (id: string, noticia: Noticia) => {
-    try {
-      this.noticias.doc<Noticia>(id).update(noticia)
-      .then(result => {
-        this.alertService.showAlert('Noticia ' + id + ' actualizada.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error actualizando la noticia: ' + id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al actualizar noticia', true);
-    }
+    this.noticias.doc<Noticia>(id).update(noticia);
   }
 
-  addNoticia = (noticia: Noticia) => {
-    try {
-      this.noticias.add(noticia)
-      .then(result => {
-        this.alertService.showAlert('Noticia ' + noticia.id + ' agregada.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error agregando la noticia: ' + noticia.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al agregar noticia', true);
-    }
+  addNoticia = (noticia: Noticia): string => {
+    const id = this.db.createId();
+    this.noticias.doc(id).set(noticia);
+    return id;
   }
 
   deleteNoticia = (noticia: Noticia) => {
-    try {
-      this.noticias.doc<Noticia>(noticia.id).delete()
-      .then(result => {
-        this.alertService.showAlert('Noticia ' + noticia.id + ' eliminada.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error eliminando la noticia: ' + noticia.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al eliminar noticia', true);
-    }
+    this.noticias.doc<Noticia>(noticia.id).delete();
   }
 }
