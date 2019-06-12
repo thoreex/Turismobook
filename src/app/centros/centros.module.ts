@@ -15,6 +15,6 @@ import { CentrosComponent } from './centros/centros.component';
     FormsModule,
     CentrosRoutingModule
   ],
-  exports: [CentroListComponent]
+  exports: []
 })
 export class CentrosModule { }

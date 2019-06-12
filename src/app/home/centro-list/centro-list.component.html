@@ -1,0 +1,24 @@
+<div class="card-columns" *ngIf="centros$ | async as centros; else loading">
+  <div class="card" *ngFor="let centro of centros">
+    <img
+      class="card-img-top"
+      src="{{ centro.imagen }}"
+      alt="Imagen del centro"
+    />
+    <div class="card-body">
+      <h5 class="card-title">
+        <a [routerLink]="['/centros', centro.id]">{{ centro.nombre }}</a>
+      </h5>
+      <p class="card-text">
+        {{ centro.descripcion }}
+      </p>
+      <p class="card-text">
+        <small class="text-muted">{{ centro.ultimaModificacion }}</small>
+      </p>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  Cargando...
+</ng-template>

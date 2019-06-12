@@ -1,6 +1,6 @@
-<ng-container *ngIf="check; else elseTemplate">
+<ng-container *ngIf="noticias$ | async as noticias; else elseTemplate">
   <carousel>
-    <slide *ngFor="let noticia of aNoticiaGuardada; let index = index">
+    <slide *ngFor="let noticia of noticias; let index = index">
       <img
         [src]="noticia.imagen"
         alt="image slide"

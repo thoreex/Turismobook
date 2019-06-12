@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Noticia } from 'src/app/noticias/noticia';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-first-page',
@@ -8,8 +9,7 @@ import { NoticiasService } from 'src/app/noticias/noticias.service';
   styleUrls: ['./first-page.component.css']
 })
 export class FirstPageComponent implements OnInit {
-  aNoticiaGuardada: Noticia[] = [];
-  check = false;
+  noticias$: BehaviorSubject<Noticia[]>;
 
   constructor(private noticiasService: NoticiasService) { }
 
@@ -18,12 +18,7 @@ export class FirstPageComponent implements OnInit {
   }
 
   getNoticias() {
-    this.noticiasService.getNoticias().subscribe(noticias => this.aNoticiaGuardada = noticias);
-    if (this.aNoticiaGuardada.length > 0) {
-      this.check = true;
-    } else {
-      this.check = false;
-    }
+    this.noticias$ = this.noticiasService.getNoticias();
   }
 
 }
