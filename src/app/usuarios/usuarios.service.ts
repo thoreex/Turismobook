@@ -11,7 +11,7 @@ import { AlertService } from '../alert.service';
 export class UsuariosService {
   private collection: AngularFirestoreCollection<Usuario>;
 
-  constructor(private readonly db: AngularFirestore, private alertService: AlertService) {
+  constructor(private readonly db: AngularFirestore) {
     this.collection = this.db.collection<Usuario>('usuarios');
   }
 
@@ -39,44 +39,16 @@ export class UsuariosService {
   }
 
   updateUsuario = (id: string, usuario: Usuario) => {
-    try {
-      this.collection.doc(id).update(usuario)
-      .then(result => {
-        this.alertService.showAlert('Usuario ' + id + ' actualizado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error actualizando el usuario: ' + id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al actualizar usuario', true);
-    }
+    this.collection.doc(id).update(usuario);
   }
 
-  addUsuario = (usuario: Usuario) => {
-    try {
-      this.collection.add(usuario)
-      .then(result => {
-        this.alertService.showAlert('Usuario ' + usuario.id + ' agregado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error agregando el usuario: ' + usuario.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al agregar usuario', true);
-    }
+  addUsuario = (usuario: Usuario): string => {
+    const id = this.db.createId();
+    this.collection.doc(id).set(usuario);
+    return id;
   }
 
   deleteUsuario = (usuario: Usuario) => {
-    try {
-      this.collection.doc<Usuario>(usuario.id).delete()
-      .then(result => {
-        this.alertService.showAlert('Usuario ' + usuario.id + ' eliminado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error eliminando el usuario: ' + usuario.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al eliminar usuario', true);
-    }
+    this.collection.doc<Usuario>(usuario.id).delete();
   }
 }

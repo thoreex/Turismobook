@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ResenasService } from '../resenas.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './resenas-detail.component.html',
   styleUrls: ['./resenas-detail.component.css']
 })
-export class ResenasDetailComponent implements OnInit, OnDestroy {
+export class ResenasDetailComponent implements OnInit {
   resena$: BehaviorSubject<Resena>;
 
   constructor(private resenasService: ResenasService,
@@ -19,10 +19,6 @@ export class ResenasDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getResena();
-  }
-
-  ngOnDestroy() {
-    this.resena$.unsubscribe();
   }
 
   getResena() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CentrosService } from '../centros.service';
 import { Centro } from '../centro';
@@ -13,7 +13,7 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
   templateUrl: './centro-detail.component.html',
   styleUrls: ['./centro-detail.component.css']
 })
-export class CentroDetailComponent implements OnInit, OnDestroy {
+export class CentroDetailComponent implements OnInit {
   centro$: BehaviorSubject<Centro>;
   isFollowing: boolean;
   isResena: boolean;
@@ -40,10 +40,6 @@ export class CentroDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.centro$.unsubscribe();
-  }
-
   getCentro() {
     const id = this.route.snapshot.paramMap.get('id');
     this.centro$ = this.centrosService.getCentro(id);
@@ -66,7 +62,7 @@ export class CentroDetailComponent implements OnInit, OnDestroy {
       this.centro$
     ).pipe(
       map(([usuario, centro]) => {
-        return usuario && centro && usuario.resenas && usuario.resenas.some(resena => resena.usuario.id === centro.id);
+        return usuario && centro && usuario.resenas && usuario.resenas.some(resena => resena.centro.id === centro.id);
       })
     ).subscribe(isResena => this.isResena = isResena);
   }

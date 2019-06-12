@@ -156,10 +156,12 @@
                       ></span>
                     </p>
                     <div class="clearfix"></div>
-                    <p>
+                    <ng-container
+                      *ngIf="authService.usuario$ | async as usuariologgedIn"
+                    >
                       <span
                         class="float-right"
-                        *ngIf="usuario.id === authService.oUsuario?.id"
+                        *ngIf="usuariologgedIn.id === usuario.id"
                       >
                         <a
                           [routerLink]="[
@@ -176,7 +178,7 @@
                           Editar
                         </a>
                       </span>
-                    </p>
+                    </ng-container>
                     <div class="clearfix"></div>
                     <p>
                       {{ resena.resena }}

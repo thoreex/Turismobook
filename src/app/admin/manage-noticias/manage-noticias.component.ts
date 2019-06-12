@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './manage-noticias.component.html',
   styleUrls: ['./manage-noticias.component.css']
 })
-export class ManageNoticiasComponent implements OnInit, OnDestroy {
+export class ManageNoticiasComponent implements OnInit {
   private id: string;
   public formGroup: FormGroup;
   public Crear = '-1';
@@ -20,7 +20,7 @@ export class ManageNoticiasComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
-    private formBuilder: FormBuilder) {}
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
@@ -28,10 +28,6 @@ export class ManageNoticiasComponent implements OnInit, OnDestroy {
     if (this.id !== this.Crear) {
       this.cargarNoticia();
     }
-  }
-
-  ngOnDestroy() {
-    this.noticia$.unsubscribe();
   }
 
   iniciarNoticia = () => {

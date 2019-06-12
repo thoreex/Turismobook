@@ -11,7 +11,7 @@ import { AlertService } from '../alert.service';
 export class CentrosService {
   private collection: AngularFirestoreCollection<Centro>;
 
-  constructor(private readonly db: AngularFirestore, private alertService: AlertService) {
+  constructor(private readonly db: AngularFirestore) {
     this.collection = this.db.collection<Centro>('centros');
   }
 
@@ -39,44 +39,16 @@ export class CentrosService {
   }
 
   updateCentro = (id: string, centro: Centro) => {
-    try {
-      this.collection.doc(id).update(centro)
-      .then(result => {
-        this.alertService.showAlert('Centro ' + id + ' actualizado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error actualizando el centro: ' + id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al actualizar centro', true);
-    }
+    this.collection.doc(id).update(centro);
   }
 
-  addCentro = (centro: Centro) => {
-    try {
-      this.collection.add(centro)
-      .then(result => {
-        this.alertService.showAlert('Centro ' + centro.id + ' agregado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error agregando el centro: ' + centro.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al agregar centro', true);
-    }
+  addCentro = (centro: Centro): string => {
+    const id = this.db.createId();
+    this.collection.doc(id).set(centro);
+    return id;
   }
 
   deleteCentro = (centro: Centro) => {
-    try {
-      this.collection.doc<Centro>(centro.id).delete()
-      .then(result => {
-        this.alertService.showAlert('Centro ' + centro.id + ' eliminado.', false);
-      })
-      .catch(error => {
-        this.alertService.showAlert('Error eliminando el centro: ' + centro.id, true);
-      });
-    } catch (error) {
-      this.alertService.showAlert('Error general al eliminar centro', true);
-    }
+    this.collection.doc<Centro>(centro.id).delete();
   }
 }

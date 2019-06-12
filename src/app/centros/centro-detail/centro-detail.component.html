@@ -265,19 +265,23 @@
                         <strong>{{ resena.titulo }}</strong>
                       </a>
                     </span>
-                    <span
-                      class="float-right"
-                      *ngIf="resena.usuario.id === authService.oUsuario?.id"
+                    <ng-container
+                      *ngIf="authService.usuario$ | async as usuario"
                     >
-                      <a
-                        [routerLink]="['resenas', 'editar', resena.id]"
-                        class="btn btn-secondary"
-                        role="button"
-                        aria-disabled="true"
+                      <span
+                        class="float-right"
+                        *ngIf="resena.usuario.id === usuario.id"
                       >
-                        Editar
-                      </a>
-                    </span>
+                        <a
+                          [routerLink]="['resenas', 'editar', resena.id]"
+                          class="btn btn-secondary"
+                          role="button"
+                          aria-disabled="true"
+                        >
+                          Editar
+                        </a>
+                      </span>
+                    </ng-container>
                   </p>
                   <div class="clearfix"></div>
                   <p>{{ resena.resena }}</p>
