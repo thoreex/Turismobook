@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
 import { BehaviorSubject } from 'rxjs';
+import { AlertService } from 'src/app/alert.service';
 
 @Component({
   selector: 'app-manage-noticias',
   templateUrl: './manage-noticias.component.html',
   styleUrls: ['./manage-noticias.component.css']
 })
-export class ManageNoticiasComponent implements OnInit {
+export class ManageNoticiasComponent implements OnInit, OnDestroy {
   private id: string;
   public formGroup: FormGroup;
   public Crear = '-1';
@@ -20,13 +21,20 @@ export class ManageNoticiasComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private alertService: AlertService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
     this.iniciarNoticia();
     if (this.id !== this.Crear) {
       this.cargarNoticia();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.noticia$) {
+      this.noticia$.unsubscribe();
     }
   }
 
@@ -54,8 +62,10 @@ export class ManageNoticiasComponent implements OnInit {
       if (this.id === this.Crear) {
         this.noticiasService.addNoticia(nuevaNoticia);
         this.Cancelar();
+        this.alertService.showAlert('Noticia agregada!', false);
       } else {
         this.noticiasService.updateNoticia(this.formGroup.value.id, nuevaNoticia);
+        this.alertService.showAlert('Noticia modificada!', false);
       }
     }
   }

@@ -3,6 +3,7 @@ import { Noticia } from 'src/app/noticias/noticia';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { AlertService } from 'src/app/alert.service';
 
 @Component({
   selector: 'app-list-noticias',
@@ -12,7 +13,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class ListNoticiasComponent implements OnInit {
   noticias$: BehaviorSubject<Noticia[]>;
 
-  constructor(private noticiasService: NoticiasService, private router: Router) { }
+  constructor(private noticiasService: NoticiasService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
     this.getNoticias();
@@ -24,5 +25,6 @@ export class ListNoticiasComponent implements OnInit {
 
   borrarData = async (noticia: Noticia) => {
     this.noticiasService.deleteNoticia(noticia);
+    this.alertService.showAlert('Noticia eliminada!', false);
   }
 }

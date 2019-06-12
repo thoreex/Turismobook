@@ -1,43 +1,73 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Centro } from '../../centros/centro';
 import { CentrosService } from '../../centros/centros.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { map, take, filter, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { ResenasService } from 'src/app/centros/resenas/resenas.service';
+import { UsuariosService } from 'src/app/usuarios/usuarios.service';
+import { Resena } from 'src/app/centros/resenas/resena';
+import { AlertService } from 'src/app/alert.service';
 
 @Component({
   selector: 'app-search-centros',
   templateUrl: './search-centros.component.html',
   styleUrls: ['./search-centros.component.css']
 })
-export class SearchCentrosComponent implements OnInit {
-  centros: Centro[] = [];
-  filteredCentros: Centro[] = [];
-  vacio = false;
-  constructor( private centrosService: CentrosService, private authService: AuthService, private router: Router) { }
+export class SearchCentrosComponent implements OnInit, OnDestroy {
+  public centros$: BehaviorSubject<Centro[]>;
+  public oCentros: Centro[];
+  public filteredCentros: Centro[];
+  public vacio = false;
+  private idResena: string;
+  private idCentro: string;
+  public Crear = '-1';
+  public resenas$: BehaviorSubject<Resena[]>;
+  public usuarios$: BehaviorSubject<Centro[]>;
+
+  constructor(private authService: AuthService,
+              private router: Router,
+              private resenasService: ResenasService,
+              private centrosService: CentrosService,
+              private usuariosService: UsuariosService,
+              private alertService: AlertService) { }
 
   ngOnInit() {
+    this.resenas$ = this.resenasService.getResenas();
+    this.usuarios$ = this.usuariosService.getUsuarios();
     this.getCentros();
   }
 
+  ngOnDestroy() {
+    if (this.centros$) {
+      this.centros$.unsubscribe();
+    }
+  }
+
   getCentros = () => {
-    /*const loggedUser = this.authService.oUsuario;
-    let centrosAll: Centro[];
-    this.centrosService.getCentros().subscribe(centros => centrosAll = centros);
-    this.centros = this.filteredCentros = centrosAll.filter(item => !item.fechaEliminacion && item.editor &&
-                                   loggedUser && item.editor.id === loggedUser.id);
-    return this.centros;*/
+    this.centros$ = this.centrosService.getCentros();
+    combineLatest(
+    this.authService.usuario$,
+    this.centros$
+    ).pipe( map(([usuario, centros]) => {
+      if (centros) {
+        return centros.filter(item => item.editor && usuario && item.editor.id === usuario.id);
+      }
+      return [];
+    })).subscribe(centros => this.oCentros = this.filteredCentros = centros);
   }
 
   searchCentros = (term: string) => {
     this.vacio = true;
     if (!term) {
-      this.filteredCentros = this.centros;
+      this.filteredCentros = this.oCentros;
       this.vacio = false;
     } else {
       term = term.toLowerCase();
       this.filteredCentros = [];
-      this.centros.forEach((item) => {
+      this.oCentros.forEach((item) => {
         if (item.nombre.toLowerCase().includes(term)) {
           this.filteredCentros.push(item);
         }
@@ -48,18 +78,31 @@ export class SearchCentrosComponent implements OnInit {
     }
   }
 
-  borrarData = (id: number) => {
-    /*this.centros.forEach((item) => {
-      if (item.id === id) {
-        item.fechaEliminacion = new Date();
-      }
-    });
-    this.authService.oUsuario.centros.forEach((item) => {
-      if (item.id === id) {
-        item.fechaEliminacion = new Date();
-      }
-    });
-    this.router.navigate(['admin']);*/
-  }
+  eliminarCentro = (id: string) => {
+    combineLatest(
+      this.resenas$,
+      this.usuarios$
+    ).subscribe(([resenas, usuarios]) => {
+      if (resenas && usuarios) {
+        usuarios.forEach( usuario => {
+          // Filtrar resenas del usuario.
+          const rindex = usuario.resenas.findIndex(uresena => uresena.centro.id === id);
+          if (rindex > -1) {
+            usuario.resenas.splice(rindex, 1);
+          }
+          this.usuariosService.updateUsuario(usuario.id, usuario);
+        });
 
+        resenas.forEach( resena => {
+          // Eliminar resenas del usuario.
+          if (resena.centro.id === id) {
+            this.resenasService.deleteResena(resena);
+          }
+        });
+        this.centrosService.deleteCentro({id});
+        this.alertService.showAlert('Centro eliminado', false);
+        // this.router.navigate(['/centros', this.idCentro]);
+      }
+    });
+  }
 }

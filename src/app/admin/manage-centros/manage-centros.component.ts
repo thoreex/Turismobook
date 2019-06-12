@@ -7,6 +7,9 @@ import { Centro } from 'src/app/centros/centro';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Usuario } from 'src/app/usuarios/usuario';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
+import { AlertService } from 'src/app/alert.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-centros',
@@ -14,11 +17,12 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
   styleUrls: ['./manage-centros.component.css']
 })
 export class ManageCentrosComponent implements OnInit {
-  private Id;
+  private id;
   public formGroup: FormGroup;
   public Crear = -1;
   public rolEditor = 'Editor';
   public loggedUser: Usuario;
+  public centro$: BehaviorSubject<Centro>;
 
   constructor(
     private router: Router,
@@ -26,16 +30,16 @@ export class ManageCentrosComponent implements OnInit {
     private centrosService: CentrosService,
     private usuarioService: UsuariosService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {
-    this.Id = this.route.snapshot.params.id;
-    this.iniciarCentro();
-    if (this.Id !== this.Crear) {
-      this.cargarCentro(this.Id);
-    }
-   }
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.params.id;
+    this.iniciarCentro();
+    if (this.id !== this.Crear) {
+      this.cargarCentro(this.id);
+    }
   }
 
   iniciarCentro = () => {
@@ -58,6 +62,16 @@ export class ManageCentrosComponent implements OnInit {
   }
 
   guardarData = () => {
+
+    /*combineLatest(
+      this.authService.usuario$,
+      this.centro$
+    ).pipe(take(1)).subscribe(([usuario, centro]) => {
+      if (usuario && centro) {
+
+      }
+    });*/
+
     /*this.loggedUser = this.authService.oUsuario;
     let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
@@ -90,35 +104,32 @@ export class ManageCentrosComponent implements OnInit {
         this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
         listaCentros.push(this.formGroup.value);
       }
-      console.log('LISTA: ' + JSON.stringify(this.formGroup.value));
-      alert('Información guardada');
       // Redireccionar "Manage-Centros"
       this.Cancelar();
     } else {
-      alert('Debe completar la información correctamente');
+      this.alertService.showAlert('Debe completar la información correctamente', false);
     }*/
   }
 
   cargarCentro = (id: string) => {
-    let listaCentros: Centro[];
-    this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
-    listaCentros.forEach(centro => {
-      if (centro.id === id) {
+    this.centro$ = this.centrosService.getCentro(id);
+    this.centro$.subscribe(centro => {
+      if (centro) {
         this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
-          id: [id, [Validators.required]],
-          nombre: [centro.nombre, [Validators.required]],
-          descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
-          horarios: [centro.horarios],
-          imagen: [centro.imagen, [Validators.required]],
-          fotografias: [centro.fotografias],
-          video: [centro.video, [Validators.required]],
-          seguidores: [centro.seguidores],
-          resenas: [centro.resenas],
-          fechaCreacion: [centro.fechaCreacion],
-          ultimaModificacion: [centro.ultimaModificacion],
-          fechaEliminacion: [centro.fechaEliminacion],
-          editor: [centro.editor],
+        id: [id, [Validators.required]],
+        nombre: [centro.nombre, [Validators.required]],
+        descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
+        horarios: [centro.horarios],
+        imagen: [centro.imagen, [Validators.required]],
+        fotografias: [centro.fotografias],
+        video: [centro.video, [Validators.required]],
+        seguidores: [centro.seguidores],
+        resenas: [centro.resenas],
+        fechaCreacion: [centro.fechaCreacion],
+        ultimaModificacion: [centro.ultimaModificacion],
+        fechaEliminacion: [centro.fechaEliminacion],
+        editor: [centro.editor]
         });
       }
     });
