@@ -99,8 +99,8 @@ export class CentroDetailComponent implements OnInit, OnDestroy {
           centro.seguidores.push({ id: usuario.id, nombre: usuario.nombre, imagen: usuario.imagen });
         }
         // actualizar firestore
-        this.centrosService.updateCentro(centro);
-        this.usuariosService.updateUsuario(usuario);
+        this.centrosService.updateCentro(centro.id, centro);
+        this.usuariosService.updateUsuario(usuario.id, usuario);
       }
     });
   }

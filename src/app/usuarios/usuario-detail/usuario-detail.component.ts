@@ -3,7 +3,7 @@ import { UsuariosService } from '../usuarios.service';
 import { ActivatedRoute } from '@angular/router';
 import { Usuario } from '../usuario';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-detail',
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./usuario-detail.component.css']
 })
 export class UsuarioDetailComponent implements OnInit {
-  usuario$: Observable<Usuario>;
+  usuario$: BehaviorSubject<Usuario>;
 
   constructor(private usuariosService: UsuariosService,
               private authService: AuthService,

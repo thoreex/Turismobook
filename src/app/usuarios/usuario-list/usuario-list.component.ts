@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../usuario';
 import { UsuariosService } from '../usuarios.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-list',
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioListComponent implements OnInit {
 
-  usuarios$: Observable<Usuario[]>;
+  usuarios$: BehaviorSubject<Usuario[]>;
 
   constructor(private usuariosService: UsuariosService) { }
 

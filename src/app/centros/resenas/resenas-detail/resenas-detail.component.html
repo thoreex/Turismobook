@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="resena$ | async as resena; else loading">
   <div class="card-body">
     <div class="row">
       <div class="col-md-2">
@@ -57,3 +57,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  Cargando...
+</ng-template>

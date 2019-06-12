@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Noticia } from './noticia';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { AlertService } from 'src/app/alert.service';
@@ -11,7 +11,7 @@ import { AlertService } from 'src/app/alert.service';
 export class NoticiasService {
   private noticias: AngularFirestoreCollection<Noticia>;
 
-  constructor( private readonly db: AngularFirestore, private alertService: AlertService, ) {
+  constructor( private readonly db: AngularFirestore, private alertService: AlertService) {
     this.noticias = this.db.collection<Noticia>('noticias');
   }
 
@@ -49,7 +49,6 @@ export class NoticiasService {
       });
     } catch (error) {
       this.alertService.showAlert('Error general al actualizar noticia', true);
-      console.log(error);
     }
   }
 
@@ -64,7 +63,6 @@ export class NoticiasService {
       });
     } catch (error) {
       this.alertService.showAlert('Error general al agregar noticia', true);
-      console.log(error);
     }
   }
 
