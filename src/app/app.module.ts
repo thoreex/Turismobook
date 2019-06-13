@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthModule } from './auth/auth.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AuthModule } from './auth/auth.module';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
