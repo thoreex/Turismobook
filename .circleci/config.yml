@@ -17,17 +17,6 @@ jobs:
           key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
             - "node_modules"
-      - run:
-          name: Linting
-          command: npm run lint
-      - run:
-          name: Testing
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run:
-          name: E2E
-          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
-      - store_artifacts:
-          path: coverage
   deploy-dev:
     docker:
       - image: circleci/node:8
@@ -78,6 +67,8 @@ workflows:
     jobs:
       - test
       - deploy-dev:
+          requires:
+            - test
           filters:
             branches:
               only: develop
