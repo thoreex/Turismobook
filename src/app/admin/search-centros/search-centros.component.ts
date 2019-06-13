@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Centro } from '../../centros/centro';
 import { CentrosService } from '../../centros/centros.service';
@@ -10,13 +10,14 @@ import { ResenasService } from 'src/app/centros/resenas/resenas.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Resena } from 'src/app/centros/resenas/resena';
 import { AlertService } from 'src/app/alert.service';
+import { Usuario } from 'src/app/usuarios/usuario';
 
 @Component({
   selector: 'app-search-centros',
   templateUrl: './search-centros.component.html',
   styleUrls: ['./search-centros.component.css']
 })
-export class SearchCentrosComponent implements OnInit, OnDestroy {
+export class SearchCentrosComponent implements OnInit {
   public centros$: BehaviorSubject<Centro[]>;
   public oCentros: Centro[];
   public filteredCentros: Centro[];
@@ -25,7 +26,7 @@ export class SearchCentrosComponent implements OnInit, OnDestroy {
   private idCentro: string;
   public Crear = '-1';
   public resenas$: BehaviorSubject<Resena[]>;
-  public usuarios$: BehaviorSubject<Centro[]>;
+  public usuarios$: BehaviorSubject<Usuario[]>;
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -38,12 +39,6 @@ export class SearchCentrosComponent implements OnInit, OnDestroy {
     this.resenas$ = this.resenasService.getResenas();
     this.usuarios$ = this.usuariosService.getUsuarios();
     this.getCentros();
-  }
-
-  ngOnDestroy() {
-    if (this.centros$) {
-      this.centros$.unsubscribe();
-    }
   }
 
   getCentros = () => {
@@ -84,12 +79,30 @@ export class SearchCentrosComponent implements OnInit, OnDestroy {
       this.usuarios$
     ).subscribe(([resenas, usuarios]) => {
       if (resenas && usuarios) {
-        usuarios.forEach( usuario => {
-          // Filtrar resenas del usuario.
-          const rindex = usuario.resenas.findIndex(uresena => uresena.centro.id === id);
-          if (rindex > -1) {
-            usuario.resenas.splice(rindex, 1);
+        usuarios.forEach(usuario => {
+          if (usuario.centros) {
+            usuario.centros.forEach((centro, index) => {
+              if (centro.id === id) {
+                usuario.centros.splice(index, 1);
+              }
+            });
           }
+          if (usuario.seguidores) {
+            usuario.seguidores.forEach((centro, index) => {
+              if (centro.id === id) {
+                usuario.seguidores.splice(index, 1);
+              }
+            });
+          }
+          if (usuario.resenas) {
+            usuario.resenas.forEach((resena, index) => {
+              if (resena.centro.id === id) {
+                usuario.resenas.splice(index, 1);
+              }
+            });
+          }
+
+          // Importante actualizar la db
           this.usuariosService.updateUsuario(usuario.id, usuario);
         });
 

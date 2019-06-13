@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from 'src/app/centros/centro';
@@ -12,7 +12,7 @@ import { map, take } from 'rxjs/operators';
   templateUrl: './manage-editores.component.html',
   styleUrls: ['./manage-editores.component.css']
 })
-export class ManageEditoresComponent implements OnInit, OnDestroy {
+export class ManageEditoresComponent implements OnInit {
   placeholderEditor = 'Seleccione el Editor.';
   placeholderCentro = 'Seleccione el Centro.';
   bindLabel = 'nombre';
@@ -30,13 +30,6 @@ export class ManageEditoresComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.usuariosService.getUsuarios().subscribe(usuarios => this.editoresList = usuarios);
     this.centrosService.getCentros().subscribe(centros => this.centrosList = centros);
-  }
-
-  ngOnDestroy() {
-    if (this.usuario$ && this.centro$) {
-      this.centro$.unsubscribe();
-      this.usuario$.unsubscribe();
-    }
   }
 
   asignar() {

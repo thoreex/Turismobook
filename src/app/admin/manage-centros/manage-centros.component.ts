@@ -32,7 +32,7 @@ export class ManageCentrosComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private centrosService: CentrosService,
-    private usuarioService: UsuariosService,
+    private usuariosService: UsuariosService,
     private resenasService: ResenasService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -45,7 +45,7 @@ export class ManageCentrosComponent implements OnInit {
     if (this.id !== this.Crear) {
       this.cargarCentro(this.id);
     }
-    this.usuarios$ = this.usuarioService.getUsuarios();
+    this.usuarios$ = this.usuariosService.getUsuarios();
     this.resenas$ = this.resenasService.getResenas();
   }
 
@@ -95,19 +95,21 @@ export class ManageCentrosComponent implements OnInit {
               if (resena.centro.id === this.id) {
                 resena.centro = actualizadoCentro;
               }
+
+              this.resenasService.updateResena(resena.id, resena);
             });
             usuarios.forEach(usuario => {
               if (usuario.centros) {
-                usuario.centros.forEach(centro => {
+                usuario.centros.forEach((centro, index) => {
                   if (centro.id === this.id) {
-                    centro = actualizadoCentro;
+                    usuario.centros[index] = actualizadoCentro;
                   }
                 });
               }
               if (usuario.seguidores) {
-                usuario.seguidores.forEach(centro => {
+                usuario.seguidores.forEach((centro, index) => {
                   if (centro.id === this.id) {
-                    centro = actualizadoCentro;
+                    usuario.seguidores[index] = actualizadoCentro;
                   }
                 });
               }
@@ -118,6 +120,8 @@ export class ManageCentrosComponent implements OnInit {
                   }
                 });
               }
+
+              this.usuariosService.updateUsuario(usuario.id, usuario);
             });
           } else {
             this.centrosService.addCentro(nuevoCentro);
