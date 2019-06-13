@@ -7,6 +7,11 @@ import { Centro } from 'src/app/centros/centro';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Usuario } from 'src/app/usuarios/usuario';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
+import { AlertService } from 'src/app/alert.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ResenasService } from 'src/app/centros/resenas/resenas.service';
+import { Resena } from 'src/app/centros/resenas/resena';
 
 @Component({
   selector: 'app-manage-centros',
@@ -14,28 +19,34 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
   styleUrls: ['./manage-centros.component.css']
 })
 export class ManageCentrosComponent implements OnInit {
-  private Id: number;
+  private id: string;
   public formGroup: FormGroup;
-  public Crear = -1;
+  public Crear = '-1';
   public rolEditor = 'Editor';
-  public loggedUser: Usuario;
+  public centro$: BehaviorSubject<Centro>;
+  public resenas$: BehaviorSubject<Resena[]>;
+  public usuarios$: BehaviorSubject<Usuario[]>;
+
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private centrosService: CentrosService,
-    private usuarioService: UsuariosService,
+    private usuariosService: UsuariosService,
+    private resenasService: ResenasService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {
-    this.Id = +this.route.snapshot.params.id;
-    this.iniciarCentro();
-    if (this.Id !== this.Crear) {
-      this.cargarCentro(this.Id);
-    }
-   }
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.params.id;
+    this.iniciarCentro();
+    if (this.id !== this.Crear) {
+      this.cargarCentro(this.id);
+    }
+    this.usuarios$ = this.usuariosService.getUsuarios();
+    this.resenas$ = this.resenasService.getResenas();
   }
 
   iniciarCentro = () => {
@@ -58,67 +69,88 @@ export class ManageCentrosComponent implements OnInit {
   }
 
   guardarData = () => {
-    this.loggedUser = this.authService.oUsuario;
-    let listaUsuarios: Usuario[];
     if (this.formGroup.valid) {
-      let centroIndex = -1;
+      combineLatest(
+        this.usuarios$,
+        this.resenas$
+      ).pipe(take(1)).subscribe(([usuarios, resenas]) => {
+        if (usuarios && resenas) {
+          const nuevoCentro: Centro = {
+            nombre: this.formGroup.value.nombre,
+            descripcion: this.formGroup.value.descripcion, imagen: this.formGroup.value.imagen,
+            video: this.formGroup.value.video, resenas: this.formGroup.value.resenas,
+            editor: this.formGroup.value.editor, seguidores: this.formGroup.value.seguidores,
+            fotografias: this.formGroup.value.fotografias,
+            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: this.formGroup.value.ultimaModificacion,
+            fechaEliminacion: this.formGroup.value.fechaEliminacion
+          };
+          if (this.id !== this.Crear) {
+            this.centrosService.updateCentro(this.id, nuevoCentro);
+            this.alertService.showAlert('Centro actualizado', false);
+            const actualizadoCentro: Centro = {
+              id: this.id, nombre: this.formGroup.value.nombre,
+              descripcion: this.formGroup.value.descripcion, imagen: this.formGroup.value.imagen
+            };
+            resenas.forEach(resena => {
+              if (resena.centro.id === this.id) {
+                resena.centro = actualizadoCentro;
+              }
 
-      let listaCentros: Centro[];
-      this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
-      listaCentros.forEach((centro, index) => {
-        if (centro.id === +this.formGroup.value.id) {
-          centroIndex = index;
+              this.resenasService.updateResena(resena.id, resena);
+            });
+            usuarios.forEach(usuario => {
+              if (usuario.centros) {
+                usuario.centros.forEach((centro, index) => {
+                  if (centro.id === this.id) {
+                    usuario.centros[index] = actualizadoCentro;
+                  }
+                });
+              }
+              if (usuario.seguidores) {
+                usuario.seguidores.forEach((centro, index) => {
+                  if (centro.id === this.id) {
+                    usuario.seguidores[index] = actualizadoCentro;
+                  }
+                });
+              }
+              if (usuario.resenas) {
+                usuario.resenas.forEach(resena => {
+                  if (resena.centro.id === this.id) {
+                    resena.centro = actualizadoCentro;
+                  }
+                });
+              }
+
+              this.usuariosService.updateUsuario(usuario.id, usuario);
+            });
+          } else {
+            this.centrosService.addCentro(nuevoCentro);
+            this.alertService.showAlert('Centro agregado', false);
+          }
         }
       });
-
-      if (centroIndex >= 0) {
-        this.usuarioService.getUsuarios().subscribe(usuarios => listaUsuarios = usuarios);
-        this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
-        listaCentros[centroIndex] = this.formGroup.value;
-        listaUsuarios.forEach((usuario) => {
-          if ( usuario.seguidores ) {
-            const indexCentro = usuario.seguidores.findIndex(centro => centro.id === +this.formGroup.value.id);
-            if ( indexCentro > -1 ) {
-              usuario.seguidores[indexCentro] = this.formGroup.value;
-            }
-          }
-        });
-      } else {
-        this.formGroup.patchValue({ id: listaCentros.length });
-        this.formGroup.patchValue({ fechaCreacion: new Date() });
-        this.formGroup.patchValue({ Editor:  {id: this.loggedUser.id, nombre: this.loggedUser.nombre}});
-        listaCentros.push(this.formGroup.value);
-      }
-      console.log('LISTA: ' + JSON.stringify(this.formGroup.value));
-      alert('Información guardada');
-      // Redireccionar "Manage-Centros"
-      this.Cancelar();
-    } else {
-      alert('Debe completar la información correctamente');
     }
   }
 
-  cargarCentro = (id: number) => {
-    let listaCentros: Centro[];
-    this.centrosService.getCentros().subscribe(centros => listaCentros = centros);
-    listaCentros.forEach(centro => {
-      if (centro.id === id) {
+  cargarCentro = (id: string) => {
+    this.centro$ = this.centrosService.getCentro(id);
+    this.centro$.subscribe(centro => {
+      if (centro) {
         this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
-          id: [id, [Validators.required]],
-          nombre: [centro.nombre, [Validators.required]],
-          descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
-          horarios: [centro.horarios],
-          imagen: [centro.imagen, [Validators.required]],
-          fotografias: [centro.fotografias],
-          video: [centro.video, [Validators.required]],
-          seguidores: [centro.seguidores],
-          resenas: [centro.resenas],
-          fechaCreacion: [centro.fechaCreacion],
-          ultimaModificacion: [centro.ultimaModificacion],
-          fechaEliminacion: [centro.fechaEliminacion],
-          editor: [centro.editor],
+        id: [id, [Validators.required]],
+        nombre: [centro.nombre, [Validators.required]],
+        descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
+        horarios: [centro.horarios],
+        imagen: [centro.imagen, [Validators.required]],
+        fotografias: [centro.fotografias],
+        video: [centro.video, [Validators.required]],
+        seguidores: [centro.seguidores],
+        resenas: [centro.resenas],
+        fechaCreacion: [centro.fechaCreacion],
+        ultimaModificacion: [centro.ultimaModificacion],
+        fechaEliminacion: [centro.fechaEliminacion],
+        editor: [centro.editor]
         });
       }
     });

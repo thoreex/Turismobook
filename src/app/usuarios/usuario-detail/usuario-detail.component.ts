@@ -3,6 +3,7 @@ import { UsuariosService } from '../usuarios.service';
 import { ActivatedRoute } from '@angular/router';
 import { Usuario } from '../usuario';
 import { AuthService } from 'src/app/auth/auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-detail',
@@ -10,7 +11,7 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./usuario-detail.component.css']
 })
 export class UsuarioDetailComponent implements OnInit {
-  usuario: Usuario;
+  usuario$: BehaviorSubject<Usuario>;
 
   constructor(private usuariosService: UsuariosService,
               private authService: AuthService,
@@ -21,9 +22,8 @@ export class UsuarioDetailComponent implements OnInit {
   }
 
   getUsuario() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.usuariosService.getUsuario(id).
-      subscribe(usuario => this.usuario = usuario);
+    const id = this.route.snapshot.paramMap.get('id');
+    this.usuario$ = this.usuariosService.getUsuario(id);
   }
 
 }

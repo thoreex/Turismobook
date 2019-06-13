@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,43 +9,42 @@ import { Router, NavigationExtras } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  message: string;
+  signinForm: FormGroup;
 
   constructor(public authService: AuthService, public router: Router) {
-    this.setMessage();
   }
 
-  ngOnInit() { }
-
-  setMessage() {
-    this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
-  }
-
-  login(usuario: string, contrasena: string) {
-    this.message = 'Trying to log in ...';
-
-    this.authService.login(usuario, contrasena).subscribe(() => {
-      this.setMessage();
-      if (this.authService.isLoggedIn) {
-        // Get the redirect URL from our auth service
-        // If no redirect has been set, use the default
-        const redirect = this.authService.redirectUrl ? this.router.parseUrl(this.authService.redirectUrl) : '/admin';
-
-        // Set our navigation extras object
-        // that passes on our global query params and fragment
-        const navigationExtras: NavigationExtras = {
-          queryParamsHandling: 'preserve',
-          preserveFragment: true
-        };
-
-        // Redirect the user
-        this.router.navigateByUrl(redirect, navigationExtras);
-      }
+  ngOnInit() {
+    this.signinForm = new FormGroup({
+      email: new FormControl('', [
+        Validators.required,
+      ]),
+      password: new FormControl('', [
+        Validators.required
+      ])
     });
   }
 
+  get email() { return this.signinForm.get('email'); }
+
+  get password() { return this.signinForm.get('password'); }
+
+  signin() {
+    this.authService.signIn(
+      this.email.value,
+      this.password.value
+      );
+  }
+
+  loginGgl() {
+    this.authService.gglSignIn();
+  }
+
+  loginFb() {
+    this.authService.fbSignIn();
+  }
+
   logout() {
-    this.authService.logout();
-    this.setMessage();
+    this.authService.signOut();
   }
 }

@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
+import { BehaviorSubject } from 'rxjs';
+import { AlertService } from 'src/app/alert.service';
 
 @Component({
   selector: 'app-manage-noticias',
@@ -10,28 +12,28 @@ import { Noticia } from 'src/app/noticias/noticia';
   styleUrls: ['./manage-noticias.component.css']
 })
 export class ManageNoticiasComponent implements OnInit {
-  private Id: number;
+  private id: string;
   public formGroup: FormGroup;
-  public Crear = -1;
-  public listaNoticias: Noticia[];
+  public Crear = '-1';
+  public noticia$: BehaviorSubject<Noticia>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private alertService: AlertService) { }
 
-    this.Id = +this.route.snapshot.params.id;
+  ngOnInit() {
+    this.id = this.route.snapshot.params.id;
     this.iniciarNoticia();
-    if (this.Id !== this.Crear) {
-      this.cargarNoticia(this.Id);
+    if (this.id !== this.Crear) {
+      this.cargarNoticia();
     }
   }
 
-  ngOnInit() {
-  }
-
   iniciarNoticia = () => {
+    this.formBuilder = new FormBuilder();
     this.formGroup = this.formBuilder.group({
       id: ['(nueva)', [Validators.required]],
       titulo: ['', [Validators.required]],
@@ -42,45 +44,38 @@ export class ManageNoticiasComponent implements OnInit {
     });
   }
 
-  guardarData = () => {
+  guardarNoticia = () => {
     if (this.formGroup.valid) {
-      let noticiaIndex = -1;
-      this.listaNoticias = [];
-      this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
-      this.listaNoticias.forEach((noticia, index) => {
-        if (noticia.id === +this.formGroup.value.id) {
-          noticiaIndex = index;
-        }
-      });
-
-      if (noticiaIndex >= 0) {
-        this.formGroup.patchValue({ ultimaModificacion: new Date() });
-        this.listaNoticias[noticiaIndex] = this.formGroup.value;
+      const nuevaNoticia = {
+        titulo: this.formGroup.value.titulo,
+        imagen: this.formGroup.value.imagen,
+        descripcion: this.formGroup.value.descripcion,
+        fechaCreacion: this.formGroup.value.fechaCreacion,
+        ultimaModificacion: this.formGroup.value.ultimaModificacion
+      };
+      if (this.id === this.Crear) {
+        this.noticiasService.addNoticia(nuevaNoticia);
+        this.Cancelar();
+        this.alertService.showAlert('Noticia agregada!', false);
       } else {
-        this.formGroup.patchValue({ id: this.listaNoticias.length });
-        this.listaNoticias.push(this.formGroup.value);
+        this.noticiasService.updateNoticia(this.formGroup.value.id, nuevaNoticia);
+        this.alertService.showAlert('Noticia modificada!', false);
       }
-
-      alert('Información guardada');
-      // Redireccionar "Manage-Noticias"
-      this.Cancelar();
-    } else {
-      alert('Debe completar la información correctamente');
     }
   }
 
-  cargarNoticia = (id: number) => {
-    this.noticiasService.getNoticias().subscribe(noticias => this.listaNoticias = noticias);
-    this.listaNoticias.forEach(noticia => {
-      if (noticia.id === id) {
+  cargarNoticia = () => {
+    this.noticia$ = this.noticiasService.getNoticia(this.id);
+    this.noticia$.subscribe(noticia => {
+      if (noticia) {
         this.formBuilder = new FormBuilder();
         this.formGroup = this.formBuilder.group({
-          id: [id, [Validators.required]],
+          id: [this.id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
           imagen: [noticia.imagen, [Validators.required]],
           descripcion: [noticia.descripcion, [Validators.required, Validators.minLength(15)]],
-          fechaCreacion: [noticia.fechaCreacion],
-          ultimaModificacion: [noticia.ultimaModificacion],
+          fechaCreacion: [new Date(+noticia.fechaCreacion.toString().slice(18, 28) * 1000)],
+          ultimaModificacion: [new Date(+noticia.ultimaModificacion.toString().slice(18, 28) * 1000)]
         });
       }
     });

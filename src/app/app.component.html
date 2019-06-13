@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" [routerLink]="['/']">{{ title }}</a>
     <button
       class="navbar-toggler"
@@ -33,12 +33,10 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li *ngIf="!authService.isLoggedIn" class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['login']"
-            >Login</a
-          >
-        </li>
-        <li *ngIf="authService.isLoggedIn" class="nav-item dropdown">
+        <li
+          *ngIf="authService.usuario$ | async as usuario; else loading"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -48,13 +46,13 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            {{ authService.oUsuario.nombre }}
+            {{ usuario.nombre }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a
               class="dropdown-item"
               routerLinkActive="active"
-              [routerLink]="['usuarios', authService.oUsuario.id]"
+              [routerLink]="['usuarios', usuario.id]"
               >Perfil</a
             >
             <a
@@ -64,19 +62,32 @@
               >Dashboard</a
             >
             <div class="dropdown-divider"></div>
-            <button class="dropdown-item" (click)="logout()">Logout</button>
+            <button class="dropdown-item" (click)="logout()">
+              Cerrar sesión
+            </button>
           </div>
         </li>
+        <ng-template #loading>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLinkActive="active"
+              [routerLink]="['/login']"
+              >Iniciar sesión</a
+            >
+          </li>
+        </ng-template>
       </ul>
     </div>
+  </nav>
+  <div
+    class="col-lg mb-3 p-3 bg-white rounded-left rounded-right rounded-bottom shadow-sm"
+  >
+    <router-outlet></router-outlet>
   </div>
-</nav>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 mx-2 my-3 p-3 bg-white rounded shadow-sm">
-      <router-outlet></router-outlet>
-    </div>
-    <div class="col-lg mx-2 mt-lg-3 mb-3 p-3 bg-white rounded shadow-sm"></div>
+  <div class="text-center mb-3">
+    <small class="text-muted"
+      >© Turismobook 2019. Todos los derechos reservados.</small
+    >
   </div>
 </div>

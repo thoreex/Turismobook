@@ -1,57 +1,68 @@
 <div class="conteiner">
-  <ng-container *ngIf="check; else elseTemplate">
-    <carousel>
-      <slide *ngFor="let noticia of noticias; let index = index">
-        <img
-          [src]="noticia.imagen"
-          alt="image slide"
-          style="display: block; width: 100%;"
-        />
-        <div class="carousel-caption">
-          <h4>{{ noticia.titulo }}</h4>
-          <p>{{ noticia.descripcion }}</p>
-          <small
-            >{{ noticia.fechaCreacion }} -
-            {{ noticia.ultimaModificacion }}</small
-          >
-          <br />
-          <a
-            class="btn btn-outline-primary"
-            routerLinkActive="active"
-            [routerLink]="['/admin/noticias', noticia.id]"
-          >
-            Editar
-          </a>
-          <button
-            type="submit"
-            class="btn btn-outline-danger"
-            (click)="borrarData(noticia.id)"
-          >
-            Eliminar
-          </button>
-          <a
-            class="btn btn-outline-primary"
-            routerLinkActive="active"
-            [routerLink]="['/admin/noticias', -1]"
-          >
-            Agregar
-          </a>
-        </div>
-      </slide>
-    </carousel>
-  </ng-container>
-  <ng-template #elseTemplate>
-    <div class="alert alert-primary" align="center" role="alert">
-      <p>¡No Hay Noticias!</p>
+  <br />
+  <div *ngIf="noticias$ | async as noticias; else loading">
+    <div *ngIf="noticias.length > 0; else noData">
+      <carousel>
+        <slide *ngFor="let noticia of noticias; let index = index">
+          <img
+            [src]="noticia.imagen"
+            alt="image slide"
+            style="display: block; width: 100%;"
+          />
+          <div class="carousel-caption">
+            <h4>{{ noticia.titulo }}</h4>
+            <p>{{ noticia.descripcion }}</p>
+            <small
+              >{{ noticia.fechaCreacion.toDate() }} -
+              {{ noticia.ultimaModificacion.toDate() }}</small
+            >
+            <br />
+            <a
+              class="btn btn-outline-primary"
+              routerLinkActive="active"
+              [routerLink]="['/admin/noticias', noticia.id]"
+            >
+              <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+              Editar
+            </a>
+            <button
+              type="submit"
+              class="btn btn-outline-danger"
+              (click)="borrarData(noticia)"
+            >
+              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+              Eliminar
+            </button>
+            <a
+              class="btn btn-outline-primary"
+              routerLinkActive="active"
+              [routerLink]="['/admin/noticias', -1]"
+            >
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+              Agregar
+            </a>
+          </div>
+        </slide>
+      </carousel>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div class="conteiner" align="center">
+      <h3>¡No Existen Noticias!</h3>
       <a
         class="btn btn-outline-primary"
         routerLinkActive="active"
         [routerLink]="['/admin/noticias', -1]"
       >
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
         Agregar
       </a>
     </div>
   </ng-template>
+
+  <ng-template #loading>
+    Cargando...
+  </ng-template>
+  <router-outlet></router-outlet>
 </div>
-<br />
-<router-outlet></router-outlet>

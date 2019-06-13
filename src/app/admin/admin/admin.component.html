@@ -1,17 +1,26 @@
-<h3>ADMIN</h3>
-<nav>
+<h3>Administración de contenido.</h3>
+<nav class="nav">
   <a
+    class="nav-link active"
     routerLinkActive="active"
     [routerLink]="['./']"
     [routerLinkActiveOptions]="{ exact: true }"
     >Dashboard</a
   >
-  <a routerLinkActive="active" [routerLink]="['manage-centros']"
+  <a
+    class="nav-link"
+    routerLinkActive="active"
+    [routerLink]="['manage-centros']"
     >Manage Centros</a
   >
-  <a routerLinkActive="active" [routerLink]="['manage-editores']"
+  <a
+    class="nav-link"
+    routerLinkActive="active"
+    [routerLink]="['manage-editores']"
     >Manage Editores</a
   >
-  <a routerLinkActive="active" [routerLink]="['noticias']">Manage Noticias</a>
+  <a class="nav-link" routerLinkActive="active" [routerLink]="['noticias']"
+    >Manage Noticias</a
+  >
 </nav>
 <router-outlet></router-outlet>

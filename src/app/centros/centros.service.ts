@@ -1,35 +1,54 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Centro } from './centro';
-import { CENTROS } from './mock-centros';
-import { AuthService } from 'src/app/auth/auth.service';
+import { BehaviorSubject } from 'rxjs';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
+import { AlertService } from '../alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CentrosService {
-  unDeleteted: Centro[];
-  constructor(private authService: AuthService) {
+  private collection: AngularFirestoreCollection<Centro>;
+
+  constructor(private readonly db: AngularFirestore) {
+    this.collection = this.db.collection<Centro>('centros');
   }
 
-  setCentros = (centros: Centro[]) => {
-    //
+  getCentros = (): BehaviorSubject<Centro[]> => {
+    const centros = new BehaviorSubject(null);
+    this.collection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Centro;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    ).subscribe(centros);
+    return centros;
   }
 
-  getCentros = (): Observable<Centro[]> => {
-    return of(CENTROS);
+  getCentro = (id: string): BehaviorSubject<Centro> => {
+    const centro = new BehaviorSubject(null);
+    this.collection.doc<Centro>(id).snapshotChanges().pipe(
+      map(a => {
+        const data = a.payload.data() as Centro;
+        return { id, ...data };
+      })
+    ).subscribe(centro);
+    return centro;
   }
 
-  getCentrosA = (): Centro[] => {
-    return CENTROS;
+  updateCentro = (id: string, centro: Centro) => {
+    this.collection.doc(id).update(centro);
   }
 
-  setCentro = (centro: Centro) => {
-    //
+  addCentro = (centro: Centro): string => {
+    const id = this.db.createId();
+    this.collection.doc(id).set(centro);
+    return id;
   }
 
-  getCentro = (id: number): Observable<Centro> => {
-    return of(CENTROS.find(centro => centro.id === id));
+  deleteCentro = (centro: Centro) => {
+    this.collection.doc<Centro>(centro.id).delete();
   }
-
 }

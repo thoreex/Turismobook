@@ -7,16 +7,15 @@ import { ContactComponent } from './contact/contact.component';
 import { ServicesComponent } from './services/services.component';
 import { FirstPageComponent } from './first-page/first-page.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { CentrosModule } from '../centros/centros.module';
 import { FormsModule } from '@angular/forms';
+import { CentroListComponent } from './centro-list/centro-list.component';
 
 @NgModule({
-  declarations: [HomeComponent, ContactComponent, ServicesComponent, FirstPageComponent],
+  declarations: [HomeComponent, ContactComponent, ServicesComponent, FirstPageComponent, CentroListComponent],
   imports: [
     CommonModule,
     FormsModule,
     CarouselModule.forRoot(),
-    CentrosModule,
     HomeRoutingModule
   ]
 })

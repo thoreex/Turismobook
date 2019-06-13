@@ -1,47 +1,57 @@
-<div class="imput-group" *ngIf="!authService.isLoggedIn">
-  <div class="text-center mb-4">
-    <img
-      class="mb-4"
-      src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
-      alt=""
-      width="72"
-      height="72"
-    />
-    <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-  </div>
-
-  <div class="form-label-group">
+<div class="my-5 text-center">
+  <form [formGroup]="signinForm" class="form-signin">
+    <h1 class="h3 mb-4 font-weight-normal">¡Bienvenido de vuelta!</h1>
+    <label for="inputEmail" class="sr-only">Correo electrónico</label>
     <input
-      id="usuario"
-      type="text"
-      [(ngModel)]="usuario"
-      maxlength="50"
+      type="email"
+      id="email"
       class="form-control"
-      placeholder="Usuario"
-      required=""
-      autofocus=""
+      placeholder="Correo electrónico"
+      formControlName="email"
+      required
     />
-    <label for="inputEmail"></label>
-  </div>
-
-  <div class="form-label-group">
+    <div *ngIf="email.invalid && (email.dirty || email.touched)">
+      <div
+        class="form-control-feedback text-danger"
+        *ngIf="email.errors.required"
+      >
+        El correo electrónico es requerido
+      </div>
+    </div>
+    <label for="password" class="sr-only">Contraseña</label>
     <input
-      id="contrasena"
       type="password"
-      [(ngModel)]="contrasena"
-      maxlength="50"
+      id="password"
       class="form-control"
       placeholder="Contraseña"
-      required=""
+      formControlName="password"
+      required
     />
-  </div>
-
-  <button
-    class="btn btn-lg btn-primary btn-block mt-5"
-    type="button"
-    (click)="login(usuario, contrasena)"
-  >
-    Sign in
-  </button>
-  <p class="mt-5 mb-3 text-muted text-center">© Turismobook 2018</p>
+    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+      <div
+        class="form-control-feedback text-danger"
+        *ngIf="password.errors.required"
+      >
+        La contraseña es requerida
+      </div>
+    </div>
+    <div class="btn-group mt-4 mb-2 btn-group-lg d-flex">
+      <button class="btn btn-secondary" type="submit" (click)="loginFb()">
+        <fa-icon [icon]="['fab', 'facebook']"></fa-icon>
+      </button>
+      <button class="btn btn-secondary" type="submit" (click)="loginGgl()">
+        <fa-icon [icon]="['fab', 'google']"></fa-icon>
+      </button>
+      <button
+        class="btn btn-lg btn-primary"
+        type="submit"
+        [disabled]="!signinForm.valid"
+        (click)="signin()"
+      >
+        <fa-icon [icon]="['fas', 'sign-in-alt']"></fa-icon>
+        Iniciar sesión
+      </button>
+    </div>
+    ¿No tienes una cuenta? <a [routerLink]="['/signup']">Registrate aqui</a>
+  </form>
 </div>

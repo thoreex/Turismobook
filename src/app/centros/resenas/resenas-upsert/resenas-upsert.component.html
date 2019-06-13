@@ -1,32 +1,11 @@
-<h2>Reseña de {{ centro?.nombre }}</h2>
-
+<h2>Información de resena</h2>
 <form [formGroup]="formGroup" id="formGroup" class="row">
-  <div class="form-group col-6 d-none">
+  <div class="form-group col-6">
     <label for="id">Id de la Reseña</label>
     <input
       class="form-control"
       formControlName="id"
       id="id"
-      type="text"
-      readonly
-    />
-  </div>
-  <div class="form-group col-6 d-none">
-    <label for="usuario">Usuario</label>
-    <input
-      class="form-control"
-      formControlName="usuario"
-      id="usuario"
-      type="text"
-      readonly
-    />
-  </div>
-  <div class="form-group col-12 d-none">
-    <label for="centro">Centro</label>
-    <input
-      class="form-control"
-      formControlName="centro"
-      id="centro"
       type="text"
       readonly
     />
@@ -125,8 +104,8 @@
   <button
     type="button"
     class="btn btn-secondary"
-    (click)="eliminarData()"
-    *ngIf="idResena > Crear"
+    (click)="eliminarResena()"
+    *ngIf="idResena"
   >
     Eliminar
   </button>
@@ -134,7 +113,7 @@
     type="submit"
     class="btn btn-primary"
     [ngClass]="{ disabled: !formGroup.valid }"
-    (click)="guardarData()"
+    (click)="guardarResena()"
   >
     Guardar
   </button>

@@ -3,6 +3,7 @@ import { ResenasService } from '../resenas.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Resena } from '../resena';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-resenas-detail',
@@ -10,7 +11,7 @@ import { Resena } from '../resena';
   styleUrls: ['./resenas-detail.component.css']
 })
 export class ResenasDetailComponent implements OnInit {
-  resena: Resena;
+  resena$: BehaviorSubject<Resena>;
 
   constructor(private resenasService: ResenasService,
               private authService: AuthService,
@@ -21,9 +22,8 @@ export class ResenasDetailComponent implements OnInit {
   }
 
   getResena() {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.resenasService.getResena(id).
-      subscribe(resena => this.resena = resena);
+    const id = this.route.snapshot.paramMap.get('id');
+    this.resena$ = this.resenasService.getResena(id);
   }
 
 }

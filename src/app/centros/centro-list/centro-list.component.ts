@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Centro } from '../centro';
 import { CentrosService } from '../centros.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-centro-list',
@@ -8,7 +9,7 @@ import { CentrosService } from '../centros.service';
   styleUrls: ['./centro-list.component.css']
 })
 export class CentroListComponent implements OnInit {
-  centros: Centro[] = [];
+  centros$: BehaviorSubject<Centro[]>;
 
   constructor(private centrosService: CentrosService) { }
 
@@ -17,7 +18,7 @@ export class CentroListComponent implements OnInit {
   }
 
   getCentros = () => {
-    return this.centrosService.getCentros().subscribe(centros => this.centros = centros);
+    return this.centros$ = this.centrosService.getCentros();
   }
 
 }

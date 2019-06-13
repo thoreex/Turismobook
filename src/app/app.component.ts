@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'Turismobook';
+
   constructor(public authService: AuthService, public router: Router) {
   }
+
   logout() {
-    this.authService.logout();
+    this.authService.signOut();
     this.router.navigate(['/']);
   }
 }
