@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Usuario } from '../usuario';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UsuariosService } from '../usuarios.service';
-import { AuthService } from 'src/app/auth/auth.service';
 import { AlertService } from 'src/app/alert.service';
 import { take } from 'rxjs/operators';
 
@@ -58,7 +57,7 @@ export class UsuarioUpsertComponent implements OnInit {
             this.id = this.usuariosService.addUsuario(nuevoUsuario);
             this.alertService.showAlert('Usuario agregado', false);
           }
-          this.router.navigate(['/usuarios', this.id]);
+          this.router.navigate(['/users', this.id]);
         });
       }
     }

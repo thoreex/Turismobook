@@ -13,14 +13,14 @@
             <h4>{{ noticia.titulo }}</h4>
             <p>{{ noticia.descripcion }}</p>
             <small
-              >{{ noticia.fechaCreacion.toDate() }} -
-              {{ noticia.ultimaModificacion.toDate() }}</small
+              >{{ noticia.fechaCreacion?.toDate() }} -
+              {{ noticia.ultimaModificacion?.toDate() }}</small
             >
             <br />
             <a
               class="btn btn-outline-primary"
               routerLinkActive="active"
-              [routerLink]="['/admin/noticias', noticia.id]"
+              [routerLink]="['/admin/manage-news', noticia.id]"
             >
               <fa-icon [icon]="['fas', 'edit']"></fa-icon>
               Editar
@@ -36,7 +36,7 @@
             <a
               class="btn btn-outline-primary"
               routerLinkActive="active"
-              [routerLink]="['/admin/noticias', -1]"
+              [routerLink]="['/admin/manage-news', -1]"
             >
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
               Agregar
@@ -53,7 +53,7 @@
       <a
         class="btn btn-outline-primary"
         routerLinkActive="active"
-        [routerLink]="['/admin/noticias', -1]"
+        [routerLink]="['/admin/manage-news', -1]"
       >
         <fa-icon [icon]="['fas', 'plus']"></fa-icon>
         Agregar

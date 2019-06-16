@@ -25,7 +25,7 @@
         <ng-container *ngIf="authService.usuario$ | async as u">
           <span *ngIf="u.id === usuario.id">
             <a
-              [routerLink]="['../editar', u.id]"
+              [routerLink]="['../edit', u.id]"
               class="btn btn-secondary"
               role="button"
               aria-disabled="true"
@@ -108,7 +108,7 @@
           </p>
           <div class="list-group list-group-flush" *ngIf="usuario.seguidores">
             <a
-              [routerLink]="['/centros', seguidor.id]"
+              [routerLink]="['/centers', seguidor.id]"
               class="list-group-item list-group-item-action"
               *ngFor="let seguidor of usuario.seguidores"
             >
@@ -143,9 +143,9 @@
                     <p>
                       <a
                         [routerLink]="[
-                          '/centros',
+                          '/centers',
                           resena.centro.id,
-                          'resenas',
+                          'reviews',
                           resena.id
                         ]"
                       >
@@ -177,10 +177,10 @@
                       >
                         <a
                           [routerLink]="[
-                            '/centros',
+                            '/centers',
                             resena.centro.id,
-                            'resenas',
-                            'editar',
+                            'reviews',
+                            'edit',
                             resena.id
                           ]"
                           class="btn btn-secondary"

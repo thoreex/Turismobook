@@ -20,12 +20,12 @@ const adminRoutes: Routes = [
         path: '',
         canActivateChild: [AuthGuard],
         children: [
-          { path: 'manage-centros', component: SearchCentrosComponent, data: { roles: ['Editor', 'Admin'] }, children: [
+          { path: 'manage-centers', component: SearchCentrosComponent, data: { roles: ['Editor', 'Admin'] }, children: [
             { path: ':id', component: ManageCentrosComponent }
           ]},
-          { path: 'manage-editores', component: ManageEditoresComponent, data: { roles: ['Admin'] } },
+          { path: 'manage-editors', component: ManageEditoresComponent, data: { roles: ['Admin'] } },
           {
-            path: 'noticias', component: ListNoticiasComponent, data: { roles: ['Admin'] }, children: [
+            path: 'manage-news', component: ListNoticiasComponent, data: { roles: ['Admin'] }, children: [
               { path: ':id', component: ManageNoticiasComponent }
             ]
           },

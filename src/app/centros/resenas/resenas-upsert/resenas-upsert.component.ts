@@ -123,7 +123,7 @@ export class ResenasUpsertComponent implements OnInit {
           // actualizar firestore
           this.centrosService.updateCentro(centro.id, centro);
           this.usuariosService.updateUsuario(usuario.id, usuario);
-          this.router.navigate(['/centros', this.idCentro, 'resenas', this.idResena]);
+          this.router.navigate(['/centers', this.idCentro, 'reviews', this.idResena]);
         }
       });
     }
@@ -151,7 +151,7 @@ export class ResenasUpsertComponent implements OnInit {
         this.usuariosService.updateUsuario(usuario.id, usuario);
         this.resenasService.deleteResena(resena);
         this.alertService.showAlert('Reseña eliminada', false);
-        this.router.navigate(['/centros', this.idCentro]);
+        this.router.navigate(['/centers', this.idCentro]);
       }
     });
   }

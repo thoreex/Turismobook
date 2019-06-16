@@ -11,7 +11,7 @@
         <p>{{ noticia.descripcion }}</p>
         <small
           >{{ noticia.fechaCreacion.toDate() }} -
-          {{ noticia.ultimaModificacion.toDate() }}</small
+          {{ noticia.ultimaModificacion?.toDate() }}</small
         >
       </div>
     </slide>

@@ -59,7 +59,7 @@ export class ManageCentrosComponent implements OnInit {
       seguidores: [''],
       resenas: [''],
       fechaCreacion: [new Date()],
-      ultimaModificacion: [''],
+      ultimaModificacion: [new Date()],
       fechaEliminacion: [''],
       editor: [''],
 
@@ -79,7 +79,7 @@ export class ManageCentrosComponent implements OnInit {
             video: this.formGroup.value.video, resenas: this.formGroup.value.resenas,
             editor: this.formGroup.value.editor, seguidores: this.formGroup.value.seguidores,
             fotografias: this.formGroup.value.fotografias,
-            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: this.formGroup.value.ultimaModificacion,
+            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: new Date(),
             fechaEliminacion: this.formGroup.value.fechaEliminacion
           };
           if (this.id !== this.Crear) {

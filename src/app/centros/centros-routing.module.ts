@@ -14,7 +14,7 @@ const routes: Routes = [
         component: CentroListComponent
       },
       {
-        path: ':id/resenas',
+        path: ':id/reviews',
         loadChildren: './resenas/resenas.module#ResenasModule'
       },
       {

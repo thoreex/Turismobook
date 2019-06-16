@@ -41,6 +41,7 @@ export class ManageNoticiasComponent implements OnInit {
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
       fechaCreacion: [new Date()],
       ultimaModificacion: [new Date()],
+      fechaEliminacion: [null]
     });
   }
 
@@ -51,7 +52,8 @@ export class ManageNoticiasComponent implements OnInit {
         imagen: this.formGroup.value.imagen,
         descripcion: this.formGroup.value.descripcion,
         fechaCreacion: this.formGroup.value.fechaCreacion,
-        ultimaModificacion: this.formGroup.value.ultimaModificacion
+        ultimaModificacion: this.formGroup.value.ultimaModificacion,
+        fechaEliminacion: this.formGroup.value.fechaEliminacion
       };
       if (this.id === this.Crear) {
         this.noticiasService.addNoticia(nuevaNoticia);
@@ -75,13 +77,14 @@ export class ManageNoticiasComponent implements OnInit {
           imagen: [noticia.imagen, [Validators.required]],
           descripcion: [noticia.descripcion, [Validators.required, Validators.minLength(15)]],
           fechaCreacion: [noticia.fechaCreacion],
-          ultimaModificacion: [noticia.ultimaModificacion]
+          ultimaModificacion: [noticia.ultimaModificacion],
+          fechaEliminacion: [noticia.fechaEliminacion]
         });
       }
     });
   }
 
   Cancelar = () => {
-    this.router.navigate(['admin/noticias']);
+    this.router.navigate(['admin/manage-news']);
   }
 }

@@ -14,11 +14,11 @@ const routes: Routes = [
     loadChildren: './home/home.module#HomeModule'
   },
   {
-    path: 'usuarios',
+    path: 'users',
     loadChildren: './usuarios/usuarios.module#UsuariosModule'
   },
   {
-    path: 'centros',
+    path: 'centers',
     loadChildren: './centros/centros.module#CentrosModule'
   },
   { path: '', pathMatch: 'full', redirectTo: '/home' },

@@ -12,7 +12,7 @@
   <a
     class="btn btn-outline-primary float-right m-b-5"
     routerLinkActive="active"
-    [routerLink]="['/admin/manage-centros', -1]"
+    [routerLink]="['/admin/manage-centers', -1]"
   >
     Agregar
   </a>
@@ -47,10 +47,12 @@
               {{ centro.descripcion }}
             </p>
             <p class="card-text">
-              <small class="text-muted">{{ centro.ultimaModificacion }}</small>
+              <small class="text-muted">{{
+                centro.ultimaModificacion?.toDate()
+              }}</small>
             </p>
             <a
-              [routerLink]="['/admin/manage-centros', centro.id]"
+              [routerLink]="['/admin/manage-centers', centro.id]"
               class="btn btn-primary"
             >
               Editar

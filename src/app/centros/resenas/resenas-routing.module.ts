@@ -15,11 +15,11 @@ const routes: Routes = [
         component: ResenasListComponent
       },
       {
-        path: 'nuevo',
+        path: 'new',
         component: ResenasUpsertComponent
       },
       {
-        path: 'editar/:id',
+        path: 'edit/:id',
         component: ResenasUpsertComponent
       },
       {

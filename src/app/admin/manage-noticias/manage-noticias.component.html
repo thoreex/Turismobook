@@ -1,6 +1,6 @@
 <h2>Información de noticias</h2>
 <form [formGroup]="formGroup" id="formGroup" class="row">
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="titulo">Id de la Noticia</label>
     <input
       class="form-control"
@@ -70,7 +70,7 @@
       </div>
     </div>
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="fechaCreacion">Fecha Creación</label>
     <input
       type="datetime"
@@ -80,7 +80,7 @@
       readonly
     />
   </div>
-  <div class="form-group col-6">
+  <div class="form-group col-6 d-none">
     <label for="ultimaModificacion">Última modificación</label>
     <input
       type="datetime"
@@ -89,21 +89,34 @@
       id="ultimaModificacion"
       readonly
     />
-    <br />
-    <button
-      type="submit"
-      class="btn btn-danger float-right m-b-5"
-      (click)="Cancelar()"
-    >
-      Cancelar
-    </button>
-    <button
-      type="submit"
-      class="btn btn-primary float-right m-b-5"
-      [ngClass]="{ disabled: !formGroup.valid }"
-      (click)="guardarNoticia()"
-    >
-      Guardar
-    </button>
+  </div>
+  <div class="form-group col-6 d-none">
+    <label for="fechaEliminacion">Fecha eliminación</label>
+    <input
+      type="datetime"
+      class="form-control"
+      formControlName="fechaEliminacion"
+      id="fechaEliminacion"
+      readonly
+    />
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <button
+        type="submit"
+        class="btn btn-danger float-right m-b-5"
+        (click)="Cancelar()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary float-right m-b-5"
+        [ngClass]="{ disabled: !formGroup.valid }"
+        (click)="guardarNoticia()"
+      >
+        Guardar
+      </button>
+    </div>
   </div>
 </form>
