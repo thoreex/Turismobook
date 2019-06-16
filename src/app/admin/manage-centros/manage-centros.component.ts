@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Centro } from 'src/app/centros/centro';
-import { AuthService } from 'src/app/auth/auth.service';
 import { Usuario } from 'src/app/usuarios/usuario';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { AlertService } from 'src/app/alert.service';
@@ -35,7 +34,6 @@ export class ManageCentrosComponent implements OnInit {
     private usuariosService: UsuariosService,
     private resenasService: ResenasService,
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private alertService: AlertService
   ) {}
 

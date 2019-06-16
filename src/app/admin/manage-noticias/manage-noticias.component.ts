@@ -74,8 +74,8 @@ export class ManageNoticiasComponent implements OnInit {
           titulo: [noticia.titulo, [Validators.required]],
           imagen: [noticia.imagen, [Validators.required]],
           descripcion: [noticia.descripcion, [Validators.required, Validators.minLength(15)]],
-          fechaCreacion: [new Date(+noticia.fechaCreacion.toString().slice(18, 28) * 1000)],
-          ultimaModificacion: [new Date(+noticia.ultimaModificacion.toString().slice(18, 28) * 1000)]
+          fechaCreacion: [noticia.fechaCreacion],
+          ultimaModificacion: [noticia.ultimaModificacion]
         });
       }
     });

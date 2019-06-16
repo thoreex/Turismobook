@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UsuariosService } from '../usuarios.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { AlertService } from 'src/app/alert.service';
-import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -18,14 +17,11 @@ export class UsuarioUpsertComponent implements OnInit {
   private id: string;
   public formGroup: FormGroup;
   public usuario$: BehaviorSubject<Usuario>;
-  private ref: AngularFireStorageReference;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private usuariosService: UsuariosService,
-              private authService: AuthService,
               private formBuilder: FormBuilder,
-              private storage: AngularFireStorage,
               private alertService: AlertService) { }
 
     ngOnInit() {

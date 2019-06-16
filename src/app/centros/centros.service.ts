@@ -3,7 +3,6 @@ import { Centro } from './centro';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
-import { AlertService } from '../alert.service';
 
 @Injectable({
   providedIn: 'root'
