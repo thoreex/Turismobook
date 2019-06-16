@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from 'src/app/centros/centro';
@@ -12,27 +12,43 @@ import { map, take } from 'rxjs/operators';
   templateUrl: './manage-editores.component.html',
   styleUrls: ['./manage-editores.component.css']
 })
-export class ManageEditoresComponent implements OnInit {
-  placeholderEditor = 'Seleccione el Editor.';
-  placeholderCentro = 'Seleccione el Centro.';
-  bindLabel = 'nombre';
-  usuario$: BehaviorSubject<Usuario>;
-  centro$: BehaviorSubject<Centro>;
-  selectedEditor: any;
-  editoresList: Usuario[];
-  selectedCentro: any;
-  centrosList: Centro[];
-  error: boolean;
+export class ManageEditoresComponent implements OnInit, OnDestroy {
+  public placeholderEditor = 'Seleccione el Editor.';
+  public placeholderCentro = 'Seleccione el Centro.';
+  public bindLabel = 'nombre';
+  public usuario$: BehaviorSubject<Usuario>;
+  public centro$: BehaviorSubject<Centro>;
+  public selectedEditor: any;
+  public editoresList: Usuario[];
+  public selectedCentro: any;
+  public centrosList: Centro[];
+  public error: boolean;
+  public exito: boolean;
+  public mensaje: string;
+  public mensajeB: string;
   constructor(private centrosService: CentrosService,
               private usuariosService: UsuariosService,
               private alertService: AlertService) {}
 
   ngOnInit() {
+    this.cargarDatos();
+  }
+
+  ngOnDestroy() {
+    this.usuariosService.getUsuarios().unsubscribe();
+    this.centrosService.getCentros().unsubscribe();
+    this.usuario$.unsubscribe();
+    this.centro$.unsubscribe();
+  }
+
+  cargarDatos() {
     this.usuariosService.getUsuarios().subscribe(usuarios => this.editoresList = usuarios);
     this.centrosService.getCentros().subscribe(centros => this.centrosList = centros);
   }
 
   asignar() {
+    this.error = false;
+    this.exito = false;
     if (this.selectedEditor) {
       this.usuario$ = this.usuariosService.getUsuario(this.selectedEditor.id);
       if (this.selectedCentro) {
@@ -53,24 +69,25 @@ export class ManageEditoresComponent implements OnInit {
                   this.usuariosService.updateUsuario(usuario.id, usuario);
                   centro.editor = { id: usuario.id, email: usuario.email, nombre: usuario.nombre };
                   this.centrosService.updateCentro(centro.id, centro);
-                  this.alertService.showAlert('Se asignó el editor ' + usuario.nombre + ' al centro ' + centro.nombre, false);
+                  this.exito = true;
+                  this.mensaje = 'Se asignó el editor ' + usuario.nombre + ' al centro ';
                   this.selectedCentro = null;
                   this.selectedEditor = null;
-                  this.error = false;
-                } else {
+                } else if (!this.exito) {
                   this.error = true;
+                  this.mensaje = 'Usuario no es editor!';
                 }
-              } else {
+              } else if (!this.exito) {
                 this.error = true;
+                this.mensaje = 'Usuario no existe!';
               }
-            } else {
+            } else if (!this.exito) {
               this.error = true;
+              this.mensaje = 'Centro ya tiene editor!';
             }
           }
+          this.alertService.showAlert(this.mensaje, this.error);
         });
-        if (this.error) {
-          this.alertService.showAlert('Error en la operación: Usuario no es editor / Usuario no existe / Centro ya tiene editor.', true);
-        }
       } else {
         this.alertService.showAlert('Seleccione un centro!', true);
       }
