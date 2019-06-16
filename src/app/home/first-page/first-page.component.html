@@ -10,8 +10,8 @@
         <h4>{{ noticia.titulo }}</h4>
         <p>{{ noticia.descripcion }}</p>
         <small
-          >{{ noticia.fechaCreacion | date: "dd/MM/yyyy hh:mm:ss" }} -
-          {{ noticia.ultimaModificacion | date: "dd/MM/yyyy hh:mm:ss" }}</small
+          >{{ noticia.fechaCreacion.toDate() }} -
+          {{ noticia.ultimaModificacion.toDate() }}</small
         >
       </div>
     </slide>
