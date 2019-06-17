@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { BehaviorSubject, of } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 describe('CentroDetailComponent', () => {
   let component: CentroDetailComponent;
@@ -12,6 +13,12 @@ describe('CentroDetailComponent', () => {
 
   const FireAuthStub = {
     authState: of({ uid: 'ABC123' })
+  };
+
+  const FireStorageStub = {
+    ref: (path: string) => ({
+      getDownloadURL: () => of(path)
+    })
   };
 
   const FirestoreStub = {
@@ -44,7 +51,8 @@ describe('CentroDetailComponent', () => {
       imports: [ RouterTestingModule ],
       providers: [
         { provide: AngularFirestore, useValue: FirestoreStub },
-        { provide: AngularFireAuth, useValue: FireAuthStub }
+        { provide: AngularFireAuth, useValue: FireAuthStub },
+        { provide: AngularFireStorage, useValue: FireStorageStub }
       ]
     })
     .compileComponents();
