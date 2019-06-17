@@ -3,8 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-noticias',
@@ -21,6 +23,7 @@ export class ManageNoticiasComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
+    private storage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private alertService: AlertService) { }
 
@@ -86,5 +89,21 @@ export class ManageNoticiasComponent implements OnInit {
 
   Cancelar = () => {
     this.router.navigate(['admin/manage-news']);
+  }
+
+  uploadPhoto(event) {
+    const file = event.target.files[0];
+    const filePath = Math.random().toString(36).substring(2);
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath, file).then(() => {
+      combineLatest([
+        fileRef.getDownloadURL(),
+        this.noticia$
+      ]).pipe(take(1)).subscribe(([downloadURL, noticia]) => {
+        noticia.imagen = downloadURL;
+
+        this.noticiasService.updateNoticia(noticia.id, noticia);
+      });
+    });
   }
 }

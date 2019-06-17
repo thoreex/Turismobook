@@ -74,18 +74,11 @@
             formControlName="imagen"
             id="imagen"
             placeholder="Escriba la url de la imagen"
+            readonly
           />
-          <div *ngIf="formGroup.controls['imagen'].dirty">
-            <div
-              class="form-control-feedback text-danger"
-              *ngIf="formGroup.controls['imagen'].errors?.required"
-            >
-              La url de la imagen es requerida
-            </div>
-          </div>
         </div>
         <div class="form-group col-6 d-none">
-          <label for="fotografias">fotografias</label>
+          <label for="fotografias">Fotografias</label>
           <input
             type="text"
             class="form-control"

@@ -28,22 +28,25 @@
       </div>
     </div>
   </div>
+
   <div class="form-group col-12">
     <label for="imagen">Imagen</label>
     <input
       type="text"
       class="form-control"
       formControlName="imagen"
-      id="imagen"
       placeholder="Escriba la url de la imagen"
+      readonly
+      hidden
     />
-    <div *ngIf="formGroup.controls['imagen'].dirty">
-      <div
-        class="form-control-feedback text-danger"
-        *ngIf="formGroup.controls['imagen'].errors?.required"
-      >
-        La url de la imagen es requerida
-      </div>
+    <div class="custom-file">
+      <input
+        type="file"
+        class="custom-file-input"
+        id="customFile"
+        (change)="uploadPhoto($event)"
+      />
+      <label class="custom-file-label" for="customFile">Elija una foto</label>
     </div>
   </div>
   <div class="form-group col-12">

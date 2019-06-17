@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Noticia } from 'src/app/noticias/noticia';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
 
 @Component({
@@ -13,7 +13,9 @@ import { AlertService } from 'src/app/alert.service';
 export class ListNoticiasComponent implements OnInit {
   noticias$: BehaviorSubject<Noticia[]>;
 
-  constructor(private noticiasService: NoticiasService, private router: Router, private alertService: AlertService) { }
+  constructor(private noticiasService: NoticiasService,
+              private router: Router,
+              private alertService: AlertService) { }
 
   ngOnInit() {
     this.getNoticias();
