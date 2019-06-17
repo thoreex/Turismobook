@@ -2,10 +2,18 @@
   <carousel>
     <slide *ngFor="let noticia of noticias; let index = index">
       <img
+        *ngIf="noticia.imagen; else defaultImage"
         [src]="noticia.imagen"
         alt="image slide"
         style="display: block; width: 100%;"
       />
+      <ng-template #defaultImage>
+        <img
+          src="https://valor-software.com/ngx-bootstrap/assets/images/nature/1.jpg"
+          alt="image slide"
+          style="display: block; width: 100%;"
+        />
+      </ng-template>
       <div class="carousel-caption">
         <h4>{{ noticia.titulo }}</h4>
         <p>{{ noticia.descripcion }}</p>

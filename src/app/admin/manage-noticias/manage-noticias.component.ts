@@ -3,10 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NoticiasService } from 'src/app/noticias/noticias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Noticia } from 'src/app/noticias/noticia';
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-noticias',
@@ -23,7 +21,6 @@ export class ManageNoticiasComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private noticiasService: NoticiasService,
-    private storage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private alertService: AlertService) { }
 
@@ -40,7 +37,7 @@ export class ManageNoticiasComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: ['(nueva)', [Validators.required]],
       titulo: ['', [Validators.required]],
-      imagen: ['', [Validators.required]],
+      imagen: [''],
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
       fechaCreacion: [new Date()],
       ultimaModificacion: [new Date()],
@@ -77,7 +74,7 @@ export class ManageNoticiasComponent implements OnInit {
         this.formGroup = this.formBuilder.group({
           id: [this.id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
-          imagen: [noticia.imagen, [Validators.required]],
+          imagen: [noticia.imagen],
           descripcion: [noticia.descripcion, [Validators.required, Validators.minLength(15)]],
           fechaCreacion: [noticia.fechaCreacion],
           ultimaModificacion: [noticia.ultimaModificacion],
@@ -89,21 +86,5 @@ export class ManageNoticiasComponent implements OnInit {
 
   Cancelar = () => {
     this.router.navigate(['admin/manage-news']);
-  }
-
-  uploadPhoto(event) {
-    const file = event.target.files[0];
-    const filePath = Math.random().toString(36).substring(2);
-    const fileRef = this.storage.ref(filePath);
-    this.storage.upload(filePath, file).then(() => {
-      combineLatest([
-        fileRef.getDownloadURL(),
-        this.noticia$
-      ]).pipe(take(1)).subscribe(([downloadURL, noticia]) => {
-        noticia.imagen = downloadURL;
-
-        this.noticiasService.updateNoticia(noticia.id, noticia);
-      });
-    });
   }
 }
