@@ -176,7 +176,7 @@ export class ComentariosUpsertComponent implements OnInit {
 
             this.usuariosService.updateUsuario(u.id, u);
           });
-          this.router.navigate(['../reviews', this.idResena]);
+          this.router.navigate(['../centers', resena.centro.id]);
         }
       });
     }

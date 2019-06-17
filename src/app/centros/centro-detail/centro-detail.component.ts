@@ -4,9 +4,10 @@ import { CentrosService } from '../centros.service';
 import { Centro } from '../centro';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/auth/auth.service';
-import { map, take } from 'rxjs/operators';
-import { combineLatest, BehaviorSubject } from 'rxjs';
+import { map, take, finalize, switchMap } from 'rxjs/operators';
+import { combineLatest, BehaviorSubject, Observable, of } from 'rxjs';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-centro-detail',
@@ -19,11 +20,13 @@ export class CentroDetailComponent implements OnInit {
   isResena: boolean;
   dangerousVideoUrl: string;
   videoUrl: SafeResourceUrl;
+  downloadURL: Observable<string>;
 
   constructor(private centrosService: CentrosService,
               private usuariosService: UsuariosService,
               private authService: AuthService,
               private route: ActivatedRoute,
+              private storage: AngularFireStorage,
               private sanitizer: DomSanitizer) {
   }
 
@@ -98,6 +101,41 @@ export class CentroDetailComponent implements OnInit {
         this.centrosService.updateCentro(centro.id, centro);
         this.usuariosService.updateUsuario(usuario.id, usuario);
       }
+    });
+  }
+
+  uploadProfile(event) {
+    const file = event.target.files[0];
+    // const filePath = `test/${new Date().getTime()}_${file.name}`;
+    const filePath = Math.random().toString(36).substring(2);
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath, file).then(() => {
+      combineLatest([
+        fileRef.getDownloadURL(),
+        this.centro$
+      ]).pipe(take(1)).subscribe(([downloadURL, centro]) => {
+        centro.imagen = downloadURL;
+        this.centrosService.updateCentro(centro.id, centro);
+      });
+    });
+  }
+
+  uploadPhoto(event) {
+    const file = event.target.files[0];
+    const filePath = Math.random().toString(36).substring(2);
+    const fileRef = this.storage.ref(filePath);
+    this.storage.upload(filePath, file).then(() => {
+      combineLatest([
+        fileRef.getDownloadURL(),
+        this.centro$
+      ]).pipe(take(1)).subscribe(([downloadURL, centro]) => {
+        if (!centro.fotografias) {
+          centro.fotografias = [];
+        }
+        centro.fotografias.push(downloadURL);
+
+        this.centrosService.updateCentro(centro.id, centro);
+      });
     });
   }
 }

@@ -1,11 +1,21 @@
 <div *ngIf="centro$ | async as centro; else loading">
   <div class="row">
     <div class="d-flex justify-content-start mx-3 my-2 mr-auto">
-      <img
-        src="{{ centro.imagen }}"
-        style="width: 150px; height: 150px"
-        class="rounded"
-      />
+      <div class="img-container">
+        <img
+          src="{{ centro.imagen }}"
+          style="width: 150px; height: 150px"
+          class="rounded"
+        />
+        <ng-container *ngIf="authService.usuario$ | async as usuario">
+          <label
+            class="btn btn-secondary"
+            *ngIf="centro.editor?.id === usuario.id"
+          >
+            Foto <input type="file" (change)="uploadProfile($event)" hidden />
+          </label>
+        </ng-container>
+      </div>
       <div class="ml-3">
         <h4 class="col-12 font-weight-bold">
           {{ centro.nombre }}
@@ -191,6 +201,15 @@
               <img class="card-img" src="{{ fotografia }}" alt="Card image" />
             </div>
           </div>
+          <ng-container *ngIf="authService.usuario$ | async as usuario">
+            <label
+              class="btn btn-secondary"
+              *ngIf="centro.editor?.id === usuario.id"
+            >
+              Subir otra foto
+              <input type="file" (change)="uploadPhoto($event)" hidden />
+            </label>
+          </ng-container>
         </div>
         <div
           class="tab-pane fade"
@@ -302,45 +321,43 @@
                     [ngClass]="{ 'mt-2': i > 0 }"
                   >
                     <div class="card-body">
-                      <div class="row">
-                        <p>
-                          <a
-                            [routerLink]="['/users', comentario.usuario.id]"
-                            class="float-left"
+                      <p>
+                        <a
+                          [routerLink]="['/users', comentario.usuario.id]"
+                          class="float-left"
+                        >
+                          <strong>{{ comentario.usuario.nombre }}</strong>
+                        </a>
+                      </p>
+                      <div class="clearfix"></div>
+                      <p>
+                        <ng-container
+                          *ngIf="authService.usuario$ | async as usuario"
+                        >
+                          <span
+                            class="float-right"
+                            *ngIf="comentario.usuario.id === usuario.id"
                           >
-                            <strong>{{ comentario.usuario.nombre }}</strong>
-                          </a>
-                        </p>
-                        <div class="clearfix"></div>
-                        <p>
-                          <ng-container
-                            *ngIf="authService.usuario$ | async as usuario"
-                          >
-                            <span
-                              class="float-right"
-                              *ngIf="comentario.usuario.id === usuario.id"
+                            <a
+                              [routerLink]="[
+                                'reviews',
+                                resena.id,
+                                'comments',
+                                'edit',
+                                comentario.id
+                              ]"
+                              class="btn btn-secondary"
+                              role="button"
+                              aria-disabled="true"
                             >
-                              <a
-                                [routerLink]="[
-                                  'reviews',
-                                  resena.id,
-                                  'comments',
-                                  'edit',
-                                  comentario.id
-                                ]"
-                                class="btn btn-secondary"
-                                role="button"
-                                aria-disabled="true"
-                              >
-                                Editar
-                              </a>
-                            </span>
-                          </ng-container>
-                        </p>
-                        <div class="clearfix"></div>
-                        <p>{{ comentario.comentario }}</p>
-                        <small>{{ comentario.fechaCreacion?.toDate() }}</small>
-                      </div>
+                              Editar
+                            </a>
+                          </span>
+                        </ng-container>
+                      </p>
+                      <div class="clearfix"></div>
+                      <p>{{ comentario.comentario }}</p>
+                      <small>{{ comentario.fechaCreacion?.toDate() }}</small>
                     </div>
                   </div>
                   <small>{{ resena.fechaCreacion?.toDate() }}</small>
