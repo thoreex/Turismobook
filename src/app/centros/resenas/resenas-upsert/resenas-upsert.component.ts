@@ -54,7 +54,7 @@ export class ResenasUpsertComponent implements OnInit {
       titulo: ['', [Validators.required]],
       resena: ['', [Validators.required]],
       fechaCreacion: [new Date()],
-      ultimaModificacion: [''],
+      ultimaModificacion: [new Date()],
       fechaEliminacion: [''],
     });
   }
@@ -79,7 +79,7 @@ export class ResenasUpsertComponent implements OnInit {
             descripcion: centro.descripcion, imagen: centro.imagen
           };
           const usuarioLimpio = {
-            id: usuario.id, nombre: usuario.nombre
+            id: usuario.id, nombre: usuario.nombre, imagen: usuario.imagen
           };
           const nuevaResena = {
             centro: centroLimpio, usuario: usuarioLimpio,

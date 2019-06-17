@@ -5,7 +5,7 @@ import { CentrosRoutingModule } from './centros-routing.module';
 import { CentroListComponent } from './centro-list/centro-list.component';
 import { CentroDetailComponent } from './centro-detail/centro-detail.component';
 import { CentroSearchComponent } from './centro-search/centro-search.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CentrosComponent } from './centros/centros.component';
 
 @NgModule({
@@ -13,6 +13,7 @@ import { CentrosComponent } from './centros/centros.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     CentrosRoutingModule
   ],
   exports: []

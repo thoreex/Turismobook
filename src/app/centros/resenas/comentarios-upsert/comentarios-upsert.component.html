@@ -1,7 +1,7 @@
 <h2>Información de resena</h2>
 <form [formGroup]="formGroup" id="formGroup" class="row">
   <div class="form-group col-6">
-    <label for="id">Id de la Reseña</label>
+    <label for="id">Id del comentario</label>
     <input
       class="form-control"
       formControlName="id"
@@ -11,59 +11,21 @@
     />
   </div>
   <div class="form-group col-12">
-    <label for="valoracion">Valoración</label>
-    <input
-      type="number"
-      class="form-control"
-      formControlName="valoracion"
-      id="valoracion"
-      placeholder="Escriba la valoración"
-      min="1"
-      max="5"
-    />
-    <div *ngIf="formGroup.controls['valoracion'].dirty">
-      <div
-        class="form-control-feedback text-danger"
-        *ngIf="formGroup.controls['valoracion'].errors?.required"
-      >
-        La valoración es requerida
-      </div>
-    </div>
-  </div>
-  <div class="form-group col-12">
-    <label for="titulo">Título</label>
-    <input
-      type="text"
-      class="form-control"
-      formControlName="titulo"
-      id="titulo"
-      placeholder="Escriba el título"
-    />
-    <div *ngIf="formGroup.controls['titulo'].dirty">
-      <div
-        class="form-control-feedback text-danger"
-        *ngIf="formGroup.controls['titulo'].errors?.required"
-      >
-        El título es requerido
-      </div>
-    </div>
-  </div>
-  <div class="form-group col-12">
-    <label for="resena">Reseña</label>
+    <label for="comentario">Comentario</label>
     <textarea
       type="text"
       class="form-control"
-      formControlName="resena"
-      id="resena"
+      formControlName="comentario"
+      id="comentario"
       rows="3"
     >
     </textarea>
-    <div *ngIf="formGroup.controls['resena'].dirty">
+    <div *ngIf="formGroup.controls['comentario'].dirty">
       <div
         class="form-control-feedback text-danger"
-        *ngIf="formGroup.controls['resena'].errors?.required"
+        *ngIf="formGroup.controls['comentario'].errors?.required"
       >
-        La reseña es requerida
+        El comentario es requerido
       </div>
     </div>
   </div>
@@ -103,7 +65,7 @@
   <button
     type="button"
     class="btn btn-secondary"
-    (click)="eliminarResena()"
+    (click)="eliminarComentario()"
     *ngIf="idResena"
   >
     Eliminar
@@ -112,7 +74,7 @@
     type="submit"
     class="btn btn-primary"
     [ngClass]="{ disabled: !formGroup.valid }"
-    (click)="guardarResena()"
+    (click)="guardarComentario()"
   >
     Guardar
   </button>

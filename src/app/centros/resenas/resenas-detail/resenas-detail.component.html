@@ -35,8 +35,17 @@
             <strong>{{ resena.titulo }}</strong>
           </span>
           <ng-container *ngIf="authService.usuario$ | async as usuario">
-            <span class="float-right" *ngIf="resena.usuario.id === usuario.id">
+            <div class="btn-group float-right" role="group">
               <a
+                [routerLink]="['comments', 'new']"
+                class="btn btn-secondary"
+                role="button"
+                aria-disabled="true"
+              >
+                Comentar
+              </a>
+              <a
+                *ngIf="resena.usuario.id === usuario.id"
                 [routerLink]="['../edit', resena.id]"
                 class="btn btn-secondary"
                 role="button"
@@ -44,14 +53,48 @@
               >
                 Editar
               </a>
-            </span>
+            </div>
           </ng-container>
         </p>
         <div class="clearfix"></div>
         <p>
           {{ resena.resena }}
         </p>
-        <small>{{ resena.fechaCreacion }}</small>
+        <div
+          class="card"
+          *ngFor="let comentario of resena.comentarios"
+          [ngClass]="{ 'mt-2': i > 0 }"
+        >
+          <div class="card-body">
+            <p>
+              <a
+                [routerLink]="['/users', comentario.usuario.id]"
+                class="float-left"
+              >
+                <strong>{{ comentario.usuario.nombre }}</strong>
+              </a>
+              <ng-container *ngIf="authService.usuario$ | async as usuario">
+                <span
+                  class="float-right"
+                  *ngIf="comentario.usuario.id === usuario.id"
+                >
+                  <a
+                    [routerLink]="['comments', 'edit', comentario.id]"
+                    class="btn btn-secondary"
+                    role="button"
+                    aria-disabled="true"
+                  >
+                    Editar
+                  </a>
+                </span>
+              </ng-container>
+            </p>
+            <div class="clearfix"></div>
+            <p>{{ comentario.comentario }}</p>
+            <small>{{ comentario.fechaCreacion?.toDate() }}</small>
+          </div>
+        </div>
+        <small>{{ resena.fechaCreacion?.toDate() }}</small>
       </div>
     </div>
   </div>

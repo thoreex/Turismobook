@@ -222,7 +222,7 @@
           </p>
           <div
             class="card"
-            *ngFor="let resena of centro.resenas; let i = index"
+            *ngFor="let resena of centro.resenas"
             [ngClass]="{ 'mt-2': i > 0 }"
           >
             <div class="card-body">
@@ -268,11 +268,22 @@
                     <ng-container
                       *ngIf="authService.usuario$ | async as usuario"
                     >
-                      <span
-                        class="float-right"
-                        *ngIf="resena.usuario.id === usuario.id"
-                      >
+                      <div class="btn-group float-right" role="group">
                         <a
+                          [routerLink]="[
+                            'reviews',
+                            resena.id,
+                            'comments',
+                            'new'
+                          ]"
+                          class="btn btn-secondary"
+                          role="button"
+                          aria-disabled="true"
+                        >
+                          Comentar
+                        </a>
+                        <a
+                          *ngIf="resena.usuario.id === usuario.id"
                           [routerLink]="['reviews', 'edit', resena.id]"
                           class="btn btn-secondary"
                           role="button"
@@ -280,12 +291,59 @@
                         >
                           Editar
                         </a>
-                      </span>
+                      </div>
                     </ng-container>
                   </p>
                   <div class="clearfix"></div>
                   <p>{{ resena.resena }}</p>
-                  <small>{{ resena.fechaCreacion }}</small>
+                  <div
+                    class="card"
+                    *ngFor="let comentario of resena.comentarios"
+                    [ngClass]="{ 'mt-2': i > 0 }"
+                  >
+                    <div class="card-body">
+                      <div class="row">
+                        <p>
+                          <a
+                            [routerLink]="['/users', comentario.usuario.id]"
+                            class="float-left"
+                          >
+                            <strong>{{ comentario.usuario.nombre }}</strong>
+                          </a>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>
+                          <ng-container
+                            *ngIf="authService.usuario$ | async as usuario"
+                          >
+                            <span
+                              class="float-right"
+                              *ngIf="comentario.usuario.id === usuario.id"
+                            >
+                              <a
+                                [routerLink]="[
+                                  'reviews',
+                                  resena.id,
+                                  'comments',
+                                  'edit',
+                                  comentario.id
+                                ]"
+                                class="btn btn-secondary"
+                                role="button"
+                                aria-disabled="true"
+                              >
+                                Editar
+                              </a>
+                            </span>
+                          </ng-container>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>{{ comentario.comentario }}</p>
+                        <small>{{ comentario.fechaCreacion?.toDate() }}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <small>{{ resena.fechaCreacion?.toDate() }}</small>
                 </div>
               </div>
             </div>
@@ -294,8 +352,8 @@
       </div>
     </div>
   </div>
-</div>
 
-<ng-template #loading>
-  Cargando...
-</ng-template>
+  <ng-template #loading>
+    Cargando...
+  </ng-template>
+</div>
