@@ -11,6 +11,14 @@
       [placeholder]="placeholderEditor"
       [(ngModel)]="selectedEditor"
     >
+      <ng-template ng-label-tmp let-item="item">
+        <img height="30" width="30" [src]="item.imagen" />
+        <b> {{ item.nombre }}</b>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-index="index">
+        <img height="30" width="30" [src]="item.imagen" />
+        <b> {{ item.nombre }}</b>
+      </ng-template>
     </ng-select>
   </div>
   <br />
@@ -21,6 +29,14 @@
       [placeholder]="placeholderCentro"
       [(ngModel)]="selectedCentro"
     >
+      <ng-template ng-label-tmp let-item="item">
+        <img height="30" width="30" [src]="item.imagen" />
+        <b> {{ item.nombre }}</b>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-index="index">
+        <img height="30" width="30" [src]="item.imagen" />
+        <b> {{ item.nombre }}</b>
+      </ng-template>
     </ng-select>
   </div>
 
