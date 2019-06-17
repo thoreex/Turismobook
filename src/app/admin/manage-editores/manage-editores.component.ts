@@ -1,18 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from 'src/app/centros/centro';
 import { Usuario } from 'src/app/usuarios/usuario';
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { combineLatest, BehaviorSubject } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
-import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-editores',
   templateUrl: './manage-editores.component.html',
   styleUrls: ['./manage-editores.component.css']
 })
-export class ManageEditoresComponent implements OnInit, OnDestroy {
+export class ManageEditoresComponent implements OnInit {
   public placeholderEditor = 'Seleccione el Editor.';
   public placeholderCentro = 'Seleccione el Centro.';
   public bindLabel = 'nombre';
@@ -32,13 +31,6 @@ export class ManageEditoresComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarDatos();
-  }
-
-  ngOnDestroy() {
-    this.usuariosService.getUsuarios().unsubscribe();
-    this.centrosService.getCentros().unsubscribe();
-    this.usuario$.unsubscribe();
-    this.centro$.unsubscribe();
   }
 
   cargarDatos() {
