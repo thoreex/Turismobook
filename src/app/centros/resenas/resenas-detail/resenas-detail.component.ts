@@ -44,7 +44,6 @@ export class ResenasDetailComponent implements OnInit {
         // Censurar
         const cindex = usuario.resenas.findIndex(uresena => uresena.id === resena.id);
         const i = centro.resenas.findIndex(uresena => uresena.id === resena.id);
-        console.log(cindex, i);
         if (cindex > -1 && i > -1) {
           usuario.resenas[cindex].censurar = censurar;
           centro.resenas[i].censurar = censurar;
