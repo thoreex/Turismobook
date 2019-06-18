@@ -241,7 +241,7 @@
           </p>
           <div
             class="card"
-            *ngFor="let resena of centro.resenas"
+            *ngFor="let resena of centro.resenas; index as j"
             [ngClass]="{ 'mt-2': i > 0 }"
           >
             <div class="card-body">
@@ -280,7 +280,9 @@
                   <p>
                     <span class="float-left">
                       Título:
-                      <a [routerLink]="['reviews', resena.id]">
+                      <a
+                        [routerLink]="['reviews', resena.id + ',' + centro.id]"
+                      >
                         <strong>{{ resena.titulo }}</strong>
                       </a>
                     </span>
@@ -289,6 +291,7 @@
                     >
                       <div class="btn-group float-right" role="group">
                         <a
+                          *ngIf="!resena.censurar"
                           [routerLink]="[
                             'reviews',
                             resena.id,
@@ -302,7 +305,9 @@
                           Comentar
                         </a>
                         <a
-                          *ngIf="resena.usuario.id === usuario.id"
+                          *ngIf="
+                            resena.usuario.id === usuario.id && !resena.censurar
+                          "
                           [routerLink]="['reviews', 'edit', resena.id]"
                           class="btn btn-secondary"
                           role="button"
@@ -310,11 +315,30 @@
                         >
                           Editar
                         </a>
+                        <button
+                          *ngIf="
+                            resena.usuario.id === usuario.id && !resena.censurar
+                          "
+                          class="btn btn-secondary"
+                          (click)="censurar(resena, j, true)"
+                        >
+                          Censurar
+                        </button>
+                        <button
+                          *ngIf="
+                            resena.usuario.id === usuario.id && resena.censurar
+                          "
+                          class="btn btn-secondary"
+                          (click)="censurar(resena, j, false)"
+                        >
+                          Descensurar
+                        </button>
                       </div>
                     </ng-container>
                   </p>
                   <div class="clearfix"></div>
-                  <p>{{ resena.resena }}</p>
+                  <p *ngIf="!resena.censurar">{{ resena.resena }}</p>
+                  <p *ngIf="resena.censurar"><b>Reseña censurada</b></p>
                   <div
                     class="card"
                     *ngFor="let comentario of resena.comentarios"

@@ -8,6 +8,8 @@ import { map, take, finalize, switchMap } from 'rxjs/operators';
 import { combineLatest, BehaviorSubject, Observable, of } from 'rxjs';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { ResenasService } from '../resenas/resenas.service';
+import { Resena } from '../resenas/resena';
 
 @Component({
   selector: 'app-centro-detail',
@@ -24,6 +26,7 @@ export class CentroDetailComponent implements OnInit {
 
   constructor(private centrosService: CentrosService,
               private usuariosService: UsuariosService,
+              private resenasService: ResenasService,
               private authService: AuthService,
               private route: ActivatedRoute,
               private storage: AngularFireStorage,
@@ -68,6 +71,27 @@ export class CentroDetailComponent implements OnInit {
         return usuario && centro && usuario.resenas && usuario.resenas.some(resena => resena.centro.id === centro.id);
       })
     ).subscribe(isResena => this.isResena = isResena);
+  }
+
+  censurar(resena: Resena, i: number, censurar: boolean) {
+    combineLatest(
+      this.authService.usuario$,
+      this.centro$
+    ).pipe(take(1)).subscribe(([usuario, centro]) => {
+      if (usuario && centro) {
+        // Censurar
+        const cindex = usuario.resenas.findIndex(uresena => uresena.id === centro.resenas[i].id);
+        if (cindex > -1 && i > -1) {
+          usuario.resenas[cindex].censurar = censurar;
+          centro.resenas[i].censurar = censurar;
+          resena.censurar = censurar;
+          // actualizar firestore
+          this.resenasService.updateResena(resena.id, resena);
+          this.centrosService.updateCentro(centro.id, centro);
+          this.usuariosService.updateUsuario(usuario.id, usuario);
+        }
+      }
+    });
   }
 
   follow() {

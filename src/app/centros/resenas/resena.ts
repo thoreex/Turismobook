@@ -9,6 +9,7 @@ export class Resena {
     valoracion?: number;
     titulo?: string;
     resena?: string;
+    censurar?: boolean;
     comentarios?: Comentario[];
     fechaCreacion?: Date;
     ultimaModificacion?: Date;
