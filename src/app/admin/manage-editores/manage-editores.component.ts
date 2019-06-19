@@ -5,6 +5,7 @@ import { Centro } from 'src/app/centros/centro';
 import { Usuario } from 'src/app/usuarios/usuario';
 import { combineLatest, BehaviorSubject } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-editores',
@@ -48,7 +49,7 @@ export class ManageEditoresComponent implements OnInit {
         combineLatest(
           this.usuario$,
           this.centro$
-        ).subscribe(([usuario, centro]) => {
+        ).pipe(take(1)).subscribe(([usuario, centro]) => {
           if (usuario && centro) {
             if (!centro.editor) {
               if (usuario) {
