@@ -56,6 +56,7 @@ export class ResenasUpsertComponent implements OnInit {
       fechaCreacion: [new Date()],
       ultimaModificacion: [new Date()],
       fechaEliminacion: [''],
+      censurar: [false]
     });
   }
 
@@ -85,7 +86,8 @@ export class ResenasUpsertComponent implements OnInit {
             centro: centroLimpio, usuario: usuarioLimpio,
             valoracion: this.formGroup.value.valoracion, titulo: this.formGroup.value.titulo,
             resena: this.formGroup.value.resena, fechaCreacion: this.formGroup.value.fechaCreacion,
-            ultimaModificacion: this.formGroup.value.ultimaModificacion, fechaEliminacion: this.formGroup.value.fechaEliminacion
+            ultimaModificacion: this.formGroup.value.ultimaModificacion, fechaEliminacion: this.formGroup.value.fechaEliminacion,
+            censurar: this.formGroup.value.censurar
           };
           if (this.idResena) {
             this.resenasService.updateResena(this.idResena, nuevaResena);
@@ -169,6 +171,7 @@ export class ResenasUpsertComponent implements OnInit {
           fechaCreacion: [resena.fechaCreacion],
           ultimaModificacion: [resena.ultimaModificacion],
           fechaEliminacion: [resena.fechaEliminacion],
+          censurar: [resena.censurar],
         });
       }
     });
