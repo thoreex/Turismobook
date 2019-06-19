@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { BehaviorSubject, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 describe('ResenasDetailComponent', () => {
   let component: ResenasDetailComponent;
@@ -45,6 +46,17 @@ describe('ResenasDetailComponent', () => {
       declarations: [ ResenasDetailComponent ],
       imports: [ RouterTestingModule ],
       providers: [
+        {
+          provide: ActivatedRoute, useValue: {
+            parent: {
+              parent: {
+                snapshot: { params: of({ id: 0 }) }
+              },
+              snapshot: { params: of({ id: 0 }) }
+            },
+            snapshot: { params: of({ id: 0 }) }
+          }
+        },
         { provide: AngularFirestore, useValue: FirestoreStub },
         { provide: AngularFireAuth, useValue: FireAuthStub }
       ]
