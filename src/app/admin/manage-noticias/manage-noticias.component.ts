@@ -37,10 +37,11 @@ export class ManageNoticiasComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: ['(nueva)', [Validators.required]],
       titulo: ['', [Validators.required]],
-      imagen: ['', [Validators.required]],
+      imagen: [''],
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
       fechaCreacion: [new Date()],
       ultimaModificacion: [new Date()],
+      fechaEliminacion: [null]
     });
   }
 
@@ -51,7 +52,8 @@ export class ManageNoticiasComponent implements OnInit {
         imagen: this.formGroup.value.imagen,
         descripcion: this.formGroup.value.descripcion,
         fechaCreacion: this.formGroup.value.fechaCreacion,
-        ultimaModificacion: this.formGroup.value.ultimaModificacion
+        ultimaModificacion: this.formGroup.value.ultimaModificacion,
+        fechaEliminacion: this.formGroup.value.fechaEliminacion
       };
       if (this.id === this.Crear) {
         this.noticiasService.addNoticia(nuevaNoticia);
@@ -72,16 +74,17 @@ export class ManageNoticiasComponent implements OnInit {
         this.formGroup = this.formBuilder.group({
           id: [this.id, [Validators.required]],
           titulo: [noticia.titulo, [Validators.required]],
-          imagen: [noticia.imagen, [Validators.required]],
+          imagen: [noticia.imagen],
           descripcion: [noticia.descripcion, [Validators.required, Validators.minLength(15)]],
-          fechaCreacion: [new Date(+noticia.fechaCreacion.toString().slice(18, 28) * 1000)],
-          ultimaModificacion: [new Date(+noticia.ultimaModificacion.toString().slice(18, 28) * 1000)]
+          fechaCreacion: [noticia.fechaCreacion],
+          ultimaModificacion: [noticia.ultimaModificacion],
+          fechaEliminacion: [noticia.fechaEliminacion]
         });
       }
     });
   }
 
   Cancelar = () => {
-    this.router.navigate(['admin/noticias']);
+    this.router.navigate(['admin/manage-news']);
   }
 }

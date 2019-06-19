@@ -114,7 +114,7 @@ export class SearchCentrosComponent implements OnInit {
         });
         this.centrosService.deleteCentro({id});
         this.alertService.showAlert('Centro eliminado', false);
-        // this.router.navigate(['/centros', this.idCentro]);
+        // this.router.navigate(['/centers']);
       }
     });
   }

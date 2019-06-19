@@ -1,16 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchCentrosComponent } from './search-centros.component';
+import { ComentariosUpsertComponent } from './comentarios-upsert.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { of, BehaviorSubject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { BehaviorSubject, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-describe('SearchCentrosComponent', () => {
-  let component: SearchCentrosComponent;
-  let fixture: ComponentFixture<SearchCentrosComponent>;
+describe('ComentariosUpsertComponent', () => {
+  let component: ComentariosUpsertComponent;
+  let fixture: ComponentFixture<ComentariosUpsertComponent>;
 
   const FireAuthStub = {
     authState: of({ uid: 'ABC123' })
@@ -42,9 +42,17 @@ describe('SearchCentrosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchCentrosComponent],
-      imports: [ NgxPaginationModule, RouterTestingModule, FormsModule, ReactiveFormsModule ],
+      declarations: [ ComentariosUpsertComponent ],
+      imports: [ReactiveFormsModule, RouterTestingModule],
       providers: [
+        {
+          provide: ActivatedRoute, useValue: {
+            parent: {
+              snapshot: { params: of({ id: 0 }) }
+            },
+            snapshot: { params: of({ id: 0 }) }
+          }
+        },
         { provide: AngularFirestore, useValue: FirestoreStub },
         { provide: AngularFireAuth, useValue: FireAuthStub }
       ]
@@ -53,7 +61,7 @@ describe('SearchCentrosComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchCentrosComponent);
+    fixture = TestBed.createComponent(ComentariosUpsertComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

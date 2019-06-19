@@ -54,18 +54,19 @@ export class ResenasUpsertComponent implements OnInit {
       titulo: ['', [Validators.required]],
       resena: ['', [Validators.required]],
       fechaCreacion: [new Date()],
-      ultimaModificacion: [''],
+      ultimaModificacion: [new Date()],
       fechaEliminacion: [''],
+      censurar: [false]
     });
   }
 
   guardarResena = () => {
     if (this.formGroup.valid) {
       // agregamos la resena duplicado a usuario y centro
-      combineLatest(
+      combineLatest([
         this.authService.usuario$,
         this.centro$
-      ).pipe(take(1)).subscribe(([usuario, centro]) => {
+      ]).pipe(take(1)).subscribe(([usuario, centro]) => {
         if (usuario && centro) {
           if (!usuario.resenas) {
             usuario.resenas = [];
@@ -79,13 +80,14 @@ export class ResenasUpsertComponent implements OnInit {
             descripcion: centro.descripcion, imagen: centro.imagen
           };
           const usuarioLimpio = {
-            id: usuario.id, nombre: usuario.nombre
+            id: usuario.id, nombre: usuario.nombre, imagen: usuario.imagen
           };
           const nuevaResena = {
             centro: centroLimpio, usuario: usuarioLimpio,
             valoracion: this.formGroup.value.valoracion, titulo: this.formGroup.value.titulo,
             resena: this.formGroup.value.resena, fechaCreacion: this.formGroup.value.fechaCreacion,
-            ultimaModificacion: this.formGroup.value.ultimaModificacion, fechaEliminacion: this.formGroup.value.fechaEliminacion
+            ultimaModificacion: this.formGroup.value.ultimaModificacion, fechaEliminacion: this.formGroup.value.fechaEliminacion,
+            censurar: this.formGroup.value.censurar
           };
           if (this.idResena) {
             this.resenasService.updateResena(this.idResena, nuevaResena);
@@ -123,18 +125,18 @@ export class ResenasUpsertComponent implements OnInit {
           // actualizar firestore
           this.centrosService.updateCentro(centro.id, centro);
           this.usuariosService.updateUsuario(usuario.id, usuario);
-          this.router.navigate(['/centros', this.idCentro, 'resenas', this.idResena]);
+          this.router.navigate(['/centers', this.idCentro, 'reviews', this.idResena]);
         }
       });
     }
   }
 
   eliminarResena = () => {
-    combineLatest(
+    combineLatest([
       this.resena$,
       this.authService.usuario$,
       this.centro$
-    ).pipe(take(1)).subscribe(([resena, usuario, centro]) => {
+    ]).pipe(take(1)).subscribe(([resena, usuario, centro]) => {
       if (resena && usuario && centro) {
         // eliminar del usuario
         const cindex = usuario.resenas.findIndex(uresena => uresena.centro.id === centro.id);
@@ -151,7 +153,7 @@ export class ResenasUpsertComponent implements OnInit {
         this.usuariosService.updateUsuario(usuario.id, usuario);
         this.resenasService.deleteResena(resena);
         this.alertService.showAlert('Reseña eliminada', false);
-        this.router.navigate(['/centros', this.idCentro]);
+        this.router.navigate(['/centers', this.idCentro]);
       }
     });
   }
@@ -169,6 +171,7 @@ export class ResenasUpsertComponent implements OnInit {
           fechaCreacion: [resena.fechaCreacion],
           ultimaModificacion: [resena.ultimaModificacion],
           fechaEliminacion: [resena.fechaEliminacion],
+          censurar: [resena.censurar],
         });
       }
     });

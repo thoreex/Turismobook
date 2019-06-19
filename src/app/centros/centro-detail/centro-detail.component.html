@@ -1,11 +1,21 @@
 <div *ngIf="centro$ | async as centro; else loading">
   <div class="row">
     <div class="d-flex justify-content-start mx-3 my-2 mr-auto">
-      <img
-        src="{{ centro.imagen }}"
-        style="width: 150px; height: 150px"
-        class="rounded"
-      />
+      <div class="img-container">
+        <img
+          src="{{ centro.imagen }}"
+          style="width: 150px; height: 150px"
+          class="rounded"
+        />
+        <ng-container *ngIf="authService.usuario$ | async as usuario">
+          <label
+            class="btn btn-secondary"
+            *ngIf="centro.editor?.id === usuario.id"
+          >
+            Foto <input type="file" (change)="uploadProfile($event)" hidden />
+          </label>
+        </ng-container>
+      </div>
       <div class="ml-3">
         <h4 class="col-12 font-weight-bold">
           {{ centro.nombre }}
@@ -24,7 +34,7 @@
           *ngIf="authService.usuario$ | async"
         >
           <a
-            [routerLink]="['resenas', 'nuevo']"
+            [routerLink]="['reviews', 'new']"
             class="btn btn-primary"
             role="button"
             [class.disabled]="isResena"
@@ -191,6 +201,15 @@
               <img class="card-img" src="{{ fotografia }}" alt="Card image" />
             </div>
           </div>
+          <ng-container *ngIf="authService.usuario$ | async as usuario">
+            <label
+              class="btn btn-secondary"
+              *ngIf="centro.editor?.id === usuario.id"
+            >
+              Subir otra foto
+              <input type="file" (change)="uploadPhoto($event)" hidden />
+            </label>
+          </ng-container>
         </div>
         <div
           class="tab-pane fade"
@@ -203,7 +222,7 @@
           </p>
           <div class="list-group list-group-flush" *ngIf="centro.seguidores">
             <a
-              [routerLink]="['/usuarios', seguidor.id]"
+              [routerLink]="['/users', seguidor.id]"
               class="list-group-item list-group-item-action"
               *ngFor="let seguidor of centro.seguidores"
             >
@@ -222,7 +241,7 @@
           </p>
           <div
             class="card"
-            *ngFor="let resena of centro.resenas; let i = index"
+            *ngFor="let resena of centro.resenas; index as j"
             [ngClass]="{ 'mt-2': i > 0 }"
           >
             <div class="card-body">
@@ -236,7 +255,7 @@
                 <div class="col-md-10">
                   <p>
                     <a
-                      [routerLink]="['/usuarios', resena.usuario.id]"
+                      [routerLink]="['/users', resena.usuario.id]"
                       class="float-left"
                     >
                       <strong>{{ resena.usuario.nombre }}</strong>
@@ -261,31 +280,111 @@
                   <p>
                     <span class="float-left">
                       Título:
-                      <a [routerLink]="['resenas', resena.id]">
+                      <a
+                        [routerLink]="['reviews', resena.id]"
+                      >
                         <strong>{{ resena.titulo }}</strong>
                       </a>
                     </span>
                     <ng-container
                       *ngIf="authService.usuario$ | async as usuario"
                     >
-                      <span
-                        class="float-right"
-                        *ngIf="resena.usuario.id === usuario.id"
-                      >
+                      <div class="btn-group float-right" role="group">
                         <a
-                          [routerLink]="['resenas', 'editar', resena.id]"
+                          *ngIf="!resena.censurar"
+                          [routerLink]="[
+                            'reviews',
+                            resena.id,
+                            'comments',
+                            'new'
+                          ]"
+                          class="btn btn-secondary"
+                          role="button"
+                          aria-disabled="true"
+                        >
+                          Comentar
+                        </a>
+                        <a
+                          *ngIf="
+                            resena.usuario.id === usuario.id && !resena.censurar
+                          "
+                          [routerLink]="['reviews', 'edit', resena.id]"
                           class="btn btn-secondary"
                           role="button"
                           aria-disabled="true"
                         >
                           Editar
                         </a>
-                      </span>
+                        <button
+                          *ngIf="
+                            centro.editor?.id === usuario.id && !resena.censurar
+                          "
+                          class="btn btn-secondary"
+                          (click)="censurar(resena, true)"
+                        >
+                          Censurar
+                        </button>
+                        <button
+                          *ngIf="
+                            centro.editor?.id === usuario.id && resena.censurar
+                          "
+                          class="btn btn-secondary"
+                          (click)="censurar(resena, false)"
+                        >
+                          Descensurar
+                        </button>
+                      </div>
                     </ng-container>
                   </p>
                   <div class="clearfix"></div>
-                  <p>{{ resena.resena }}</p>
-                  <small>{{ resena.fechaCreacion }}</small>
+                  <p *ngIf="!resena.censurar">{{ resena.resena }}</p>
+                  <p *ngIf="resena.censurar"><b>Reseña censurada</b></p>
+                  <div
+                    class="card"
+                    *ngFor="let comentario of resena.comentarios"
+                    [ngClass]="{ 'mt-2': i > 0 }"
+                  >
+                    <div class="card-body" *ngIf="!resena.censurar">
+                      <p>
+                        <a
+                          [routerLink]="['/users', comentario.usuario.id]"
+                          class="float-left"
+                        >
+                          <strong>{{ comentario.usuario.nombre }}</strong>
+                        </a>
+                      </p>
+                      <div class="clearfix"></div>
+                      <p>
+                        <ng-container
+                          *ngIf="authService.usuario$ | async as usuario"
+                        >
+                          <span
+                            class="float-right"
+                            *ngIf="comentario.usuario.id === usuario.id"
+                          >
+                            <a
+                              [routerLink]="[
+                                'reviews',
+                                resena.id,
+                                'comments',
+                                'edit',
+                                comentario.id
+                              ]"
+                              class="btn btn-secondary"
+                              role="button"
+                              aria-disabled="true"
+                            >
+                              Editar
+                            </a>
+                          </span>
+                        </ng-container>
+                      </p>
+                      <div class="clearfix"></div>
+                      <p>{{ comentario.comentario }}</p>
+                      <small>{{ comentario.fechaCreacion?.toDate() }}</small>
+                    </div>
+                  </div>
+                  <small>{{ resena.fechaCreacion?.toDate() }}</small>
                 </div>
               </div>
             </div>
@@ -294,8 +393,8 @@
       </div>
     </div>
   </div>
-</div>
 
-<ng-template #loading>
-  Cargando...
-</ng-template>
+  <ng-template #loading>
+    Cargando...
+  </ng-template>
+</div>

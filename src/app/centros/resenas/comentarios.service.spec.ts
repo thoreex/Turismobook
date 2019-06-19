@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UsuariosService } from './usuarios.service';
+import { ComentariosService } from './comentarios.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 
-describe('UsuariosService', () => {
+describe('ComentariosService', () => {
 
   const FirestoreStub = {
     collection: (name: string) => ({
@@ -28,7 +28,7 @@ describe('UsuariosService', () => {
   }));
 
   it('should be created', () => {
-    const service: UsuariosService = TestBed.get(UsuariosService);
+    const service: ComentariosService = TestBed.get(ComentariosService);
     expect(service).toBeTruthy();
   });
 });

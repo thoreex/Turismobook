@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resena } from './resena';
 import { BehaviorSubject } from 'rxjs';
-import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
 @Injectable({

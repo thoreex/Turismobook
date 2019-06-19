@@ -3,9 +3,9 @@ import { CentrosService } from 'src/app/centros/centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from 'src/app/centros/centro';
 import { Usuario } from 'src/app/usuarios/usuario';
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { combineLatest, BehaviorSubject } from 'rxjs';
 import { AlertService } from 'src/app/alert.service';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-manage-editores',
@@ -13,26 +13,35 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./manage-editores.component.css']
 })
 export class ManageEditoresComponent implements OnInit {
-  placeholderEditor = 'Seleccione el Editor.';
-  placeholderCentro = 'Seleccione el Centro.';
-  bindLabel = 'nombre';
-  usuario$: BehaviorSubject<Usuario>;
-  centro$: BehaviorSubject<Centro>;
-  selectedEditor: any;
-  editoresList: Usuario[];
-  selectedCentro: any;
-  centrosList: Centro[];
-  error: boolean;
+  public placeholderEditor = 'Seleccione el Editor.';
+  public placeholderCentro = 'Seleccione el Centro.';
+  public bindLabel = 'nombre';
+  public usuario$: BehaviorSubject<Usuario>;
+  public centro$: BehaviorSubject<Centro>;
+  public selectedEditor: any;
+  public editoresList: Usuario[];
+  public selectedCentro: any;
+  public centrosList: Centro[];
+  public error: boolean;
+  public exito: boolean;
+  public mensaje: string;
+  public mensajeB: string;
   constructor(private centrosService: CentrosService,
               private usuariosService: UsuariosService,
               private alertService: AlertService) {}
 
   ngOnInit() {
+    this.cargarDatos();
+  }
+
+  cargarDatos() {
     this.usuariosService.getUsuarios().subscribe(usuarios => this.editoresList = usuarios);
     this.centrosService.getCentros().subscribe(centros => this.centrosList = centros);
   }
 
   asignar() {
+    this.error = false;
+    this.exito = false;
     if (this.selectedEditor) {
       this.usuario$ = this.usuariosService.getUsuario(this.selectedEditor.id);
       if (this.selectedCentro) {
@@ -40,7 +49,7 @@ export class ManageEditoresComponent implements OnInit {
         combineLatest(
           this.usuario$,
           this.centro$
-        ).subscribe(([usuario, centro]) => {
+        ).pipe(take(1)).subscribe(([usuario, centro]) => {
           if (usuario && centro) {
             if (!centro.editor) {
               if (usuario) {
@@ -53,24 +62,25 @@ export class ManageEditoresComponent implements OnInit {
                   this.usuariosService.updateUsuario(usuario.id, usuario);
                   centro.editor = { id: usuario.id, email: usuario.email, nombre: usuario.nombre };
                   this.centrosService.updateCentro(centro.id, centro);
-                  this.alertService.showAlert('Se asignó el editor ' + usuario.nombre + ' al centro ' + centro.nombre, false);
+                  this.exito = true;
+                  this.mensaje = 'Se asignó el editor ' + usuario.nombre + ' al centro ';
                   this.selectedCentro = null;
                   this.selectedEditor = null;
-                  this.error = false;
-                } else {
+                } else if (!this.exito) {
                   this.error = true;
+                  this.mensaje = 'Usuario no es editor!';
                 }
-              } else {
+              } else if (!this.exito) {
                 this.error = true;
+                this.mensaje = 'Usuario no existe!';
               }
-            } else {
+            } else if (!this.exito) {
               this.error = true;
+              this.mensaje = 'Centro ya tiene editor!';
             }
           }
+          this.alertService.showAlert(this.mensaje, this.error);
         });
-        if (this.error) {
-          this.alertService.showAlert('Error en la operación: Usuario no es editor / Usuario no existe / Centro ya tiene editor.', true);
-        }
       } else {
         this.alertService.showAlert('Seleccione un centro!', true);
       }

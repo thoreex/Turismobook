@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CentrosService } from 'src/app/centros/centros.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Centro } from 'src/app/centros/centro';
-import { AuthService } from 'src/app/auth/auth.service';
 import { Usuario } from 'src/app/usuarios/usuario';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { AlertService } from 'src/app/alert.service';
@@ -35,7 +34,6 @@ export class ManageCentrosComponent implements OnInit {
     private usuariosService: UsuariosService,
     private resenasService: ResenasService,
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private alertService: AlertService
   ) {}
 
@@ -55,13 +53,13 @@ export class ManageCentrosComponent implements OnInit {
       nombre: ['', [Validators.required]],
       descripcion: ['', [Validators.required, Validators.minLength(15)]],
       horarios: [''],
-      imagen: ['', [Validators.required]],
+      imagen: [''],
       fotografias: [''],
       video: ['', [Validators.required]],
       seguidores: [''],
       resenas: [''],
       fechaCreacion: [new Date()],
-      ultimaModificacion: [''],
+      ultimaModificacion: [new Date()],
       fechaEliminacion: [''],
       editor: [''],
 
@@ -81,7 +79,7 @@ export class ManageCentrosComponent implements OnInit {
             video: this.formGroup.value.video, resenas: this.formGroup.value.resenas,
             editor: this.formGroup.value.editor, seguidores: this.formGroup.value.seguidores,
             fotografias: this.formGroup.value.fotografias,
-            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: this.formGroup.value.ultimaModificacion,
+            fechaCreacion: this.formGroup.value.fechaCreacion, ultimaModificacion: new Date(),
             fechaEliminacion: this.formGroup.value.fechaEliminacion
           };
           if (this.id !== this.Crear) {
@@ -142,7 +140,7 @@ export class ManageCentrosComponent implements OnInit {
         nombre: [centro.nombre, [Validators.required]],
         descripcion: [centro.descripcion, [Validators.required, Validators.minLength(15)]],
         horarios: [centro.horarios],
-        imagen: [centro.imagen, [Validators.required]],
+        imagen: [centro.imagen],
         fotografias: [centro.fotografias],
         video: [centro.video, [Validators.required]],
         seguidores: [centro.seguidores],
