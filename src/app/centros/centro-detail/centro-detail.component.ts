@@ -10,6 +10,7 @@ import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { ResenasService } from '../resenas/resenas.service';
 import { Resena } from '../resenas/resena';
+import { Usuario } from 'src/app/usuarios/usuario';
 
 @Component({
   selector: 'app-centro-detail',
@@ -18,6 +19,8 @@ import { Resena } from '../resenas/resena';
 })
 export class CentroDetailComponent implements OnInit {
   centro$: BehaviorSubject<Centro>;
+  usuarios$: BehaviorSubject<Usuario[]>;
+  resenas$: BehaviorSubject<Resena[]>;
   isFollowing: boolean;
   isResena: boolean;
   dangerousVideoUrl: string;
@@ -37,7 +40,8 @@ export class CentroDetailComponent implements OnInit {
     this.getCentro();
     this.getFollowing();
     this.getResena();
-
+    this.usuarios$ = this.usuariosService.getUsuarios();
+    this.resenas$ = this.resenasService.getResenas();
     this.centro$.subscribe(centro => {
       if (centro) {
         this.dangerousVideoUrl = 'https://www.youtube.com/embed/' + centro.video;
@@ -73,23 +77,38 @@ export class CentroDetailComponent implements OnInit {
     ).subscribe(isResena => this.isResena = isResena);
   }
 
-  censurar(resena: Resena, i: number, censurar: boolean) {
-    combineLatest(
-      this.authService.usuario$,
+  censurar(resena: Resena, censurar: boolean) {
+    combineLatest([
+      this.usuarios$,
+      this.resenas$,
       this.centro$
-    ).pipe(take(1)).subscribe(([usuario, centro]) => {
-      if (usuario && centro) {
-        // Censurar
-        const cindex = usuario.resenas.findIndex(uresena => uresena.id === centro.resenas[i].id);
-        if (cindex > -1 && i > -1) {
-          usuario.resenas[cindex].censurar = censurar;
-          centro.resenas[i].censurar = censurar;
-          resena.censurar = censurar;
-          // actualizar firestore
-          this.resenasService.updateResena(resena.id, resena);
+    ]).pipe(take(1)).subscribe(([usuarios, resenas, centro]) => {
+      if (usuarios && resenas && centro) {
+        // Censurar en centro
+        const cindex = centro.resenas.findIndex(cresena => cresena.id === resena.id);
+        if (cindex > -1) {
+          centro.resenas[cindex].censurar = censurar;
           this.centrosService.updateCentro(centro.id, centro);
-          this.usuariosService.updateUsuario(usuario.id, usuario);
         }
+        // Censurar en usuario
+        usuarios.forEach(usuario => {
+          if (usuario.resenas) {
+            usuario.resenas.forEach((uresena, index) => {
+              if (uresena.id === resena.id) {
+                 uresena.censurar = censurar;
+                 usuario.resenas[index] = uresena;
+                 this.usuariosService.updateUsuario(usuario.id, usuario);
+              }
+            });
+          }
+        });
+        // Censurar resena
+        resenas.forEach(uresena => {
+          if (uresena.id === resena.id) {
+            uresena.censurar = censurar;
+            this.resenasService.updateResena(resena.id, resena);
+         }
+        });
       }
     });
   }

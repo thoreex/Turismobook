@@ -216,7 +216,7 @@
                       *ngFor="let comentario of resena.comentarios"
                       [ngClass]="{ 'mt-2': i > 0 }"
                     >
-                      <div class="card-body">
+                      <div class="card-body" *ngIf="!resena.censurar">
                         <p>
                           <a
                             [routerLink]="['/users', comentario.usuario.id]"

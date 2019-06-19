@@ -8,6 +8,7 @@ import { CentrosService } from '../../centros.service';
 import { UsuariosService } from 'src/app/usuarios/usuarios.service';
 import { Centro } from '../../centro';
 import { take } from 'rxjs/operators';
+import { Usuario } from 'src/app/usuarios/usuario';
 
 @Component({
   selector: 'app-resenas-detail',
@@ -17,6 +18,9 @@ import { take } from 'rxjs/operators';
 export class ResenasDetailComponent implements OnInit {
   resena$: BehaviorSubject<Resena>;
   centro$: BehaviorSubject<Centro>;
+  usuarios$: BehaviorSubject<Usuario[]>;
+  idCentro: string;
+  idResena: string;
 
   constructor(private resenasService: ResenasService,
               private centrosService: CentrosService,
@@ -26,33 +30,48 @@ export class ResenasDetailComponent implements OnInit {
 
   ngOnInit() {
     this.getResena();
+    this.usuarios$ = this.usuariosService.getUsuarios();
   }
 
   getResena() {
-    const id = this.route.snapshot.paramMap.get('id').split(',');
-    this.resena$ = this.resenasService.getResena(id[0]);
-    this.centro$ = this.centrosService.getCentro(id[1]);
+    this.idCentro = this.route.parent.parent.snapshot.params.id;
+    if (this.idCentro) {
+      this.centro$ = this.centrosService.getCentro(this.idCentro);
+    }
+
+    this.idResena = this.route.snapshot.params.id;
+    if (this.idResena) {
+      this.resena$ = this.resenasService.getResena(this.idResena);
+    }
   }
 
-  censurar(censurar: boolean) {
-    combineLatest(
-      this.authService.usuario$,
-      this.centro$,
-      this.resena$
-    ).pipe(take(1)).subscribe(([usuario, centro, resena]) => {
-      if (usuario && centro && resena) {
-        // Censurar
-        const cindex = usuario.resenas.findIndex(uresena => uresena.id === resena.id);
-        const i = centro.resenas.findIndex(uresena => uresena.id === resena.id);
-        if (cindex > -1 && i > -1) {
-          usuario.resenas[cindex].censurar = censurar;
-          centro.resenas[i].censurar = censurar;
-          resena.censurar = censurar;
-          // actualizar firestore
-          this.resenasService.updateResena(resena.id, resena);
+  censurar(resena: Resena, censurar: boolean) {
+    combineLatest([
+      this.usuarios$,
+      this.centro$
+    ]).pipe(take(1)).subscribe(([usuarios, centro]) => {
+      if (usuarios && centro) {
+        // Censurar en centro
+        const cindex = centro.resenas.findIndex(cresena => cresena.id === resena.id);
+        if (cindex > -1) {
+          centro.resenas[cindex].censurar = censurar;
           this.centrosService.updateCentro(centro.id, centro);
-          this.usuariosService.updateUsuario(usuario.id, usuario);
         }
+        // Censurar en usuario
+        usuarios.forEach(usuario => {
+          if (usuario.resenas) {
+            usuario.resenas.forEach((uresena, index) => {
+              if (uresena.id === resena.id) {
+                 uresena.censurar = censurar;
+                 usuario.resenas[index] = uresena;
+                 this.usuariosService.updateUsuario(usuario.id, usuario);
+              }
+            });
+          }
+        });
+        // Censurar resena
+        resena.censurar = censurar;
+        this.resenasService.updateResena(resena.id, resena);
       }
     });
   }

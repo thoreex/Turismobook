@@ -281,7 +281,7 @@
                     <span class="float-left">
                       Título:
                       <a
-                        [routerLink]="['reviews', resena.id + ',' + centro.id]"
+                        [routerLink]="['reviews', resena.id]"
                       >
                         <strong>{{ resena.titulo }}</strong>
                       </a>
@@ -317,19 +317,19 @@
                         </a>
                         <button
                           *ngIf="
-                            resena.usuario.id === usuario.id && !resena.censurar
+                            centro.editor?.id === usuario.id && !resena.censurar
                           "
                           class="btn btn-secondary"
-                          (click)="censurar(resena, j, true)"
+                          (click)="censurar(resena, true)"
                         >
                           Censurar
                         </button>
                         <button
                           *ngIf="
-                            resena.usuario.id === usuario.id && resena.censurar
+                            centro.editor?.id === usuario.id && resena.censurar
                           "
                           class="btn btn-secondary"
-                          (click)="censurar(resena, j, false)"
+                          (click)="censurar(resena, false)"
                         >
                           Descensurar
                         </button>
@@ -344,7 +344,7 @@
                     *ngFor="let comentario of resena.comentarios"
                     [ngClass]="{ 'mt-2': i > 0 }"
                   >
-                    <div class="card-body">
+                    <div class="card-body" *ngIf="!resena.censurar">
                       <p>
                         <a
                           [routerLink]="['/users', comentario.usuario.id]"

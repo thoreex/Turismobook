@@ -54,20 +54,22 @@
               >
                 Editar
               </a>
-              <button
-                *ngIf="resena.usuario.id === usuario.id && !resena.censurar"
-                class="btn btn-secondary"
-                (click)="censurar(true)"
-              >
-                Censurar
-              </button>
-              <button
-                *ngIf="resena.usuario.id === usuario.id && resena.censurar"
-                class="btn btn-secondary"
-                (click)="censurar(false)"
-              >
-                Descensurar
-              </button>
+              <div *ngIf="centro$ | async as centro">
+                <button
+                  *ngIf="centro.editor?.id === usuario.id && !resena.censurar"
+                  class="btn btn-secondary"
+                  (click)="censurar(resena, true)"
+                >
+                  Censurar
+                </button>
+                <button
+                  *ngIf="centro.editor?.id === usuario.id && resena.censurar"
+                  class="btn btn-secondary"
+                  (click)="censurar(resena, false)"
+                >
+                  Descensurar
+                </button>
+              </div>
             </div>
           </ng-container>
         </p>
@@ -79,7 +81,7 @@
           *ngFor="let comentario of resena.comentarios"
           [ngClass]="{ 'mt-2': i > 0 }"
         >
-          <div class="card-body">
+          <div class="card-body" *ngIf="!resena.censurar">
             <p>
               <a
                 [routerLink]="['/users', comentario.usuario.id]"

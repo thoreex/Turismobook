@@ -62,10 +62,10 @@ export class ResenasUpsertComponent implements OnInit {
   guardarResena = () => {
     if (this.formGroup.valid) {
       // agregamos la resena duplicado a usuario y centro
-      combineLatest(
+      combineLatest([
         this.authService.usuario$,
         this.centro$
-      ).pipe(take(1)).subscribe(([usuario, centro]) => {
+      ]).pipe(take(1)).subscribe(([usuario, centro]) => {
         if (usuario && centro) {
           if (!usuario.resenas) {
             usuario.resenas = [];
@@ -130,11 +130,11 @@ export class ResenasUpsertComponent implements OnInit {
   }
 
   eliminarResena = () => {
-    combineLatest(
+    combineLatest([
       this.resena$,
       this.authService.usuario$,
       this.centro$
-    ).pipe(take(1)).subscribe(([resena, usuario, centro]) => {
+    ]).pipe(take(1)).subscribe(([resena, usuario, centro]) => {
       if (resena && usuario && centro) {
         // eliminar del usuario
         const cindex = usuario.resenas.findIndex(uresena => uresena.centro.id === centro.id);
